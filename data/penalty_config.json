@@ -1,0 +1,28 @@
+{
+    "implemented_rules": [
+        "Unassigned Group",
+        "Underworked Team Member (< 8 Effort)",
+        "Multi-Day Weekdays (e.g. Tue+Wed)",
+        "Inefficient Day (< 2 Tasks)",
+        "Multi-Day General (Weekday+Sunday)",
+        "Intra-Week Cooldown (Same Week)",
+        "Cooldown (Adjacent Weeks)",
+        "Role Diversity (Assignments in each capable family)"
+    ],
+    "time_limit_seconds": 120.0,
+    "scope": {
+        "month": "January",
+        "year": 2026
+    },
+    "penalty_ratio": 10,
+    "ladder": [
+        "Unassigned Group",
+        "Underworked Team Member (< 8 Effort)",
+        "Intra-Week Cooldown (Same Week)",
+        "Multi-Day Weekdays (e.g. Tue+Wed)",
+        "Role Diversity (Assignments in each capable family)",
+        "Inefficient Day (< 2 Tasks)",
+        "Multi-Day General (Weekday+Sunday)",
+        "Cooldown (Adjacent Weeks)"
+    ]
+}

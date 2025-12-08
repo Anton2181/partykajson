@@ -1,0 +1,182 @@
+[
+    {
+        "name": "Alicja Nowak",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Anna Brzoza",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Antoni Domanowski",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Aleksander Nowak",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Andras Retlaki",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Damian Bartosiewicz",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Damian Bagnowski",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Diana Siwicka",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Krzysztof Budny",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Karolina Zak",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Michał Dziedziniewicz",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Maria Merchel",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Nina Andrzejczyk",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Maciek Oficialski",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Anna Kolomenkina",
+        "role": "follower",
+        "both": true
+    },
+    {
+        "name": "Agnieszka Lech",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Anna Sidorowicz",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Daniele Donzello",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Damian Karas",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Ephraim Eshak",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Jan Mężyński",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Martyna Gosz",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Marius Latinis",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Michal Zagrodzki",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Natalia Khotsianovska",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Piotr Kucharski",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Patrycja Niemczuk",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Pawel Wypijewski",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Sylwia Woźniak",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Tomasz Wilk",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Yuliana Szewczuk",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Yulia Talybova",
+        "role": "follower",
+        "both": true
+    },
+    {
+        "name": "Ludmiła Januszewska",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Iana Kain",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Julia Borychowska",
+        "role": "follower",
+        "both": false
+    },
+    {
+        "name": "Krzysiek Rećko",
+        "role": "leader",
+        "both": false
+    }
+]

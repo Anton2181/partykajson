@@ -1,0 +1,746 @@
+[
+    {
+        "person_name": "Anna Brzoza",
+        "rule": "Underworked Team Member (< 8 Effort)",
+        "cost": 1000000,
+        "details": "Total Effort: 0.0 < 8.0"
+    },
+    {
+        "person_name": "Ephraim Eshak",
+        "rule": "Underworked Team Member (< 8 Effort)",
+        "cost": 1000000,
+        "details": "Total Effort: 0.0 < 8.0"
+    },
+    {
+        "person_name": "Damian Karas",
+        "rule": "Intra-Week Cooldown (Same Week)",
+        "cost": 100000,
+        "details": " Intra-week: Take Care of Newcomers - Tuesday & Take Care of Newcomers - Wednesday"
+    },
+    {
+        "person_name": "Damian Karas",
+        "rule": "Multi-Day Weekdays (e.g. Tue+Wed)",
+        "cost": 10000,
+        "details": "Cascading Penalty (Total Excess: 1): W16: 1 extra days"
+    },
+    {
+        "person_name": "Anna Brzoza",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Anna Brzoza",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Social Media Posts - Tuesday"
+    },
+    {
+        "person_name": "Anna Brzoza",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Social Media Posts - Wednesday"
+    },
+    {
+        "person_name": "Martyna Gosz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Sunday Milonga"
+    },
+    {
+        "person_name": "Martyna Gosz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Food Supply"
+    },
+    {
+        "person_name": "Martyna Gosz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Martyna Gosz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Martyna Gosz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Natalia Khotsianovska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Media"
+    },
+    {
+        "person_name": "Natalia Khotsianovska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Natalia Khotsianovska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Natalia Khotsianovska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Natalia Khotsianovska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Damian Bartosiewicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Third Registrator Wednesday"
+    },
+    {
+        "person_name": "Damian Bartosiewicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Damian Bartosiewicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Sylwia Woźniak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Sunday Milonga"
+    },
+    {
+        "person_name": "Sylwia Woźniak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: MCing"
+    },
+    {
+        "person_name": "Sylwia Woźniak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Sylwia Woźniak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Sylwia Woźniak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Anna Sidorowicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Assisting"
+    },
+    {
+        "person_name": "Anna Sidorowicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Third Registrator Wednesday"
+    },
+    {
+        "person_name": "Anna Sidorowicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Anna Sidorowicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Social Media Posts - Tuesday"
+    },
+    {
+        "person_name": "Anna Sidorowicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Anna Sidorowicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Jan Mężyński",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Media"
+    },
+    {
+        "person_name": "Jan Mężyński",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Third Registrator Wednesday"
+    },
+    {
+        "person_name": "Jan Mężyński",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Jan Mężyński",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Jan Mężyński",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Social Media Posts - Tuesday"
+    },
+    {
+        "person_name": "Jan Mężyński",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Jan Mężyński",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Marius Latinis",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Marius Latinis",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Marius Latinis",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Michał Dziedziniewicz",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Antoni Domanowski",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Maciek Oficialski",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Anna Kolomenkina",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Assisting"
+    },
+    {
+        "person_name": "Anna Kolomenkina",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Third Registrator Wednesday"
+    },
+    {
+        "person_name": "Anna Kolomenkina",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Anna Kolomenkina",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Anna Kolomenkina",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Maria Merchel",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: DJing"
+    },
+    {
+        "person_name": "Maria Merchel",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Maria Merchel",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Maria Merchel",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Ephraim Eshak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Monthly Print"
+    },
+    {
+        "person_name": "Ephraim Eshak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Julia Borychowska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Sunday Milonga"
+    },
+    {
+        "person_name": "Julia Borychowska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Third Registrator Wednesday"
+    },
+    {
+        "person_name": "Julia Borychowska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Julia Borychowska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Julia Borychowska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Julia Borychowska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Social Media Posts - Wednesday"
+    },
+    {
+        "person_name": "Julia Borychowska",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Yulia Talybova",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Sunday Milonga"
+    },
+    {
+        "person_name": "Yulia Talybova",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Assisting"
+    },
+    {
+        "person_name": "Yulia Talybova",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Yulia Talybova",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Yulia Talybova",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Alicja Nowak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: DJing"
+    },
+    {
+        "person_name": "Alicja Nowak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Deinstalling Milonga"
+    },
+    {
+        "person_name": "Alicja Nowak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Alicja Nowak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Alicja Nowak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Diana Siwicka",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Third Registrator Wednesday"
+    },
+    {
+        "person_name": "Diana Siwicka",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Diana Siwicka",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Diana Siwicka",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Aleksander Nowak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Aleksander Nowak",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Deinstalling Milonga"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Third Registrator Wednesday"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Social Media Posts - Tuesday"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Krzysiek Rećko",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Sunday Milonga"
+    },
+    {
+        "person_name": "Krzysiek Rećko",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Media"
+    },
+    {
+        "person_name": "Krzysiek Rećko",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Third Registrator Wednesday"
+    },
+    {
+        "person_name": "Krzysiek Rećko",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Krzysiek Rećko",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Registrations / Advanced - Tuesday"
+    },
+    {
+        "person_name": "Krzysiek Rećko",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Krzysiek Rećko",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Social Media Posts - Wednesday"
+    },
+    {
+        "person_name": "Krzysiek Rećko",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Tomasz Wilk",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Assisting"
+    },
+    {
+        "person_name": "Tomasz Wilk",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Media"
+    },
+    {
+        "person_name": "Tomasz Wilk",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Tomasz Wilk",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Tomasz Wilk",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Daniele Donzello",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Assisting"
+    },
+    {
+        "person_name": "Daniele Donzello",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: DJing"
+    },
+    {
+        "person_name": "Daniele Donzello",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Team Members"
+    },
+    {
+        "person_name": "Daniele Donzello",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Daniele Donzello",
+        "rule": "Role Diversity (Assignments in each capable family)",
+        "cost": 1000,
+        "details": "Missed assignment in capable family: Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Natalia Khotsianovska",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Anna Sidorowicz",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Patrycja Niemczuk",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Jan Mężyński",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Pawel Wypijewski",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Marius Latinis",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Antoni Domanowski",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Maciek Oficialski",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Maria Merchel",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Alicja Nowak",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Aleksander Nowak",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Damian Karas",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Tomasz Wilk",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Daniele Donzello",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 10,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Sylwia Woźniak",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 1,
+        "details": "Teaching Intermediate Wednesday (W15) & Teaching Beginners Wednesday (W16)"
+    },
+    {
+        "person_name": "Patrycja Niemczuk",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 1,
+        "details": "Sunday Milonga Installation (W17) & MC Sunday (W18)"
+    },
+    {
+        "person_name": "Patrycja Niemczuk",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 1,
+        "details": "Teaching Intermediate Wednesday (W17) & Teaching Intermediate Wednesday (W18)"
+    },
+    {
+        "person_name": "Pawel Wypijewski",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 1,
+        "details": "Teaching Intermediate Wednesday (W17) & Teaching Beginners Tuesday (W18)"
+    },
+    {
+        "person_name": "Marius Latinis",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 1,
+        "details": "Teaching Intermediate Wednesday (W16) & Teaching Beginners Wednesday (W17)"
+    },
+    {
+        "person_name": "Tomasz Wilk",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 1,
+        "details": "Teaching Beginners Wednesday (W15) & Teaching Beginners Tuesday (W16)"
+    }
+]
