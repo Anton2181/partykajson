@@ -220,11 +220,16 @@ class SATSolver:
                 family_groups[fam].append(group['id'])
                 family_candidates[fam].update(self.get_group_candidates(group))
             
-            # 2. Iterate Families and Candidates
+            # 2. Collect Missed Families per Person
+            person_missed_vars = {} # person -> list of bool vars (one per family)
+            
             for fam, groups_ids in family_groups.items():
                 # For each person capable of this family
                 for person in family_candidates[fam]:
                     if person not in all_persons: continue # Skip if inactive
+                    
+                    if person not in person_missed_vars:
+                        person_missed_vars[person] = []
                     
                     # Gather assignment vars for this person in this family
                     fam_vars = []
@@ -235,7 +240,6 @@ class SATSolver:
                     if fam_vars:
                         # Bool: Has at least one assignment in family
                         # We want to PENALIZE if sum(fam_vars) == 0
-                        # i.e., NOT(OR(fam_vars))
                         
                         missed_diversity = self.model.NewBoolVar(f"missed_div_{fam}_{person}")
                         
@@ -243,14 +247,37 @@ class SATSolver:
                         self.model.Add(sum(fam_vars) == 0).OnlyEnforceIf(missed_diversity)
                         self.model.Add(sum(fam_vars) > 0).OnlyEnforceIf(missed_diversity.Not())
                         
-                        objective_terms.append(missed_diversity * P_DIVERSITY)
+                        person_missed_vars[person].append(missed_diversity)
                         
-                        # Store for reporting
+                        # Store for reporting (individual details)
                         if person not in self.debug_vars:
                              self.debug_vars[person] = {}
                         if 'diversity' not in self.debug_vars[person]:
                              self.debug_vars[person]['diversity'] = {}
                         self.debug_vars[person]['diversity'][fam] = missed_diversity
+
+            # 3. Apply Cascading Penalty per Person
+            for person, missed_vars in person_missed_vars.items():
+                if missed_vars:
+                    # Calculate total missed families
+                    missed_count = self.model.NewIntVar(0, len(missed_vars), f"missed_count_{person}")
+                    self.model.Add(missed_count == sum(missed_vars))
+                    
+                    # Create Cost Table: 0 -> 0, 1 -> P, 2 -> 2P, 3 -> 4P, 4 -> 8P ...
+                    # Formula: Cost = P * 2^(N-1) for N >= 1, else 0
+                    costs = [0]
+                    for i in range(1, len(missed_vars) + 1):
+                         costs.append(P_DIVERSITY * (2**(i-1)))
+                    
+                    div_cost_var = self.model.NewIntVar(0, max(costs), f"div_cost_{person}")
+                    self.model.AddElement(missed_count, costs, div_cost_var)
+                    
+                    objective_terms.append(div_cost_var)
+                    
+                    # Save for debug reporting (override the dict logic partly or augment it?)
+                    # We still keep 'diversity' dict for details, but maybe store cost var too
+                    self.debug_vars[person]['diversity_cost_var'] = div_cost_var
+                    self.debug_vars[person]['diversity_missed_count'] = missed_count
 
 
         # --- Cooldown Logic ---
@@ -627,16 +654,23 @@ class SATSolver:
                             "details": "Worked on Weekday + Sunday"
                         })
 
-                    # Role Diversity
-                    if 'diversity' in self.debug_vars[person]:
-                        for fam, var in self.debug_vars[person]['diversity'].items():
-                            if solver.Value(var) == 1:
-                                incurred_penalties.append({
-                                    "person_name": person,
-                                    "rule": "Role Diversity (Assignments in each capable family)",
-                                    "cost": P_DIVERSITY,
-                                    "details": f"Missed assignment in capable family: {fam}"
-                                })
+                    # Role Diversity (Cascading)
+                    if 'diversity_cost_var' in self.debug_vars[person]:
+                         cost_val = solver.Value(self.debug_vars[person]['diversity_cost_var'])
+                         if cost_val > 0:
+                             missed_fams = []
+                             if 'diversity' in self.debug_vars[person]:
+                                 for fam, var in self.debug_vars[person]['diversity'].items():
+                                     if solver.Value(var) == 1:
+                                         missed_fams.append(fam)
+                             
+                             missed_count_val = solver.Value(self.debug_vars[person]['diversity_missed_count'])
+                             incurred_penalties.append({
+                                 "person_name": person,
+                                 "rule": "Role Diversity (Cascading)",
+                                 "cost": cost_val,
+                                 "details": f"Missed {missed_count_val} families: {', '.join(missed_fams)}"
+                             })
 
                     # Cooldowns (Geometric + Pairwise)
                     if 'cooldown' in self.debug_vars[person]:

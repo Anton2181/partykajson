@@ -1,17 +1,17 @@
 {
     "G15_7_1_1": {
         "group_name": "MC Sunday",
-        "assignee": "Daniele Donzello",
+        "assignee": "Aleksander Nowak",
         "method": "automatic"
     },
     "G15_7_2_1": {
         "group_name": "Sunday Milonga Installation",
-        "assignee": "Pawel Wypijewski",
+        "assignee": "Iana Kain",
         "method": "automatic"
     },
     "G15_7_3_1": {
         "group_name": "Sunday Milonga Deinstallation",
-        "assignee": "Marius Latinis",
+        "assignee": "Tomasz Wilk",
         "method": "automatic"
     },
     "G15_2_1_1": {
@@ -31,7 +31,7 @@
     },
     "G15_2_4_2": {
         "group_name": "Teaching Beginners Tuesday",
-        "assignee": "Maria Merchel",
+        "assignee": "Anna Sidorowicz",
         "method": "automatic"
     },
     "G15_2_5_1": {
@@ -46,7 +46,7 @@
     },
     "G15_2_7_1": {
         "group_name": "Take Care of Newcomers - Tuesday",
-        "assignee": "Antoni Domanowski",
+        "assignee": "Krzysiek Rećko",
         "method": "automatic"
     },
     "G15_2_8_1": {
@@ -66,7 +66,7 @@
     },
     "G15_2_11_1": {
         "group_name": "Deistalling the Venue + Cleaning - Tuesday",
-        "assignee": "Julia Borychowska",
+        "assignee": "Alicja Nowak",
         "method": "automatic"
     },
     "G15_2_12_1": {
@@ -86,7 +86,7 @@
     },
     "G15_3_3_1": {
         "group_name": "Teaching Beginners Wednesday",
-        "assignee": "Tomasz Wilk",
+        "assignee": "Marius Latinis",
         "method": "automatic"
     },
     "G15_3_4_2": {
@@ -96,7 +96,7 @@
     },
     "G15_3_5_1": {
         "group_name": "Assisting Beginners Wednesday",
-        "assignee": "Marius Latinis",
+        "assignee": "Damian Bartosiewicz",
         "method": "automatic"
     },
     "G15_3_6_2": {
@@ -111,7 +111,7 @@
     },
     "G15_3_8_1": {
         "group_name": "Third Registrator Wednesday",
-        "assignee": "Aleksander Nowak",
+        "assignee": "Julia Borychowska",
         "method": "automatic"
     },
     "G15_3_9_1": {
@@ -121,17 +121,17 @@
     },
     "G15_3_10_1": {
         "group_name": "MC Wednesday",
-        "assignee": "Krzysiek Rećko",
+        "assignee": "Jan Mężyński",
         "method": "automatic"
     },
     "G15_3_11_1": {
         "group_name": "DJ Wednesday",
-        "assignee": "Jan Mężyński",
+        "assignee": "Sylwia Woźniak",
         "method": "automatic"
     },
     "G15_3_12_1": {
         "group_name": "Deistalling the Venue + Cleaning - Wednesday",
-        "assignee": "Krzysiek Rećko",
+        "assignee": "Jan Mężyński",
         "method": "automatic"
     },
     "G15_3_13_1": {
@@ -141,7 +141,7 @@
     },
     "G16_7_1_1": {
         "group_name": "MC Sunday",
-        "assignee": "Jan Mężyński",
+        "assignee": "Julia Borychowska",
         "method": "automatic"
     },
     "G16_7_2_1": {
@@ -151,7 +151,7 @@
     },
     "G16_7_3_1": {
         "group_name": "Sunday Milonga Deinstallation",
-        "assignee": "Aleksander Nowak",
+        "assignee": "Jan Mężyński",
         "method": "automatic"
     },
     "G16_2_1_1": {
@@ -166,7 +166,7 @@
     },
     "G16_2_3_1": {
         "group_name": "Teaching Beginners Tuesday",
-        "assignee": "Tomasz Wilk",
+        "assignee": "Pawel Wypijewski",
         "method": "automatic"
     },
     "G16_2_4_2": {
@@ -176,12 +176,12 @@
     },
     "G16_2_5_1": {
         "group_name": "Assisting Beginners Tuesday",
-        "assignee": "Michał Dziedziniewicz",
+        "assignee": "Antoni Domanowski",
         "method": "automatic"
     },
     "G16_2_6_2": {
         "group_name": "Assisting Beginners Tuesday",
-        "assignee": "Maria Merchel",
+        "assignee": "Nina Andrzejczyk",
         "method": "automatic"
     },
     "G16_2_7_1": {
@@ -191,17 +191,17 @@
     },
     "G16_2_8_1": {
         "group_name": "Tuesday Milonga Installation",
-        "assignee": "Aleksander Nowak",
+        "assignee": "Julia Borychowska",
         "method": "automatic"
     },
     "G16_2_9_1": {
         "group_name": "MC Tuesday",
-        "assignee": "Julia Borychowska",
+        "assignee": "Daniele Donzello",
         "method": "automatic"
     },
     "G16_2_10_1": {
         "group_name": "DJ Tuesday",
-        "assignee": "Krzysiek Rećko",
+        "assignee": "Iana Kain",
         "method": "automatic"
     },
     "G16_2_11_1": {
@@ -211,32 +211,32 @@
     },
     "G16_2_12_1": {
         "group_name": "Photographer Tuesday",
-        "assignee": "Julia Borychowska",
+        "assignee": "Iana Kain",
         "method": "automatic"
     },
     "G16_3_1_1": {
         "group_name": "Teaching Intermediate Wednesday",
-        "assignee": "Marius Latinis",
+        "assignee": "Jan Mężyński",
         "method": "automatic"
     },
     "G16_3_2_2": {
         "group_name": "Teaching Intermediate Wednesday",
-        "assignee": "Anna Sidorowicz",
+        "assignee": "Sylwia Woźniak",
         "method": "automatic"
     },
     "G16_3_3_1": {
         "group_name": "Teaching Beginners Wednesday",
-        "assignee": "Jan Mężyński",
+        "assignee": "Tomasz Wilk",
         "method": "automatic"
     },
     "G16_3_4_2": {
         "group_name": "Teaching Beginners Wednesday",
-        "assignee": "Sylwia Woźniak",
+        "assignee": "Maria Merchel",
         "method": "automatic"
     },
     "G16_3_5_1": {
         "group_name": "Assisting Beginners Wednesday",
-        "assignee": "Damian Bartosiewicz",
+        "assignee": "Michał Dziedziniewicz",
         "method": "automatic"
     },
     "G16_3_6_2": {
@@ -251,12 +251,12 @@
     },
     "G16_3_8_1": {
         "group_name": "Third Registrator Wednesday",
-        "assignee": "Alicja Nowak",
+        "assignee": "Anna Sidorowicz",
         "method": "automatic"
     },
     "G16_3_9_1": {
         "group_name": "Wednesday Milonga Installation",
-        "assignee": "Alicja Nowak",
+        "assignee": "Aleksander Nowak",
         "method": "automatic"
     },
     "G16_3_10_1": {
@@ -266,12 +266,12 @@
     },
     "G16_3_11_1": {
         "group_name": "DJ Wednesday",
-        "assignee": "Iana Kain",
+        "assignee": "Maria Merchel",
         "method": "automatic"
     },
     "G16_3_12_1": {
         "group_name": "Deistalling the Venue + Cleaning - Wednesday",
-        "assignee": "Jan Mężyński",
+        "assignee": "Anna Sidorowicz",
         "method": "automatic"
     },
     "G16_3_13_1": {
@@ -281,17 +281,17 @@
     },
     "G17_7_1_1": {
         "group_name": "MC Sunday",
-        "assignee": "Iana Kain",
+        "assignee": "Marius Latinis",
         "method": "automatic"
     },
     "G17_7_2_1": {
         "group_name": "Sunday Milonga Installation",
-        "assignee": "Patrycja Niemczuk",
+        "assignee": "Krzysiek Rećko",
         "method": "automatic"
     },
     "G17_7_3_1": {
         "group_name": "Sunday Milonga Deinstallation",
-        "assignee": "Anna Sidorowicz",
+        "assignee": "Patrycja Niemczuk",
         "method": "automatic"
     },
     "G17_2_1_1": {
@@ -306,12 +306,12 @@
     },
     "G17_2_3_1": {
         "group_name": "Teaching Beginners Tuesday",
-        "assignee": "Michał Dziedziniewicz",
+        "assignee": "Pawel Wypijewski",
         "method": "automatic"
     },
     "G17_2_4_2": {
         "group_name": "Teaching Beginners Tuesday",
-        "assignee": "Martyna Gosz",
+        "assignee": "Natalia Khotsianovska",
         "method": "automatic"
     },
     "G17_2_5_1": {
@@ -321,27 +321,27 @@
     },
     "G17_2_6_2": {
         "group_name": "Assisting Beginners Tuesday",
-        "assignee": "Nina Andrzejczyk",
+        "assignee": "Anna Sidorowicz",
         "method": "automatic"
     },
     "G17_2_7_1": {
         "group_name": "Take Care of Newcomers - Tuesday",
-        "assignee": "Aleksander Nowak",
+        "assignee": "Iana Kain",
         "method": "automatic"
     },
     "G17_2_8_1": {
         "group_name": "Tuesday Milonga Installation",
-        "assignee": "Maciek Oficialski",
+        "assignee": "Jan Mężyński",
         "method": "automatic"
     },
     "G17_2_9_1": {
         "group_name": "MC Tuesday",
-        "assignee": "Daniele Donzello",
+        "assignee": "Iana Kain",
         "method": "automatic"
     },
     "G17_2_10_1": {
         "group_name": "DJ Tuesday",
-        "assignee": "Anna Kolomenkina",
+        "assignee": "Alicja Nowak",
         "method": "automatic"
     },
     "G17_2_11_1": {
@@ -351,12 +351,12 @@
     },
     "G17_2_12_1": {
         "group_name": "Photographer Tuesday",
-        "assignee": "Anna Sidorowicz",
+        "assignee": "Maria Merchel",
         "method": "automatic"
     },
     "G17_3_1_1": {
         "group_name": "Teaching Intermediate Wednesday",
-        "assignee": "Pawel Wypijewski",
+        "assignee": "Marius Latinis",
         "method": "automatic"
     },
     "G17_3_2_2": {
@@ -366,17 +366,17 @@
     },
     "G17_3_3_1": {
         "group_name": "Teaching Beginners Wednesday",
-        "assignee": "Marius Latinis",
+        "assignee": "Tomasz Wilk",
         "method": "automatic"
     },
     "G17_3_4_2": {
         "group_name": "Teaching Beginners Wednesday",
-        "assignee": "Natalia Khotsianovska",
+        "assignee": "Martyna Gosz",
         "method": "automatic"
     },
     "G17_3_5_1": {
         "group_name": "Assisting Beginners Wednesday",
-        "assignee": "Krzysiek Rećko",
+        "assignee": "Damian Bartosiewicz",
         "method": "automatic"
     },
     "G17_3_6_2": {
@@ -386,37 +386,37 @@
     },
     "G17_3_7_1": {
         "group_name": "Take Care of Newcomers - Wednesday",
-        "assignee": "Julia Borychowska",
+        "assignee": "Sylwia Woźniak",
         "method": "automatic"
     },
     "G17_3_8_1": {
         "group_name": "Third Registrator Wednesday",
-        "assignee": "Maria Merchel",
+        "assignee": "Krzysiek Rećko",
         "method": "automatic"
     },
     "G17_3_9_1": {
         "group_name": "Wednesday Milonga Installation",
-        "assignee": "Jan Mężyński",
+        "assignee": "Krzysiek Rećko",
         "method": "automatic"
     },
     "G17_3_10_1": {
         "group_name": "MC Wednesday",
-        "assignee": "Iana Kain",
+        "assignee": "Sylwia Woźniak",
         "method": "automatic"
     },
     "G17_3_11_1": {
         "group_name": "DJ Wednesday",
-        "assignee": "Julia Borychowska",
+        "assignee": "Martyna Gosz",
         "method": "automatic"
     },
     "G17_3_12_1": {
         "group_name": "Deistalling the Venue + Cleaning - Wednesday",
-        "assignee": "Damian Bartosiewicz",
+        "assignee": "Julia Borychowska",
         "method": "automatic"
     },
     "G17_3_13_1": {
         "group_name": "Photographer Wednesday",
-        "assignee": "Iana Kain",
+        "assignee": "Julia Borychowska",
         "method": "automatic"
     },
     "G18_7_1_1": {
@@ -426,7 +426,7 @@
     },
     "G18_7_2_1": {
         "group_name": "Sunday Milonga Installation",
-        "assignee": "Tomasz Wilk",
+        "assignee": "Daniele Donzello",
         "method": "automatic"
     },
     "G18_7_3_1": {
@@ -446,12 +446,12 @@
     },
     "G18_2_3_1": {
         "group_name": "Teaching Beginners Tuesday",
-        "assignee": "Pawel Wypijewski",
+        "assignee": "Michał Dziedziniewicz",
         "method": "automatic"
     },
     "G18_2_4_2": {
         "group_name": "Teaching Beginners Tuesday",
-        "assignee": "Anna Kolomenkina",
+        "assignee": "Patrycja Niemczuk",
         "method": "automatic"
     },
     "G18_2_5_1": {
@@ -461,72 +461,72 @@
     },
     "G18_2_6_2": {
         "group_name": "Assisting Beginners Tuesday",
-        "assignee": "Alicja Nowak",
+        "assignee": "Nina Andrzejczyk",
         "method": "automatic"
     },
     "G18_2_7_1": {
         "group_name": "Take Care of Newcomers - Tuesday",
-        "assignee": "Sylwia Woźniak",
+        "assignee": "Anna Kolomenkina",
         "method": "automatic"
     },
     "G18_2_8_1": {
         "group_name": "Tuesday Milonga Installation",
-        "assignee": "Julia Borychowska",
+        "assignee": "Maciek Oficialski",
         "method": "automatic"
     },
     "G18_2_9_1": {
         "group_name": "MC Tuesday",
-        "assignee": "Maciek Oficialski",
+        "assignee": "Krzysiek Rećko",
         "method": "automatic"
     },
     "G18_2_10_1": {
         "group_name": "DJ Tuesday",
-        "assignee": "Sylwia Woźniak",
+        "assignee": "Anna Kolomenkina",
         "method": "automatic"
     },
     "G18_2_11_1": {
         "group_name": "Deistalling the Venue + Cleaning - Tuesday",
-        "assignee": "Maciek Oficialski",
+        "assignee": "Krzysiek Rećko",
         "method": "automatic"
     },
     "G18_2_12_1": {
         "group_name": "Photographer Tuesday",
-        "assignee": "Maria Merchel",
+        "assignee": "Krzysiek Rećko",
         "method": "automatic"
     },
     "G18_3_1_1": {
         "group_name": "Teaching Intermediate Wednesday",
-        "assignee": "Jan Mężyński",
+        "assignee": "Pawel Wypijewski",
         "method": "automatic"
     },
     "G18_3_2_2": {
         "group_name": "Teaching Intermediate Wednesday",
-        "assignee": "Patrycja Niemczuk",
+        "assignee": "Sylwia Woźniak",
         "method": "automatic"
     },
     "G18_3_3_1": {
         "group_name": "Teaching Beginners Wednesday",
-        "assignee": "Tomasz Wilk",
+        "assignee": "Marius Latinis",
         "method": "automatic"
     },
     "G18_3_4_2": {
         "group_name": "Teaching Beginners Wednesday",
-        "assignee": "Anna Sidorowicz",
+        "assignee": "Maria Merchel",
         "method": "automatic"
     },
     "G18_3_5_1": {
         "group_name": "Assisting Beginners Wednesday",
-        "assignee": "Damian Bartosiewicz",
+        "assignee": "Aleksander Nowak",
         "method": "automatic"
     },
     "G18_3_6_2": {
         "group_name": "Assisting Beginners Wednesday",
-        "assignee": "Iana Kain",
+        "assignee": "Alicja Nowak",
         "method": "automatic"
     },
     "G18_3_7_1": {
         "group_name": "Take Care of Newcomers - Wednesday",
-        "assignee": "Martyna Gosz",
+        "assignee": "Julia Borychowska",
         "method": "automatic"
     },
     "G18_3_8_1": {
@@ -536,27 +536,27 @@
     },
     "G18_3_9_1": {
         "group_name": "Wednesday Milonga Installation",
-        "assignee": "Krzysiek Rećko",
+        "assignee": "Martyna Gosz",
         "method": "automatic"
     },
     "G18_3_10_1": {
         "group_name": "MC Wednesday",
-        "assignee": "Jan Mężyński",
+        "assignee": "Julia Borychowska",
         "method": "automatic"
     },
     "G18_3_11_1": {
         "group_name": "DJ Wednesday",
-        "assignee": "Martyna Gosz",
+        "assignee": "Jan Mężyński",
         "method": "automatic"
     },
     "G18_3_12_1": {
         "group_name": "Deistalling the Venue + Cleaning - Wednesday",
-        "assignee": "Anna Sidorowicz",
+        "assignee": "Iana Kain",
         "method": "automatic"
     },
     "G18_3_13_1": {
         "group_name": "Photographer Wednesday",
-        "assignee": "Diana Siwicka",
+        "assignee": "Jan Mężyński",
         "method": "automatic"
     },
     "G15_0_1_1": {
@@ -581,12 +581,12 @@
     },
     "G15_0_5_1": {
         "group_name": "Monthly Report",
-        "assignee": "Antoni Domanowski",
+        "assignee": "Maciek Oficialski",
         "method": "automatic"
     },
     "G15_0_6_2": {
         "group_name": "Monthly Report",
-        "assignee": "Maciek Oficialski",
+        "assignee": "Antoni Domanowski",
         "method": "automatic"
     },
     "G15_0_7_1": {
@@ -621,17 +621,17 @@
     },
     "G15_2_13_1": {
         "group_name": "Registrations / Advanced - Tuesday",
-        "assignee": "Alicja Nowak",
+        "assignee": "Anna Sidorowicz",
         "method": "automatic"
     },
     "G15_2_14_1": {
         "group_name": "Social Media Posts - Tuesday",
-        "assignee": "Julia Borychowska",
+        "assignee": "Krzysiek Rećko",
         "method": "automatic"
     },
     "G15_2_15_1": {
         "group_name": "Take Care of Partyka Students - Tuesday",
-        "assignee": "Antoni Domanowski",
+        "assignee": "Damian Bagnowski",
         "method": "automatic"
     },
     "G15_3_14_1": {
@@ -641,17 +641,17 @@
     },
     "G15_3_15_1": {
         "group_name": "Take Care of Partyka Students - Wednesday",
-        "assignee": "Aleksander Nowak",
+        "assignee": "Diana Siwicka",
         "method": "automatic"
     },
     "G16_2_13_1": {
         "group_name": "Registrations / Advanced - Tuesday",
-        "assignee": "Aleksander Nowak",
+        "assignee": "Julia Borychowska",
         "method": "automatic"
     },
     "G16_2_14_1": {
         "group_name": "Social Media Posts - Tuesday",
-        "assignee": "Krzysiek Rećko",
+        "assignee": "Iana Kain",
         "method": "automatic"
     },
     "G16_2_15_1": {
@@ -661,7 +661,7 @@
     },
     "G16_3_14_1": {
         "group_name": "Social Media Posts - Wednesday",
-        "assignee": "Iana Kain",
+        "assignee": "Jan Mężyński",
         "method": "automatic"
     },
     "G16_3_15_1": {
@@ -671,22 +671,22 @@
     },
     "G17_2_13_1": {
         "group_name": "Registrations / Advanced - Tuesday",
-        "assignee": "Anna Sidorowicz",
+        "assignee": "Alicja Nowak",
         "method": "automatic"
     },
     "G17_2_14_1": {
         "group_name": "Social Media Posts - Tuesday",
-        "assignee": "Anna Kolomenkina",
+        "assignee": "Jan Mężyński",
         "method": "automatic"
     },
     "G17_2_15_1": {
         "group_name": "Take Care of Partyka Students - Tuesday",
-        "assignee": "Nina Andrzejczyk",
+        "assignee": "Aleksander Nowak",
         "method": "automatic"
     },
     "G17_3_14_1": {
         "group_name": "Social Media Posts - Wednesday",
-        "assignee": "Jan Mężyński",
+        "assignee": "Julia Borychowska",
         "method": "automatic"
     },
     "G17_3_15_1": {
@@ -696,27 +696,27 @@
     },
     "G18_2_13_1": {
         "group_name": "Registrations / Advanced - Tuesday",
-        "assignee": "Damian Bagnowski",
+        "assignee": "Krzysiek Rećko",
         "method": "automatic"
     },
     "G18_2_14_1": {
         "group_name": "Social Media Posts - Tuesday",
-        "assignee": "Maciek Oficialski",
+        "assignee": "Anna Sidorowicz",
         "method": "automatic"
     },
     "G18_2_15_1": {
         "group_name": "Take Care of Partyka Students - Tuesday",
-        "assignee": "Damian Bagnowski",
+        "assignee": "Anna Sidorowicz",
         "method": "automatic"
     },
     "G18_3_14_1": {
         "group_name": "Social Media Posts - Wednesday",
-        "assignee": "Anna Sidorowicz",
+        "assignee": "Iana Kain",
         "method": "automatic"
     },
     "G18_3_15_1": {
         "group_name": "Take Care of Partyka Students - Wednesday",
-        "assignee": "Diana Siwicka",
+        "assignee": "Tomasz Wilk",
         "method": "automatic"
     }
 }
