@@ -7,7 +7,6 @@
         "Multi-Day General (Weekday+Sunday)",
         "Intra-Week Cooldown (Same Week)",
         "Cooldown (Adjacent Weeks)",
-        "Teaching or Assisting Coverage",
         "Role Diversity (Assignments in each capable family)"
     ],
     "time_limit_seconds": 0.0,
@@ -20,8 +19,9 @@
         "Unassigned Group",
         "Underworked Team Member (< 8 Effort)",
         "Intra-Week Cooldown (Same Week)",
-        "Teaching or Assisting Coverage",
+        "Teaching/Assisting Preference",
         "Multi-Day Weekdays (e.g. Tue+Wed)",
+        "Teaching/Assisting Equality",
         "Role Diversity (Assignments in each capable family)",
         "Inefficient Day (< 2 Tasks)",
         "Multi-Day General (Weekday+Sunday)",

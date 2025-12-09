@@ -109,20 +109,7 @@ class SATSolver:
             else:
                 self.model.Add(sum(possible_vars) + self.unassigned_vars[g_id] == 1)
             
-            # Hard Priority Rule
-            # If priority candidates exist, we MUST pick one of them (OR be unassigned).
-            # We cannot pick a non-priority candidate.
-            
-            # EXCEPTION: If manually assigned, do not enforce this (Manual overrides Priority).
-            manual_assignee = group.get('assignee')
-            
-            if priority_list and not manual_assignee:
-                # Identify non-priority candidates
-                non_priority = [p for p in all_candidates if p not in priority_list]
-                for np in non_priority:
-                     if (g_id, np) in self.assignments:
-                         # Force non-priority to 0
-                         self.model.Add(self.assignments[(g_id, np)] == 0)
+
 
         # Mutual Exclusion
         group_map = {g['id']: g for g in self.groups}
@@ -204,81 +191,176 @@ class SATSolver:
         # Term 7: Role Diversity
         P_DIVERSITY = self.penalties.get_penalty_by_name("Role Diversity (Assignments in each capable family)")
         
-        # Term 8: Teaching/Assisting Coverage
-        P_TEACH_ASSIST = self.penalties.get_penalty_by_name("Teaching or Assisting Coverage")
+        # Term 8: Teaching/Assisting Preference
+        P_TEACH_PREF = self.penalties.get_penalty_by_name("Teaching/Assisting Preference")
         
-        # --- Teaching/Assisting Coverage Logic ---
-        if P_TEACH_ASSIST > 0:
-            # 1. Identify Teaching and Assisting Groups
-            teaching_groups = [g for g in self.groups if g.get('family') == 'Teaching']
-            assisting_groups = [g for g in self.groups if g.get('family') == 'Assisting']
+        # Term 9: Teaching/Assisting Equality (Hoisted)
+        P_TEACH_EQUALITY = self.penalties.get_penalty_by_name("Teaching/Assisting Equality")
+        
+        # --- Teaching/Assisting Preference Logic ---
+        if P_TEACH_PREF > 0 or P_TEACH_EQUALITY > 0:
+            # Shared: Identify Teaching/Assisting Groups and Candidates
+            # 1. Group Classification
+            teaching_groups_ids = []
+            assisting_groups_ids = []
             
-            # Map person -> can_teach? can_assist?
-            # A person is eligible for this rule if they are a candidate for AT LEAST ONE group in either family.
+            # Map for capable sets
+            capable_teaching = set()
+            capable_assisting = set()
             
-            relevant_persons = set()
-            persons_teaching_vars = {} # person -> list of assign vars
-            persons_assisting_vars = {} # person -> list of assign vars
-            
-            for person in all_persons:
-                persons_teaching_vars[person] = []
-                persons_assisting_vars[person] = []
-                
-                can_teach = False
-                for g in teaching_groups:
-                    if person in self.get_group_candidates(g):
-                        can_teach = True
-                        if (g['id'], person) in self.assignments:
-                            persons_teaching_vars[person].append(self.assignments[(g['id'], person)])
-                            
-                can_assist = False
-                for g in assisting_groups:
-                    if person in self.get_group_candidates(g):
-                        can_assist = True
-                        if (g['id'], person) in self.assignments:
-                            persons_assisting_vars[person].append(self.assignments[(g['id'], person)])
-                            
-                if can_teach or can_assist:
-                    relevant_persons.add(person)
-            
-            # 2. Apply Penalty
-            for person in relevant_persons:
-                # Logic:
-                # If capable of Teaching -> Must have > 0 Assignments in Teaching (Assisting doesn't count for coverage)
-                # Else If capable of Assisting -> Must have > 0 Assignments in Assisting
-                
-                check_vars = []
-                
-                # Check capability (re-derive from vars existence or candidate check)
-                can_teach = len(persons_teaching_vars[person]) > 0 or \
-                             any(person in self.get_group_candidates(g) for g in teaching_groups)
-                
-                if can_teach:
-                    check_vars = persons_teaching_vars[person]
-                else:
-                    # Can assist (implied by being in relevant_persons and not can_teach)
-                    check_vars = persons_assisting_vars[person]
+            for group in self.groups:
+                fam = group.get('family', '')
+                if fam == 'Teaching':
+                    teaching_groups_ids.append(group['id'])
+                    capable_teaching.update(self.get_group_candidates(group))
+                elif fam == 'Assisting':
+                    assisting_groups_ids.append(group['id'])
+                    capable_assisting.update(self.get_group_candidates(group))
 
-                if not check_vars:
-                     # Capable but no vars?! (Should unlikely happen unless all groups exclusive? or Logic error)
-                     # Or maybe they are candidate but all their groups were filtered out?
-                     # Apply penalty safety.
-                     objective_terms.append(P_TEACH_ASSIST)
-                     if person not in self.debug_vars: self.debug_vars[person] = {}
-                     
-                     details = "Teaching (Priority)" if can_teach else "Assisting"
-                     self.debug_vars[person]['teach_assist_penalty_details'] = f"No assignments in {details}"
-                     self.debug_vars[person]['teach_assist_penalty'] = True
-                else:
-                    missed_coverage = self.model.NewBoolVar(f"missed_teach_assist_{person}")
+            # --- Teaching/Assisting Preference Logic ---
+            if P_TEACH_PREF > 0:
+                all_relevant = capable_teaching.union(capable_assisting)
+                
+                for person in all_relevant:
+                    if person not in all_persons: continue
                     
-                    self.model.Add(sum(check_vars) == 0).OnlyEnforceIf(missed_coverage)
-                    self.model.Add(sum(check_vars) > 0).OnlyEnforceIf(missed_coverage.Not())
+                    teach_vars = [self.assignments[(gid, person)] for gid in teaching_groups_ids if (gid, person) in self.assignments]
+                    assist_vars = [self.assignments[(gid, person)] for gid in assisting_groups_ids if (gid, person) in self.assignments]
                     
-                    objective_terms.append(missed_coverage * P_TEACH_ASSIST)
+                    has_teaching = self.model.NewBoolVar(f"has_teaching_{person}")
+                    if teach_vars:
+                        # Optimization: sum(vars) > 0 <-> has_teaching
+                        self.model.AddMaxEquality(has_teaching, teach_vars)
+                    else:
+                        self.model.Add(has_teaching == 0)
+                        
+                    has_assisting = self.model.NewBoolVar(f"has_assisting_{person}")
+                    if assist_vars:
+                        self.model.AddMaxEquality(has_assisting, assist_vars)
+                    else:
+                        self.model.Add(has_assisting == 0)
                     
-                    if person not in self.debug_vars: self.debug_vars[person] = {}
-                    self.debug_vars[person]['teach_assist_var'] = missed_coverage
+                    # Apply Costs
+                    if person in capable_teaching:
+                        # P_TEACH_PREF * (1.0 * is_bad + 0.5 * is_ok_assist)
+                        P_HALF = int(P_TEACH_PREF * 0.5)
+                        
+                        is_half_bad = self.model.NewBoolVar(f"teach_pref_half_{person}")
+                        # (!T and A)
+                        self.model.AddBoolAnd([has_teaching.Not(), has_assisting]).OnlyEnforceIf(is_half_bad)
+                        self.model.AddBoolOr([has_teaching, has_assisting.Not()]).OnlyEnforceIf(is_half_bad.Not())
+                        
+                        is_full_bad = self.model.NewBoolVar(f"teach_pref_full_{person}")
+                        # (!T and !A)
+                        self.model.AddBoolAnd([has_teaching.Not(), has_assisting.Not()]).OnlyEnforceIf(is_full_bad)
+                        self.model.AddBoolOr([has_teaching, has_assisting]).OnlyEnforceIf(is_full_bad.Not())
+                        
+                        objective_terms.append(is_half_bad * P_HALF)
+                        objective_terms.append(is_full_bad * P_TEACH_PREF)
+                        
+                        # Debug logic remains similar but simplified context
+                        if person not in self.debug_vars: self.debug_vars[person] = {}
+                        self.debug_vars[person]['teach_pref'] = {
+                            'type': 'teacher',
+                            'half_var': is_half_bad,
+                            'full_var': is_full_bad,
+                            'cost_half': P_HALF,
+                            'cost_full': P_TEACH_PREF
+                        }
+
+                    elif person in capable_assisting:
+                        is_bad = self.model.NewBoolVar(f"assist_pref_bad_{person}")
+                        # Not Assisting => Bad
+                        self.model.Add(has_assisting == 0).OnlyEnforceIf(is_bad)
+                        self.model.Add(has_assisting == 1).OnlyEnforceIf(is_bad.Not())
+                        
+                        objective_terms.append(is_bad * P_TEACH_PREF)
+                        
+                        if person not in self.debug_vars: self.debug_vars[person] = {}
+                        self.debug_vars[person]['teach_pref'] = {
+                            'type': 'assistant',
+                            'full_var': is_bad,
+                            'cost_full': P_TEACH_PREF
+                        }
+
+            # --- Teaching/Assisting Equality Logic ---
+            if P_TEACH_EQUALITY > 0:
+                fam_map_ids = {"Teaching": teaching_groups_ids, "Assisting": assisting_groups_ids}
+                
+                for person in all_persons:
+                     for fam_name, gids in fam_map_ids.items():
+                         if not gids: continue
+
+                         # Manual/Auto Detection
+                         manual_vars = []
+                         auto_vars = []
+                         
+                         # Optimization: Filter loop by assignments existence
+                         person_gids = [gid for gid in gids if (gid, person) in self.assignments]
+                         if not person_gids: continue
+
+                         for gid in person_gids:
+                             var = self.assignments[(gid, person)]
+                             is_manual = False
+                             group_obj = self.group_map.get(gid)
+                             
+                             if group_obj:
+                                 # 1. Explicit Manual
+                                 if group_obj.get('assignee') == person:
+                                     is_manual = True
+                                 
+                                 # 2. Unavoidable
+                                 if not is_manual:
+                                     p_list = group_obj.get('filtered_priority_candidates_list')
+                                     curr_candidates = p_list if p_list else group_obj.get('filtered_candidates_list', [])
+                                     
+                                     if len(curr_candidates) == 1 and curr_candidates[0] == person:
+                                         is_manual = True
+                             
+                             if is_manual:
+                                 manual_vars.append(var)
+                             else:
+                                 auto_vars.append(var)
+                         
+                         p_vars = manual_vars + auto_vars
+                         
+                         # Only create constraints if >1 assignment possible
+                         # Actually we need it if >1 assignment is MADE. 
+                         # We can optimistically create if len(p_vars) >= 2
+                         if len(p_vars) >= 2:
+                             total_count_var = self.model.NewIntVar(0, len(p_vars), f"equality_count_{fam_name}_{person}")
+                             self.model.Add(total_count_var == sum(p_vars))
+                             
+                             costs = []
+                             for i in range(len(p_vars) + 1):
+                                 if i < 2:
+                                     costs.append(0)
+                                 else:
+                                     multiplier = 3 ** (i - 2)
+                                     costs.append(P_TEACH_EQUALITY * multiplier)
+                            
+                             base_cost_var = self.model.NewIntVar(0, max(costs), f"equality_base_cost_{fam_name}_{person}")
+                             self.model.AddElement(total_count_var, costs, base_cost_var)
+                             
+                             has_auto = self.model.NewBoolVar(f"equality_has_auto_{fam_name}_{person}")
+                             if auto_vars:
+                                 self.model.AddMaxEquality(has_auto, auto_vars)
+                             else:
+                                 self.model.Add(has_auto == 0)
+                                 
+                             final_cost_var = self.model.NewIntVar(0, max(costs), f"equality_final_cost_{fam_name}_{person}")
+                             self.model.AddMultiplicationEquality(final_cost_var, [base_cost_var, has_auto])
+                             
+                             objective_terms.append(final_cost_var)
+                             
+                             if person not in self.debug_vars: self.debug_vars[person] = {}
+                             if 'equality' not in self.debug_vars[person]: self.debug_vars[person]['equality'] = []
+                             self.debug_vars[person]['equality'].append({
+                                 'family': fam_name,
+                                 'count_var': total_count_var,
+                                 'cost_var': final_cost_var,
+                                 'has_auto': has_auto
+                             })
 
         # --- Role Diversity Logic ---
         # "For each defined family in groups we want each person to do at least one assignment 
@@ -343,7 +425,7 @@ class SATSolver:
                     # Formula: Cost = P * 2^(N-1) for N >= 1, else 0
                     costs = [0]
                     for i in range(1, len(missed_vars) + 1):
-                         costs.append(P_DIVERSITY * (2**(i-1)))
+                         costs.append(P_DIVERSITY * (3**(i-1)))
                     
                     div_cost_var = self.model.NewIntVar(0, max(costs), f"div_cost_{person}")
                     self.model.AddElement(missed_count, costs, div_cost_var)
@@ -465,7 +547,7 @@ class SATSolver:
                         # L=4 -> +2*P (Total 4P for last link)
                         # L=5 -> +4*P (Total 8P for last link)
                         
-                        multiplier = 2**(length - 3) 
+                        multiplier = 3**(length - 3) 
                         extra_cost = P_COOLDOWN * multiplier
                         
                         # Apply constraint for this specific person on this chain
@@ -530,35 +612,37 @@ class SATSolver:
         
         # If ANY daily-based penalty is active, we need the day processing loop.
         if P_MULTI_WEEKDAY > 0 or P_INEFFICIENT > 0 or P_MULTI_GENERAL > 0:
+            # Hoist: Build Day -> Group Map ONCE
+            day_to_group_ids = {} # day_key -> list of gids
+            
+            for group in self.groups:
+                 parts = group['id'].split('_')
+                 if len(parts) >= 3:
+                     day_key = f"{parts[0]}_{parts[1]}" # Week_Day
+                     if day_key not in day_to_group_ids:
+                         day_to_group_ids[day_key] = []
+                     day_to_group_ids[day_key].append(group['id'])
+
             for person in all_persons:
                  # Gather days worked
                  days_worked_vars = []
                  weekdays_worked_vars = []
                  weekdays_by_week = {} # week_str -> list of vars
                  
-                 # Group IDs by day for this person
-                 person_day_groups = {}
-                 for group in self.groups:
-                     parts = group['id'].split('_')
-                     if len(parts) >= 3:
-                         day_key = f"{parts[0]}_{parts[1]}" # Week_Day
-                     else:
-                         continue
-                         
-                     if day_key not in person_day_groups:
-                         person_day_groups[day_key] = []
-                     person_day_groups[day_key].append(group['id'])
-
+                 # Optimization: Use Shared Map
+                 
                  # Create Worked Day Vars
-                 for day_key, g_ids in person_day_groups.items():
+                 for day_key, g_ids in day_to_group_ids.items():
                      worked_var = self.model.NewBoolVar(f"worked_{person}_{day_key}")
+                     
+                     # Only consider groups this person is actually a candidate for (exists in assignments)
                      day_assigns = [self.assignments[(gid, person)] for gid in g_ids if (gid, person) in self.assignments]
                      
                      if not day_assigns:
                          self.model.Add(worked_var == 0)
                      else:
-                         self.model.Add(sum(day_assigns) > 0).OnlyEnforceIf(worked_var)
-                         self.model.Add(sum(day_assigns) == 0).OnlyEnforceIf(worked_var.Not())
+                         # sum > 0 <-> worked
+                         self.model.AddMaxEquality(worked_var, day_assigns)
                          
                          if P_INEFFICIENT > 0:
                              inefficient_var = self.model.NewBoolVar(f"inefficient_{person}_{day_key}")
@@ -614,7 +698,7 @@ class SATSolver:
                                  else:
                                      # i=2 -> 2^(0) = 1
                                      # i=3 -> 2^(1) = 2
-                                     multiplier = 2 ** (i - 2)
+                                     multiplier = 3 ** (i - 2)
                                      costs.append(P_MULTI_WEEKDAY * multiplier)
                              
                              cost_var = self.model.NewIntVar(0, max(costs), f"multi_weekday_cost_{person}_{w_str}")
@@ -664,7 +748,7 @@ class SATSolver:
         
         if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
             print(f"Solution Found! Status: {solver.StatusName(status)}")
-            print(f"Objective Value: {solver.ObjectiveValue()}")
+            print(f"Objective Value: {int(solver.ObjectiveValue())}")
             
             # Collect Assignments
             for group in self.groups:
@@ -680,7 +764,7 @@ class SATSolver:
                         "group_id": g_id,
                         "group_name": group['name'],
                         "assignee": None,
-                        "rule": self.penalties.get_rule_name(0),
+                        "rule": "Unassigned Group",
                         "cost": P_UNASSIGNED
                     })
                 else:
@@ -717,25 +801,6 @@ class SATSolver:
                 # New Rules
                 # New Rules
                 if person in self.debug_vars:
-                    # Teaching/Assisting Coverage
-                    if 'teach_assist_var' in self.debug_vars[person] and solver.Value(self.debug_vars[person]['teach_assist_var']) == 1:
-                         # Determine detail logic again for report? Or store it?
-                         # For now generic msg or infer
-                         incurred_penalties.append({
-                            "person_name": person,
-                            "rule": "Teaching or Assisting Coverage",
-                            "cost": P_TEACH_ASSIST,
-                            "details": "Missed required Teaching/Assisting assignment (Teaching prioritized)"
-                        })
-                    elif 'teach_assist_penalty' in self.debug_vars[person] and self.debug_vars[person]['teach_assist_penalty']:
-                         det = self.debug_vars[person].get('teach_assist_penalty_details', "No assignments in Teaching or Assisting")
-                         incurred_penalties.append({
-                            "person_name": person,
-                            "rule": "Teaching or Assisting Coverage",
-                            "cost": P_TEACH_ASSIST,
-                            "details": det
-                        })
-
                     # Multi-Day Weekday
                     # Multi-Day Weekday (Cascading)
                     # Multi-Day Weekday (Cascading Geometric)
@@ -806,6 +871,44 @@ class SATSolver:
                                     "details": item['details']
                                 })
                         
+                    # Teaching/Assisting Preference
+                    if 'teach_pref' in self.debug_vars[person]:
+                        info = self.debug_vars[person]['teach_pref']
+                        cost_incurred = 0
+                        details = ""
+                        
+                        if info['type'] == 'teacher':
+                             if solver.Value(info['full_var']) == 1:
+                                 cost_incurred = info['cost_full']
+                                 details = "Teacher assigned neither Teaching nor Assisting"
+                             elif solver.Value(info['half_var']) == 1:
+                                 cost_incurred = info['cost_half']
+                                 details = "Teacher assigned only Assisting (Preferred Teaching)"
+                        elif info['type'] == 'assistant':
+                             if solver.Value(info['full_var']) == 1:
+                                 cost_incurred = info['cost_full']
+                                 details = "Assistant assigned no Assisting tasks"
+                        
+                        if cost_incurred > 0:
+                            incurred_penalties.append({
+                                "person_name": person,
+                                "rule": "Teaching/Assisting Preference",
+                                "cost": cost_incurred,
+                            })
+
+                    # Teaching/Assisting Equality
+                    if 'equality' in self.debug_vars[person]:
+                        for item in self.debug_vars[person]['equality']:
+                            c_val = solver.Value(item['cost_var'])
+                            if c_val > 0:
+                                cnt = solver.Value(item['count_var'])
+                                incurred_penalties.append({
+                                    "person_name": person,
+                                    "rule": "Teaching/Assisting Equality",
+                                    "cost": c_val,
+                                    "details": f"Hoarding {cnt} assignments in {item['family']} (Active due to new auto assignment)"
+                                })
+
                 # Efficiency check (need to reconstruct context or store vars better)
                 # Re-check logic simply via values for reporting
                 # (Ideally we stored inefficient vars)
@@ -838,12 +941,23 @@ class SATSolver:
         return False
 
     def get_group_candidates(self, group):
-        """Helper to get all valid candidates for a group."""
-        c = group.get('filtered_priority_candidates_list', []) + \
-            group.get('filtered_candidates_list', [])
-        s = list(set(c))
+        """Helper to get all valid candidates for a group.
         
+        Optimization: If 'assignee' is set, return ONLY that person.
+        Optimization: If 'filtered_priority_candidates_list' exists and is not empty, use ONLY that.
+        Otherwise, use 'filtered_candidates_list'.
+        """
+        # 1. Manual Assignment (Highest Priority)
         m = group.get('assignee')
-        if m and m not in s: 
-            s.append(m)
-        return s
+        if m:
+            return [m]
+        
+        # 2. Filtered Priority List (Strict)
+        # Note: If this list exists, we ignore standard candidates completely.
+        # This prunes the search space significantly.
+        priority_candidates = group.get('filtered_priority_candidates_list', [])
+        if priority_candidates:
+            return list(set(priority_candidates))
+            
+        # 3. Standard Candidates
+        return list(set(group.get('filtered_candidates_list', [])))

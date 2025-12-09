@@ -1,5 +1,5 @@
 {
-    "Iana Kain": {
+    "Julia Borychowska": {
         "assignments": [
             {
                 "week": 15,
@@ -10,139 +10,75 @@
                 "group_id": "G15_7_1_1"
             },
             {
-                "week": 16,
+                "week": 15,
                 "day": "Wednesday",
-                "group_name": "DJ Wednesday",
-                "family": "DJing",
+                "group_name": "Third Registrator Wednesday",
+                "family": "Third Registrator Wednesday",
                 "role": "any",
-                "group_id": "G16_3_11_1"
+                "group_id": "G15_3_8_1"
             },
             {
-                "week": 16,
-                "day": "Wednesday",
-                "group_name": "Photographer Wednesday",
-                "family": "Media",
-                "role": "any",
-                "group_id": "G16_3_13_1"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "Take Care of Newcomers - Wednesday",
-                "family": "Assisting",
-                "role": "any",
-                "group_id": "G17_3_7_1"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "MC Wednesday",
-                "family": "MCing",
-                "role": "any",
-                "group_id": "G17_3_10_1"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "Deistalling the Venue + Cleaning - Wednesday",
-                "family": "Deinstalling Milonga",
-                "role": "any",
-                "group_id": "G17_3_12_1"
-            },
-            {
-                "week": 17,
+                "week": 15,
                 "day": "Wednesday",
                 "group_name": "Social Media Posts - Wednesday",
                 "family": "Social Media Posts - Wednesday",
                 "role": "any",
-                "group_id": "G17_3_14_1"
+                "group_id": "G15_3_14_1"
             },
             {
-                "week": 18,
+                "week": 16,
                 "day": "Tuesday",
                 "group_name": "Tuesday Milonga Installation",
                 "family": "Food Supply",
                 "role": "any",
-                "group_id": "G18_2_8_1"
+                "group_id": "G16_2_8_1"
             },
             {
-                "week": 18,
-                "day": "Tuesday",
-                "group_name": "Social Media Posts - Tuesday",
-                "family": "Social Media Posts - Tuesday",
-                "role": "any",
-                "group_id": "G18_2_14_1"
-            }
-        ],
-        "penalties": [
-            {
-                "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
-            },
-            {
-                "rule": "Multi-Day General (Weekday+Sunday)",
-                "cost": 10,
-                "details": "Worked on Weekday + Sunday"
-            }
-        ]
-    },
-    "Alicja Nowak": {
-        "assignments": [
-            {
-                "week": 15,
-                "day": "Sunday",
-                "group_name": "Sunday Milonga Installation",
-                "family": "Sunday Milonga",
-                "role": "any",
-                "group_id": "G15_7_2_1"
-            },
-            {
-                "week": 15,
+                "week": 17,
                 "day": "Tuesday",
                 "group_name": "Take Care of Newcomers - Tuesday",
                 "family": "Assisting",
                 "role": "any",
-                "group_id": "G15_2_7_1"
+                "group_id": "G17_2_7_1"
             },
             {
-                "week": 15,
-                "day": "Tuesday",
-                "group_name": "DJ Tuesday",
-                "family": "DJing",
-                "role": "any",
-                "group_id": "G15_2_10_1"
-            },
-            {
-                "week": 16,
+                "week": 17,
                 "day": "Tuesday",
                 "group_name": "MC Tuesday",
                 "family": "MCing",
                 "role": "any",
-                "group_id": "G16_2_9_1"
+                "group_id": "G17_2_9_1"
             },
             {
-                "week": 16,
+                "week": 17,
                 "day": "Tuesday",
                 "group_name": "Deistalling the Venue + Cleaning - Tuesday",
                 "family": "Deinstalling Milonga",
                 "role": "any",
-                "group_id": "G16_2_11_1"
+                "group_id": "G17_2_11_1"
             },
             {
-                "week": 17,
+                "week": 18,
                 "day": "Wednesday",
-                "group_name": "Wednesday Milonga Installation",
-                "family": "Food Supply",
+                "group_name": "DJ Wednesday",
+                "family": "DJing",
                 "role": "any",
-                "group_id": "G17_3_9_1"
+                "group_id": "G18_3_11_1"
+            },
+            {
+                "week": 18,
+                "day": "Wednesday",
+                "group_name": "Photographer Wednesday",
+                "family": "Media",
+                "role": "any",
+                "group_id": "G18_3_13_1"
             }
         ],
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+                "cost": 81000,
+                "details": "Missed 5 families: Take Care of Team Members, Registrations / Advanced - Tuesday, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
             },
             {
                 "rule": "Multi-Day General (Weekday+Sunday)",
@@ -156,18 +92,10 @@
             {
                 "week": 15,
                 "day": "Sunday",
-                "group_name": "Sunday Milonga Deinstallation",
+                "group_name": "Sunday Milonga Installation",
                 "family": "Sunday Milonga",
                 "role": "any",
-                "group_id": "G15_7_3_1"
-            },
-            {
-                "week": 15,
-                "day": "Wednesday",
-                "group_name": "Take Care of Newcomers - Wednesday",
-                "family": "Assisting",
-                "role": "any",
-                "group_id": "G15_3_7_1"
+                "group_id": "G15_7_2_1"
             },
             {
                 "week": 15,
@@ -178,64 +106,125 @@
                 "group_id": "G15_3_10_1"
             },
             {
-                "week": 16,
+                "week": 15,
                 "day": "Wednesday",
                 "group_name": "Deistalling the Venue + Cleaning - Wednesday",
                 "family": "Deinstalling Milonga",
                 "role": "any",
-                "group_id": "G16_3_12_1"
+                "group_id": "G15_3_12_1"
             },
             {
                 "week": 16,
-                "day": "Wednesday",
-                "group_name": "Social Media Posts - Wednesday",
-                "family": "Social Media Posts - Wednesday",
-                "role": "any",
-                "group_id": "G16_3_14_1"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "DJ Wednesday",
-                "family": "DJing",
-                "role": "any",
-                "group_id": "G17_3_11_1"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "Photographer Wednesday",
+                "day": "Tuesday",
+                "group_name": "Photographer Tuesday",
                 "family": "Media",
                 "role": "any",
-                "group_id": "G17_3_13_1"
+                "group_id": "G16_2_12_1"
             },
             {
-                "week": 18,
+                "week": 16,
+                "day": "Tuesday",
+                "group_name": "Registrations / Advanced - Tuesday",
+                "family": "Registrations / Advanced - Tuesday",
+                "role": "any",
+                "group_id": "G16_2_13_1"
+            },
+            {
+                "week": 17,
                 "day": "Wednesday",
                 "group_name": "Third Registrator Wednesday",
                 "family": "Third Registrator Wednesday",
                 "role": "any",
-                "group_id": "G18_3_8_1"
+                "group_id": "G17_3_8_1"
             },
             {
-                "week": 18,
+                "week": 17,
                 "day": "Wednesday",
                 "group_name": "Wednesday Milonga Installation",
                 "family": "Food Supply",
                 "role": "any",
-                "group_id": "G18_3_9_1"
+                "group_id": "G17_3_9_1"
+            },
+            {
+                "week": 18,
+                "day": "Wednesday",
+                "group_name": "Take Care of Newcomers - Wednesday",
+                "family": "Assisting",
+                "role": "any",
+                "group_id": "G18_3_7_1"
+            },
+            {
+                "week": 18,
+                "day": "Wednesday",
+                "group_name": "Social Media Posts - Wednesday",
+                "family": "Social Media Posts - Wednesday",
+                "role": "any",
+                "group_id": "G18_3_14_1"
             }
         ],
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: Take Care of Team Members, Registrations / Advanced - Tuesday, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+                "cost": 81000,
+                "details": "Missed 5 families: DJing, Take Care of Team Members, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
             },
             {
                 "rule": "Multi-Day General (Weekday+Sunday)",
                 "cost": 10,
                 "details": "Worked on Weekday + Sunday"
+            }
+        ]
+    },
+    "Pawel Wypijewski": {
+        "assignments": [
+            {
+                "week": 15,
+                "day": "Sunday",
+                "group_name": "Sunday Milonga Deinstallation",
+                "family": "Sunday Milonga",
+                "role": "any",
+                "group_id": "G15_7_3_1"
+            },
+            {
+                "week": 15,
+                "day": "Wednesday",
+                "group_name": "Teaching Beginners Wednesday",
+                "family": "Teaching",
+                "role": "leader",
+                "group_id": "G15_3_3_1"
+            },
+            {
+                "week": 17,
+                "day": "Wednesday",
+                "group_name": "Teaching Beginners Wednesday",
+                "family": "Teaching",
+                "role": "leader",
+                "group_id": "G17_3_3_1"
+            },
+            {
+                "week": 18,
+                "day": "Wednesday",
+                "group_name": "Teaching Intermediate Wednesday",
+                "family": "Teaching",
+                "role": "leader",
+                "group_id": "G18_3_1_1"
+            }
+        ],
+        "penalties": [
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 30000,
+                "details": "Hoarding 3 assignments in Teaching (Active due to new auto assignment)"
+            },
+            {
+                "rule": "Multi-Day General (Weekday+Sunday)",
+                "cost": 10,
+                "details": "Worked on Weekday + Sunday"
+            },
+            {
+                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+                "cost": 1,
+                "details": "Teaching Beginners Wednesday (W17) & Teaching Intermediate Wednesday (W18)"
             }
         ]
     },
@@ -277,7 +266,7 @@
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
+                "cost": 81000,
                 "details": "Missed 5 families: Sunday Milonga, Assisting, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
             }
         ]
@@ -303,74 +292,18 @@
             {
                 "week": 16,
                 "day": "Wednesday",
+                "group_name": "Teaching Intermediate Wednesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G16_3_2_2"
+            },
+            {
+                "week": 18,
+                "day": "Wednesday",
                 "group_name": "Assisting Beginners Wednesday",
                 "family": "Assisting",
                 "role": "follower",
-                "group_id": "G16_3_6_2"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "Teaching Beginners Wednesday",
-                "family": "Teaching",
-                "role": "follower",
-                "group_id": "G17_3_4_2"
-            },
-            {
-                "week": 18,
-                "day": "Tuesday",
-                "group_name": "Photographer Tuesday",
-                "family": "Media",
-                "role": "any",
-                "group_id": "G18_2_12_1"
-            },
-            {
-                "week": 18,
-                "day": "Tuesday",
-                "group_name": "Registrations / Advanced - Tuesday",
-                "family": "Registrations / Advanced - Tuesday",
-                "role": "any",
-                "group_id": "G18_2_13_1"
-            }
-        ],
-        "penalties": [
-            {
-                "rule": "Role Diversity (Cascading)",
-                "cost": 8000,
-                "details": "Missed 4 families: Third Registrator Wednesday, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
-            },
-            {
-                "rule": "Multi-Day General (Weekday+Sunday)",
-                "cost": 10,
-                "details": "Worked on Weekday + Sunday"
-            }
-        ]
-    },
-    "Tomasz Wilk": {
-        "assignments": [
-            {
-                "week": 15,
-                "day": "Tuesday",
-                "group_name": "Teaching Beginners Tuesday",
-                "family": "Teaching",
-                "role": "leader",
-                "group_id": "G15_2_3_1"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "Teaching Beginners Wednesday",
-                "family": "Teaching",
-                "role": "leader",
-                "group_id": "G17_3_3_1"
-            },
-            {
-                "week": 18,
-                "day": "Wednesday",
-                "group_name": "Photographer Wednesday",
-                "family": "Media",
-                "role": "any",
-                "group_id": "G18_3_13_1"
+                "group_id": "G18_3_6_2"
             },
             {
                 "week": 18,
@@ -384,12 +317,67 @@
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 8000,
-                "details": "Missed 4 families: Sunday Milonga, Assisting, Take Care of Team Members, Take Care of Partyka Students - Tuesday"
+                "cost": 81000,
+                "details": "Missed 5 families: Media, Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Teaching (Active due to new auto assignment)"
+            },
+            {
+                "rule": "Multi-Day General (Weekday+Sunday)",
+                "cost": 10,
+                "details": "Worked on Weekday + Sunday"
+            },
+            {
+                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+                "cost": 1,
+                "details": "Teaching Advanced Tuesday (W15) & Teaching Intermediate Wednesday (W16)"
             }
         ]
     },
-    "Martyna Gosz": {
+    "Michał Dziedziniewicz": {
+        "assignments": [
+            {
+                "week": 15,
+                "day": "Tuesday",
+                "group_name": "Teaching Beginners Tuesday",
+                "family": "Teaching",
+                "role": "leader",
+                "group_id": "G15_2_3_1"
+            },
+            {
+                "week": 16,
+                "day": "Wednesday",
+                "group_name": "Assisting Beginners Wednesday",
+                "family": "Assisting",
+                "role": "leader",
+                "group_id": "G16_3_5_1"
+            },
+            {
+                "week": 17,
+                "day": "Tuesday",
+                "group_name": "Teaching Beginners Tuesday",
+                "family": "Teaching",
+                "role": "leader",
+                "group_id": "G17_2_3_1"
+            }
+        ],
+        "penalties": [
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Teaching (Active due to new auto assignment)"
+            },
+            {
+                "rule": "Role Diversity (Cascading)",
+                "cost": 1000,
+                "details": "Missed 1 families: Take Care of Team Members"
+            }
+        ]
+    },
+    "Sylwia Woźniak": {
         "assignments": [
             {
                 "week": 15,
@@ -400,48 +388,53 @@
                 "group_id": "G15_2_4_2"
             },
             {
-                "week": 15,
+                "week": 17,
+                "day": "Tuesday",
+                "group_name": "DJ Tuesday",
+                "family": "DJing",
+                "role": "any",
+                "group_id": "G17_2_10_1"
+            },
+            {
+                "week": 18,
+                "day": "Tuesday",
+                "group_name": "Teaching Beginners Tuesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G18_2_4_2"
+            },
+            {
+                "week": 18,
                 "day": "Tuesday",
                 "group_name": "MC Tuesday",
                 "family": "MCing",
                 "role": "any",
-                "group_id": "G15_2_9_1"
-            },
-            {
-                "week": 16,
-                "day": "Wednesday",
-                "group_name": "Wednesday Milonga Installation",
-                "family": "Food Supply",
-                "role": "any",
-                "group_id": "G16_3_9_1"
-            },
-            {
-                "week": 18,
-                "day": "Wednesday",
-                "group_name": "Take Care of Newcomers - Wednesday",
-                "family": "Assisting",
-                "role": "any",
-                "group_id": "G18_3_7_1"
-            },
-            {
-                "week": 18,
-                "day": "Wednesday",
-                "group_name": "DJ Wednesday",
-                "family": "DJing",
-                "role": "any",
-                "group_id": "G18_3_11_1"
+                "group_id": "G18_2_9_1"
             }
         ],
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: Sunday Milonga, Media, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+                "cost": 81000,
+                "details": "Missed 5 families: Sunday Milonga, Assisting, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Teaching (Active due to new auto assignment)"
             }
         ]
     },
-    "Damian Bagnowski": {
+    "Antoni Domanowski": {
         "assignments": [
+            {
+                "week": 15,
+                "day": null,
+                "group_name": "Monthly Report",
+                "family": "Monthly Report",
+                "role": "any",
+                "group_id": "G15_0_5_1"
+            },
             {
                 "week": 15,
                 "day": "Tuesday",
@@ -449,14 +442,6 @@
                 "family": "Assisting",
                 "role": "leader",
                 "group_id": "G15_2_5_1"
-            },
-            {
-                "week": 15,
-                "day": "Tuesday",
-                "group_name": "Take Care of Partyka Students - Tuesday",
-                "family": "Take Care of Partyka Students - Tuesday",
-                "role": "any",
-                "group_id": "G15_2_15_1"
             },
             {
                 "week": 17,
@@ -469,9 +454,19 @@
         ],
         "penalties": [
             {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Assisting (Active due to new auto assignment)"
+            },
+            {
                 "rule": "Role Diversity (Cascading)",
                 "cost": 1000,
-                "details": "Missed 1 families: Registrations / Advanced - Tuesday"
+                "details": "Missed 1 families: Take Care of Partyka Students - Tuesday"
+            },
+            {
+                "rule": "Multi-Day General (Weekday+Sunday)",
+                "cost": 10,
+                "details": "Worked on Weekday + Sunday"
             }
         ]
     },
@@ -486,32 +481,27 @@
                 "group_id": "G15_2_6_2"
             },
             {
-                "week": 16,
+                "week": 15,
                 "day": "Tuesday",
-                "group_name": "Assisting Beginners Tuesday",
-                "family": "Assisting",
-                "role": "follower",
-                "group_id": "G16_2_6_2"
+                "group_name": "Take Care of Partyka Students - Tuesday",
+                "family": "Take Care of Partyka Students - Tuesday",
+                "role": "any",
+                "group_id": "G15_2_15_1"
             },
             {
-                "week": 18,
+                "week": 17,
                 "day": "Tuesday",
                 "group_name": "Assisting Beginners Tuesday",
                 "family": "Assisting",
                 "role": "follower",
-                "group_id": "G18_2_6_2"
+                "group_id": "G17_2_6_2"
             }
         ],
         "penalties": [
             {
-                "rule": "Role Diversity (Cascading)",
-                "cost": 1000,
-                "details": "Missed 1 families: Take Care of Partyka Students - Tuesday"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Assisting Beginners Tuesday (W15) & Assisting Beginners Tuesday (W16)"
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Assisting (Active due to new auto assignment)"
             }
         ]
     },
@@ -520,18 +510,26 @@
             {
                 "week": 15,
                 "day": "Tuesday",
-                "group_name": "Tuesday Milonga Installation",
-                "family": "Food Supply",
+                "group_name": "Take Care of Newcomers - Tuesday",
+                "family": "Assisting",
                 "role": "any",
-                "group_id": "G15_2_8_1"
+                "group_id": "G15_2_7_1"
             },
             {
                 "week": 15,
                 "day": "Tuesday",
-                "group_name": "Registrations / Advanced - Tuesday",
-                "family": "Registrations / Advanced - Tuesday",
+                "group_name": "MC Tuesday",
+                "family": "MCing",
                 "role": "any",
-                "group_id": "G15_2_13_1"
+                "group_id": "G15_2_9_1"
+            },
+            {
+                "week": 15,
+                "day": "Tuesday",
+                "group_name": "Deistalling the Venue + Cleaning - Tuesday",
+                "family": "Deinstalling Milonga",
+                "role": "any",
+                "group_id": "G15_2_11_1"
             },
             {
                 "week": 15,
@@ -552,57 +550,49 @@
             {
                 "week": 16,
                 "day": "Wednesday",
-                "group_name": "MC Wednesday",
-                "family": "MCing",
+                "group_name": "DJ Wednesday",
+                "family": "DJing",
                 "role": "any",
-                "group_id": "G16_3_10_1"
+                "group_id": "G16_3_11_1"
             },
             {
                 "week": 17,
+                "day": "Wednesday",
+                "group_name": "Photographer Wednesday",
+                "family": "Media",
+                "role": "any",
+                "group_id": "G17_3_13_1"
+            },
+            {
+                "week": 17,
+                "day": "Wednesday",
+                "group_name": "Social Media Posts - Wednesday",
+                "family": "Social Media Posts - Wednesday",
+                "role": "any",
+                "group_id": "G17_3_14_1"
+            },
+            {
+                "week": 18,
                 "day": "Sunday",
                 "group_name": "MC Sunday",
                 "family": "Sunday Milonga",
                 "role": "any",
-                "group_id": "G17_7_1_1"
-            },
-            {
-                "week": 17,
-                "day": "Tuesday",
-                "group_name": "Deistalling the Venue + Cleaning - Tuesday",
-                "family": "Deinstalling Milonga",
-                "role": "any",
-                "group_id": "G17_2_11_1"
-            },
-            {
-                "week": 17,
-                "day": "Tuesday",
-                "group_name": "Photographer Tuesday",
-                "family": "Media",
-                "role": "any",
-                "group_id": "G17_2_12_1"
+                "group_id": "G18_7_1_1"
             },
             {
                 "week": 18,
-                "day": "Tuesday",
-                "group_name": "Take Care of Newcomers - Tuesday",
-                "family": "Assisting",
+                "day": "Wednesday",
+                "group_name": "Wednesday Milonga Installation",
+                "family": "Food Supply",
                 "role": "any",
-                "group_id": "G18_2_7_1"
-            },
-            {
-                "week": 18,
-                "day": "Tuesday",
-                "group_name": "DJ Tuesday",
-                "family": "DJing",
-                "role": "any",
-                "group_id": "G18_2_10_1"
+                "group_id": "G18_3_9_1"
             }
         ],
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: Third Registrator Wednesday, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
+                "cost": 81000,
+                "details": "Missed 5 families: Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
             },
             {
                 "rule": "Multi-Day General (Weekday+Sunday)",
@@ -635,23 +625,15 @@
                 "group_name": "Monthly Report",
                 "family": "Monthly Report",
                 "role": "any",
-                "group_id": "G15_0_5_1"
+                "group_id": "G15_0_6_2"
             },
             {
                 "week": 15,
                 "day": "Tuesday",
-                "group_name": "Deistalling the Venue + Cleaning - Tuesday",
-                "family": "Deinstalling Milonga",
+                "group_name": "Tuesday Milonga Installation",
+                "family": "Food Supply",
                 "role": "any",
-                "group_id": "G15_2_11_1"
-            },
-            {
-                "week": 15,
-                "day": "Tuesday",
-                "group_name": "Photographer Tuesday",
-                "family": "Media",
-                "role": "any",
-                "group_id": "G15_2_12_1"
+                "group_id": "G15_2_8_1"
             },
             {
                 "week": 16,
@@ -665,8 +647,8 @@
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 8000,
-                "details": "Missed 4 families: Food Supply, MCing, Take Care of Team Members, Social Media Posts - Tuesday"
+                "cost": 81000,
+                "details": "Missed 5 families: MCing, Deinstalling Milonga, Media, Take Care of Team Members, Social Media Posts - Tuesday"
             },
             {
                 "rule": "Multi-Day General (Weekday+Sunday)",
@@ -675,7 +657,126 @@
             }
         ]
     },
-    "Pawel Wypijewski": {
+    "Maria Merchel": {
+        "assignments": [
+            {
+                "week": 15,
+                "day": "Tuesday",
+                "group_name": "DJ Tuesday",
+                "family": "DJing",
+                "role": "any",
+                "group_id": "G15_2_10_1"
+            },
+            {
+                "week": 15,
+                "day": "Tuesday",
+                "group_name": "Registrations / Advanced - Tuesday",
+                "family": "Registrations / Advanced - Tuesday",
+                "role": "any",
+                "group_id": "G15_2_13_1"
+            },
+            {
+                "week": 16,
+                "day": "Sunday",
+                "group_name": "Sunday Milonga Installation",
+                "family": "Sunday Milonga",
+                "role": "any",
+                "group_id": "G16_7_2_1"
+            },
+            {
+                "week": 17,
+                "day": "Wednesday",
+                "group_name": "Teaching Intermediate Wednesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G17_3_2_2"
+            },
+            {
+                "week": 18,
+                "day": "Wednesday",
+                "group_name": "Teaching Intermediate Wednesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G18_3_2_2"
+            }
+        ],
+        "penalties": [
+            {
+                "rule": "Role Diversity (Cascading)",
+                "cost": 81000,
+                "details": "Missed 5 families: Assisting, Media, Third Registrator Wednesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Teaching (Active due to new auto assignment)"
+            },
+            {
+                "rule": "Multi-Day General (Weekday+Sunday)",
+                "cost": 10,
+                "details": "Worked on Weekday + Sunday"
+            },
+            {
+                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+                "cost": 1,
+                "details": "Teaching Intermediate Wednesday (W17) & Teaching Intermediate Wednesday (W18)"
+            }
+        ]
+    },
+    "Diana Siwicka": {
+        "assignments": [
+            {
+                "week": 15,
+                "day": "Tuesday",
+                "group_name": "Photographer Tuesday",
+                "family": "Media",
+                "role": "any",
+                "group_id": "G15_2_12_1"
+            },
+            {
+                "week": 16,
+                "day": "Wednesday",
+                "group_name": "Assisting Beginners Wednesday",
+                "family": "Assisting",
+                "role": "follower",
+                "group_id": "G16_3_6_2"
+            },
+            {
+                "week": 17,
+                "day": "Wednesday",
+                "group_name": "Assisting Beginners Wednesday",
+                "family": "Assisting",
+                "role": "follower",
+                "group_id": "G17_3_6_2"
+            },
+            {
+                "week": 18,
+                "day": "Wednesday",
+                "group_name": "Third Registrator Wednesday",
+                "family": "Third Registrator Wednesday",
+                "role": "any",
+                "group_id": "G18_3_8_1"
+            }
+        ],
+        "penalties": [
+            {
+                "rule": "Role Diversity (Cascading)",
+                "cost": 27000,
+                "details": "Missed 4 families: Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Assisting (Active due to new auto assignment)"
+            },
+            {
+                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+                "cost": 1,
+                "details": "Assisting Beginners Wednesday (W16) & Assisting Beginners Wednesday (W17)"
+            }
+        ]
+    },
+    "Marius Latinis": {
         "assignments": [
             {
                 "week": 15,
@@ -687,113 +788,6 @@
             },
             {
                 "week": 16,
-                "day": "Sunday",
-                "group_name": "Sunday Milonga Installation",
-                "family": "Sunday Milonga",
-                "role": "any",
-                "group_id": "G16_7_2_1"
-            },
-            {
-                "week": 16,
-                "day": "Wednesday",
-                "group_name": "Teaching Beginners Wednesday",
-                "family": "Teaching",
-                "role": "leader",
-                "group_id": "G16_3_3_1"
-            },
-            {
-                "week": 18,
-                "day": "Wednesday",
-                "group_name": "Teaching Intermediate Wednesday",
-                "family": "Teaching",
-                "role": "leader",
-                "group_id": "G18_3_1_1"
-            }
-        ],
-        "penalties": [
-            {
-                "rule": "Multi-Day General (Weekday+Sunday)",
-                "cost": 10,
-                "details": "Worked on Weekday + Sunday"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Teaching Intermediate Wednesday (W15) & Teaching Beginners Wednesday (W16)"
-            }
-        ]
-    },
-    "Anna Kolomenkina": {
-        "assignments": [
-            {
-                "week": 15,
-                "day": "Wednesday",
-                "group_name": "Teaching Intermediate Wednesday",
-                "family": "Teaching",
-                "role": "follower",
-                "group_id": "G15_3_2_2"
-            },
-            {
-                "week": 16,
-                "day": "Tuesday",
-                "group_name": "Photographer Tuesday",
-                "family": "Media",
-                "role": "any",
-                "group_id": "G16_2_12_1"
-            },
-            {
-                "week": 16,
-                "day": "Tuesday",
-                "group_name": "Social Media Posts - Tuesday",
-                "family": "Social Media Posts - Tuesday",
-                "role": "any",
-                "group_id": "G16_2_14_1"
-            },
-            {
-                "week": 17,
-                "day": "Tuesday",
-                "group_name": "Teaching Beginners Tuesday",
-                "family": "Teaching",
-                "role": "follower",
-                "group_id": "G17_2_4_2"
-            },
-            {
-                "week": 17,
-                "day": "Tuesday",
-                "group_name": "Registrations / Advanced - Tuesday",
-                "family": "Registrations / Advanced - Tuesday",
-                "role": "any",
-                "group_id": "G17_2_13_1"
-            },
-            {
-                "week": 18,
-                "day": "Wednesday",
-                "group_name": "Assisting Beginners Wednesday",
-                "family": "Assisting",
-                "role": "follower",
-                "group_id": "G18_3_6_2"
-            }
-        ],
-        "penalties": [
-            {
-                "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: DJing, Third Registrator Wednesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
-            }
-        ]
-    },
-    "Michał Dziedziniewicz": {
-        "assignments": [
-            {
-                "week": 15,
-                "day": "Wednesday",
-                "group_name": "Teaching Beginners Wednesday",
-                "family": "Teaching",
-                "role": "leader",
-                "group_id": "G15_3_3_1"
-            },
-            {
-                "week": 16,
                 "day": "Tuesday",
                 "group_name": "Teaching Beginners Tuesday",
                 "family": "Teaching",
@@ -801,12 +795,12 @@
                 "group_id": "G16_2_3_1"
             },
             {
-                "week": 17,
-                "day": "Tuesday",
-                "group_name": "Teaching Beginners Tuesday",
-                "family": "Teaching",
-                "role": "leader",
-                "group_id": "G17_2_3_1"
+                "week": 18,
+                "day": "Sunday",
+                "group_name": "Sunday Milonga Installation",
+                "family": "Sunday Milonga",
+                "role": "any",
+                "group_id": "G18_7_2_1"
             },
             {
                 "week": 18,
@@ -819,43 +813,118 @@
         ],
         "penalties": [
             {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 30000,
+                "details": "Hoarding 3 assignments in Teaching (Active due to new auto assignment)"
+            },
+            {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 2000,
-                "details": "Missed 2 families: Assisting, Take Care of Team Members"
+                "cost": 27000,
+                "details": "Missed 4 families: Assisting, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
             },
             {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 2,
-                "details": "Geometric Streak (4 weeks): W15 -> W16 -> W17 -> W18"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Teaching Beginners Wednesday (W15) & Teaching Beginners Tuesday (W16)"
+                "rule": "Multi-Day General (Weekday+Sunday)",
+                "cost": 10,
+                "details": "Worked on Weekday + Sunday"
             },
             {
                 "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
                 "cost": 1,
-                "details": "Teaching Beginners Tuesday (W16) & Teaching Beginners Tuesday (W17)"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Teaching Beginners Tuesday (W17) & Teaching Beginners Tuesday (W18)"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Geometric Streak (3 weeks): W15 -> W16 -> W17"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Geometric Streak (3 weeks): W16 -> W17 -> W18"
+                "details": "Teaching Intermediate Wednesday (W15) & Teaching Beginners Tuesday (W16)"
             }
         ]
     },
-    "Sylwia Woźniak": {
+    "Anna Sidorowicz": {
+        "assignments": [
+            {
+                "week": 15,
+                "day": "Wednesday",
+                "group_name": "Teaching Intermediate Wednesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G15_3_2_2"
+            },
+            {
+                "week": 16,
+                "day": "Tuesday",
+                "group_name": "Teaching Beginners Tuesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G16_2_4_2"
+            },
+            {
+                "week": 16,
+                "day": "Tuesday",
+                "group_name": "Deistalling the Venue + Cleaning - Tuesday",
+                "family": "Deinstalling Milonga",
+                "role": "any",
+                "group_id": "G16_2_11_1"
+            },
+            {
+                "week": 17,
+                "day": "Sunday",
+                "group_name": "Sunday Milonga Installation",
+                "family": "Sunday Milonga",
+                "role": "any",
+                "group_id": "G17_7_2_1"
+            },
+            {
+                "week": 17,
+                "day": "Tuesday",
+                "group_name": "Photographer Tuesday",
+                "family": "Media",
+                "role": "any",
+                "group_id": "G17_2_12_1"
+            },
+            {
+                "week": 17,
+                "day": "Tuesday",
+                "group_name": "Registrations / Advanced - Tuesday",
+                "family": "Registrations / Advanced - Tuesday",
+                "role": "any",
+                "group_id": "G17_2_13_1"
+            },
+            {
+                "week": 17,
+                "day": "Tuesday",
+                "group_name": "Social Media Posts - Tuesday",
+                "family": "Social Media Posts - Tuesday",
+                "role": "any",
+                "group_id": "G17_2_14_1"
+            },
+            {
+                "week": 18,
+                "day": "Tuesday",
+                "group_name": "Assisting Beginners Tuesday",
+                "family": "Assisting",
+                "role": "follower",
+                "group_id": "G18_2_6_2"
+            }
+        ],
+        "penalties": [
+            {
+                "rule": "Role Diversity (Cascading)",
+                "cost": 81000,
+                "details": "Missed 5 families: Third Registrator Wednesday, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Teaching (Active due to new auto assignment)"
+            },
+            {
+                "rule": "Multi-Day General (Weekday+Sunday)",
+                "cost": 10,
+                "details": "Worked on Weekday + Sunday"
+            },
+            {
+                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+                "cost": 1,
+                "details": "Teaching Intermediate Wednesday (W15) & Teaching Beginners Tuesday (W16)"
+            }
+        ]
+    },
+    "Anna Kolomenkina": {
         "assignments": [
             {
                 "week": 15,
@@ -867,52 +936,55 @@
             },
             {
                 "week": 16,
-                "day": "Wednesday",
-                "group_name": "Teaching Beginners Wednesday",
-                "family": "Teaching",
+                "day": "Tuesday",
+                "group_name": "Assisting Beginners Tuesday",
+                "family": "Assisting",
                 "role": "follower",
-                "group_id": "G16_3_4_2"
+                "group_id": "G16_2_6_2"
             },
             {
-                "week": 18,
-                "day": "Sunday",
-                "group_name": "Sunday Milonga Installation",
-                "family": "Sunday Milonga",
+                "week": 16,
+                "day": "Tuesday",
+                "group_name": "Social Media Posts - Tuesday",
+                "family": "Social Media Posts - Tuesday",
                 "role": "any",
-                "group_id": "G18_7_2_1"
+                "group_id": "G16_2_14_1"
             },
             {
-                "week": 18,
+                "week": 17,
                 "day": "Wednesday",
-                "group_name": "Teaching Beginners Wednesday",
+                "group_name": "Teaching Intermediate Wednesday",
                 "family": "Teaching",
-                "role": "follower",
-                "group_id": "G18_3_4_2"
+                "role": "leader",
+                "group_id": "G17_3_1_1"
             },
             {
                 "week": 18,
-                "day": "Wednesday",
-                "group_name": "MC Wednesday",
-                "family": "MCing",
+                "day": "Tuesday",
+                "group_name": "DJ Tuesday",
+                "family": "DJing",
                 "role": "any",
-                "group_id": "G18_3_10_1"
+                "group_id": "G18_2_10_1"
+            },
+            {
+                "week": 18,
+                "day": "Tuesday",
+                "group_name": "Photographer Tuesday",
+                "family": "Media",
+                "role": "any",
+                "group_id": "G18_2_12_1"
             }
         ],
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: Assisting, DJing, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+                "cost": 81000,
+                "details": "Missed 5 families: Third Registrator Wednesday, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
             },
             {
-                "rule": "Multi-Day General (Weekday+Sunday)",
-                "cost": 10,
-                "details": "Worked on Weekday + Sunday"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Teaching Beginners Wednesday (W15) & Teaching Beginners Wednesday (W16)"
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Teaching (Active due to new auto assignment)"
             }
         ]
     },
@@ -927,31 +999,36 @@
                 "group_id": "G15_3_5_1"
             },
             {
-                "week": 15,
-                "day": "Wednesday",
-                "group_name": "Take Care of Partyka Students - Wednesday",
-                "family": "Take Care of Partyka Students - Wednesday",
-                "role": "any",
-                "group_id": "G15_3_15_1"
-            },
-            {
                 "week": 17,
                 "day": "Wednesday",
                 "group_name": "Assisting Beginners Wednesday",
                 "family": "Assisting",
                 "role": "leader",
                 "group_id": "G17_3_5_1"
+            },
+            {
+                "week": 17,
+                "day": "Wednesday",
+                "group_name": "Take Care of Partyka Students - Wednesday",
+                "family": "Take Care of Partyka Students - Wednesday",
+                "role": "any",
+                "group_id": "G17_3_15_1"
             }
         ],
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 8000,
+                "cost": 27000,
                 "details": "Missed 4 families: Deinstalling Milonga, Third Registrator Wednesday, Take Care of Team Members, Take Care of Partyka Students - Tuesday"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Assisting (Active due to new auto assignment)"
             }
         ]
     },
-    "Anna Sidorowicz": {
+    "Iana Kain": {
         "assignments": [
             {
                 "week": 15,
@@ -960,22 +1037,6 @@
                 "family": "Assisting",
                 "role": "follower",
                 "group_id": "G15_3_6_2"
-            },
-            {
-                "week": 15,
-                "day": "Wednesday",
-                "group_name": "Deistalling the Venue + Cleaning - Wednesday",
-                "family": "Deinstalling Milonga",
-                "role": "any",
-                "group_id": "G15_3_12_1"
-            },
-            {
-                "week": 15,
-                "day": "Wednesday",
-                "group_name": "Social Media Posts - Wednesday",
-                "family": "Social Media Posts - Wednesday",
-                "role": "any",
-                "group_id": "G15_3_14_1"
             },
             {
                 "week": 16,
@@ -987,34 +1048,66 @@
             },
             {
                 "week": 16,
-                "day": "Tuesday",
-                "group_name": "Teaching Beginners Tuesday",
-                "family": "Teaching",
-                "role": "follower",
-                "group_id": "G16_2_4_2"
+                "day": "Wednesday",
+                "group_name": "Photographer Wednesday",
+                "family": "Media",
+                "role": "any",
+                "group_id": "G16_3_13_1"
             },
             {
                 "week": 16,
-                "day": "Tuesday",
-                "group_name": "Registrations / Advanced - Tuesday",
-                "family": "Registrations / Advanced - Tuesday",
+                "day": "Wednesday",
+                "group_name": "Social Media Posts - Wednesday",
+                "family": "Social Media Posts - Wednesday",
                 "role": "any",
-                "group_id": "G16_2_13_1"
+                "group_id": "G16_3_14_1"
             },
             {
                 "week": 17,
                 "day": "Wednesday",
-                "group_name": "Third Registrator Wednesday",
-                "family": "Third Registrator Wednesday",
+                "group_name": "MC Wednesday",
+                "family": "MCing",
                 "role": "any",
-                "group_id": "G17_3_8_1"
+                "group_id": "G17_3_10_1"
+            },
+            {
+                "week": 17,
+                "day": "Wednesday",
+                "group_name": "Deistalling the Venue + Cleaning - Wednesday",
+                "family": "Deinstalling Milonga",
+                "role": "any",
+                "group_id": "G17_3_12_1"
+            },
+            {
+                "week": 18,
+                "day": "Tuesday",
+                "group_name": "Tuesday Milonga Installation",
+                "family": "Food Supply",
+                "role": "any",
+                "group_id": "G18_2_8_1"
+            },
+            {
+                "week": 18,
+                "day": "Tuesday",
+                "group_name": "Registrations / Advanced - Tuesday",
+                "family": "Registrations / Advanced - Tuesday",
+                "role": "any",
+                "group_id": "G18_2_13_1"
+            },
+            {
+                "week": 18,
+                "day": "Tuesday",
+                "group_name": "Social Media Posts - Tuesday",
+                "family": "Social Media Posts - Tuesday",
+                "role": "any",
+                "group_id": "G18_2_14_1"
             }
         ],
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: Media, Take Care of Team Members, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+                "cost": 81000,
+                "details": "Missed 5 families: DJing, Third Registrator Wednesday, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
             },
             {
                 "rule": "Multi-Day General (Weekday+Sunday)",
@@ -1023,54 +1116,51 @@
             }
         ]
     },
-    "Maria Merchel": {
+    "Tomasz Wilk": {
         "assignments": [
             {
                 "week": 15,
                 "day": "Wednesday",
-                "group_name": "Third Registrator Wednesday",
-                "family": "Third Registrator Wednesday",
+                "group_name": "Take Care of Newcomers - Wednesday",
+                "family": "Assisting",
                 "role": "any",
-                "group_id": "G15_3_8_1"
+                "group_id": "G15_3_7_1"
+            },
+            {
+                "week": 15,
+                "day": "Wednesday",
+                "group_name": "Take Care of Partyka Students - Wednesday",
+                "family": "Take Care of Partyka Students - Wednesday",
+                "role": "any",
+                "group_id": "G15_3_15_1"
             },
             {
                 "week": 16,
                 "day": "Wednesday",
-                "group_name": "Teaching Intermediate Wednesday",
+                "group_name": "Teaching Beginners Wednesday",
                 "family": "Teaching",
-                "role": "follower",
-                "group_id": "G16_3_2_2"
-            },
-            {
-                "week": 17,
-                "day": "Tuesday",
-                "group_name": "Take Care of Newcomers - Tuesday",
-                "family": "Assisting",
-                "role": "any",
-                "group_id": "G17_2_7_1"
-            },
-            {
-                "week": 17,
-                "day": "Tuesday",
-                "group_name": "DJ Tuesday",
-                "family": "DJing",
-                "role": "any",
-                "group_id": "G17_2_10_1"
+                "role": "leader",
+                "group_id": "G16_3_3_1"
             },
             {
                 "week": 18,
                 "day": "Wednesday",
-                "group_name": "Teaching Intermediate Wednesday",
+                "group_name": "Teaching Beginners Wednesday",
                 "family": "Teaching",
-                "role": "follower",
-                "group_id": "G18_3_2_2"
+                "role": "leader",
+                "group_id": "G18_3_3_1"
             }
         ],
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: Sunday Milonga, Media, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+                "cost": 27000,
+                "details": "Missed 4 families: Sunday Milonga, Media, Take Care of Team Members, Take Care of Partyka Students - Tuesday"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Teaching (Active due to new auto assignment)"
             }
         ]
     },
@@ -1141,6 +1231,14 @@
                 "group_id": "G16_2_1_1"
             },
             {
+                "week": 16,
+                "day": "Tuesday",
+                "group_name": "MC Tuesday",
+                "family": "MCing",
+                "role": "any",
+                "group_id": "G16_2_9_1"
+            },
+            {
                 "week": 17,
                 "day": "Sunday",
                 "group_name": "Sunday Milonga Deinstallation",
@@ -1167,14 +1265,6 @@
             {
                 "week": 18,
                 "day": "Tuesday",
-                "group_name": "MC Tuesday",
-                "family": "MCing",
-                "role": "any",
-                "group_id": "G18_2_9_1"
-            },
-            {
-                "week": 18,
-                "day": "Tuesday",
                 "group_name": "Deistalling the Venue + Cleaning - Tuesday",
                 "family": "Deinstalling Milonga",
                 "role": "any",
@@ -1184,8 +1274,13 @@
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
+                "cost": 81000,
                 "details": "Missed 5 families: Assisting, DJing, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 30000,
+                "details": "Hoarding 3 assignments in Teaching (Active due to new auto assignment)"
             },
             {
                 "rule": "Multi-Day General (Weekday+Sunday)",
@@ -1194,7 +1289,7 @@
             }
         ]
     },
-    "Julia Borychowska": {
+    "Martyna Gosz": {
         "assignments": [
             {
                 "week": 15,
@@ -1214,6 +1309,59 @@
             },
             {
                 "week": 16,
+                "day": "Wednesday",
+                "group_name": "Teaching Beginners Wednesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G16_3_4_2"
+            },
+            {
+                "week": 16,
+                "day": "Wednesday",
+                "group_name": "MC Wednesday",
+                "family": "MCing",
+                "role": "any",
+                "group_id": "G16_3_10_1"
+            },
+            {
+                "week": 17,
+                "day": "Tuesday",
+                "group_name": "Teaching Beginners Tuesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G17_2_4_2"
+            },
+            {
+                "week": 18,
+                "day": "Tuesday",
+                "group_name": "Take Care of Newcomers - Tuesday",
+                "family": "Assisting",
+                "role": "any",
+                "group_id": "G18_2_7_1"
+            }
+        ],
+        "penalties": [
+            {
+                "rule": "Role Diversity (Cascading)",
+                "cost": 81000,
+                "details": "Missed 5 families: Sunday Milonga, Food Supply, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Teaching (Active due to new auto assignment)"
+            },
+            {
+                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+                "cost": 1,
+                "details": "Teaching Beginners Wednesday (W16) & Teaching Beginners Tuesday (W17)"
+            }
+        ]
+    },
+    "Alicja Nowak": {
+        "assignments": [
+            {
+                "week": 16,
                 "day": "Sunday",
                 "group_name": "Sunday Milonga Deinstallation",
                 "family": "Sunday Milonga",
@@ -1222,35 +1370,35 @@
             },
             {
                 "week": 16,
-                "day": "Tuesday",
-                "group_name": "Tuesday Milonga Installation",
+                "day": "Wednesday",
+                "group_name": "Wednesday Milonga Installation",
                 "family": "Food Supply",
                 "role": "any",
-                "group_id": "G16_2_8_1"
+                "group_id": "G16_3_9_1"
             },
             {
                 "week": 17,
-                "day": "Tuesday",
-                "group_name": "Assisting Beginners Tuesday",
+                "day": "Wednesday",
+                "group_name": "Take Care of Newcomers - Wednesday",
                 "family": "Assisting",
-                "role": "follower",
-                "group_id": "G17_2_6_2"
+                "role": "any",
+                "group_id": "G17_3_7_1"
             },
             {
                 "week": 17,
-                "day": "Tuesday",
-                "group_name": "MC Tuesday",
+                "day": "Wednesday",
+                "group_name": "DJ Wednesday",
+                "family": "DJing",
+                "role": "any",
+                "group_id": "G17_3_11_1"
+            },
+            {
+                "week": 18,
+                "day": "Wednesday",
+                "group_name": "MC Wednesday",
                 "family": "MCing",
                 "role": "any",
-                "group_id": "G17_2_9_1"
-            },
-            {
-                "week": 17,
-                "day": "Tuesday",
-                "group_name": "Social Media Posts - Tuesday",
-                "family": "Social Media Posts - Tuesday",
-                "role": "any",
-                "group_id": "G17_2_14_1"
+                "group_id": "G18_3_10_1"
             },
             {
                 "week": 18,
@@ -1259,20 +1407,12 @@
                 "family": "Deinstalling Milonga",
                 "role": "any",
                 "group_id": "G18_3_12_1"
-            },
-            {
-                "week": 18,
-                "day": "Wednesday",
-                "group_name": "Social Media Posts - Wednesday",
-                "family": "Social Media Posts - Wednesday",
-                "role": "any",
-                "group_id": "G18_3_14_1"
             }
         ],
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
+                "cost": 81000,
                 "details": "Missed 5 families: Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
             },
             {
@@ -1282,16 +1422,8 @@
             }
         ]
     },
-    "Antoni Domanowski": {
+    "Damian Bagnowski": {
         "assignments": [
-            {
-                "week": 15,
-                "day": null,
-                "group_name": "Monthly Report",
-                "family": "Monthly Report",
-                "role": "any",
-                "group_id": "G15_0_6_2"
-            },
             {
                 "week": 16,
                 "day": "Tuesday",
@@ -1307,18 +1439,26 @@
                 "family": "Assisting",
                 "role": "leader",
                 "group_id": "G18_2_5_1"
+            },
+            {
+                "week": 18,
+                "day": "Tuesday",
+                "group_name": "Take Care of Partyka Students - Tuesday",
+                "family": "Take Care of Partyka Students - Tuesday",
+                "role": "any",
+                "group_id": "G18_2_15_1"
             }
         ],
         "penalties": [
             {
-                "rule": "Role Diversity (Cascading)",
-                "cost": 2000,
-                "details": "Missed 2 families: Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday"
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Assisting (Active due to new auto assignment)"
             },
             {
-                "rule": "Multi-Day General (Weekday+Sunday)",
-                "cost": 10,
-                "details": "Worked on Weekday + Sunday"
+                "rule": "Role Diversity (Cascading)",
+                "cost": 1000,
+                "details": "Missed 1 families: Registrations / Advanced - Tuesday"
             }
         ]
     },
@@ -1373,8 +1513,13 @@
             },
             {
                 "rule": "Multi-Day Weekdays (e.g. Tue+Wed)",
+                "cost": 100000,
+                "details": "Geometric Penalty: W16: 2 days (100000 cost)"
+            },
+            {
+                "rule": "Teaching/Assisting Equality",
                 "cost": 10000,
-                "details": "Geometric Penalty: W16: 2 days (10000 cost)"
+                "details": "Hoarding 2 assignments in Assisting (Active due to new auto assignment)"
             },
             {
                 "rule": "Multi-Day General (Weekday+Sunday)",
@@ -1383,47 +1528,7 @@
             }
         ]
     },
-    "Marius Latinis": {
-        "assignments": [
-            {
-                "week": 16,
-                "day": "Wednesday",
-                "group_name": "Assisting Beginners Wednesday",
-                "family": "Assisting",
-                "role": "leader",
-                "group_id": "G16_3_5_1"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "Teaching Intermediate Wednesday",
-                "family": "Teaching",
-                "role": "leader",
-                "group_id": "G17_3_1_1"
-            },
-            {
-                "week": 18,
-                "day": "Wednesday",
-                "group_name": "Teaching Beginners Wednesday",
-                "family": "Teaching",
-                "role": "leader",
-                "group_id": "G18_3_3_1"
-            }
-        ],
-        "penalties": [
-            {
-                "rule": "Role Diversity (Cascading)",
-                "cost": 8000,
-                "details": "Missed 4 families: Sunday Milonga, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Teaching Intermediate Wednesday (W17) & Teaching Beginners Wednesday (W18)"
-            }
-        ]
-    },
-    "Diana Siwicka": {
+    "Aleksander Nowak": {
         "assignments": [
             {
                 "week": 16,
@@ -1434,93 +1539,13 @@
                 "group_id": "G16_3_8_1"
             },
             {
-                "week": 17,
+                "week": 16,
                 "day": "Wednesday",
-                "group_name": "Assisting Beginners Wednesday",
-                "family": "Assisting",
-                "role": "follower",
-                "group_id": "G17_3_6_2"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "Take Care of Partyka Students - Wednesday",
-                "family": "Take Care of Partyka Students - Wednesday",
+                "group_name": "Deistalling the Venue + Cleaning - Wednesday",
+                "family": "Deinstalling Milonga",
                 "role": "any",
-                "group_id": "G17_3_15_1"
+                "group_id": "G16_3_12_1"
             },
-            {
-                "week": 18,
-                "day": "Tuesday",
-                "group_name": "Take Care of Partyka Students - Tuesday",
-                "family": "Take Care of Partyka Students - Tuesday",
-                "role": "any",
-                "group_id": "G18_2_15_1"
-            }
-        ],
-        "penalties": [
-            {
-                "rule": "Role Diversity (Cascading)",
-                "cost": 4000,
-                "details": "Missed 3 families: Media, Take Care of Team Members, Registrations / Advanced - Tuesday"
-            }
-        ]
-    },
-    "Patrycja Niemczuk": {
-        "assignments": [
-            {
-                "week": 17,
-                "day": "Sunday",
-                "group_name": "Sunday Milonga Installation",
-                "family": "Sunday Milonga",
-                "role": "any",
-                "group_id": "G17_7_2_1"
-            },
-            {
-                "week": 17,
-                "day": "Wednesday",
-                "group_name": "Teaching Intermediate Wednesday",
-                "family": "Teaching",
-                "role": "follower",
-                "group_id": "G17_3_2_2"
-            },
-            {
-                "week": 18,
-                "day": "Sunday",
-                "group_name": "MC Sunday",
-                "family": "Sunday Milonga",
-                "role": "any",
-                "group_id": "G18_7_1_1"
-            },
-            {
-                "week": 18,
-                "day": "Tuesday",
-                "group_name": "Teaching Beginners Tuesday",
-                "family": "Teaching",
-                "role": "follower",
-                "group_id": "G18_2_4_2"
-            }
-        ],
-        "penalties": [
-            {
-                "rule": "Multi-Day General (Weekday+Sunday)",
-                "cost": 10,
-                "details": "Worked on Weekday + Sunday"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Sunday Milonga Installation (W17) & MC Sunday (W18)"
-            },
-            {
-                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                "cost": 1,
-                "details": "Teaching Intermediate Wednesday (W17) & Teaching Beginners Tuesday (W18)"
-            }
-        ]
-    },
-    "Aleksander Nowak": {
-        "assignments": [
             {
                 "week": 17,
                 "day": "Tuesday",
@@ -1539,14 +1564,6 @@
             },
             {
                 "week": 18,
-                "day": "Sunday",
-                "group_name": "Sunday Milonga Deinstallation",
-                "family": "Sunday Milonga",
-                "role": "any",
-                "group_id": "G18_7_3_1"
-            },
-            {
-                "week": 18,
                 "day": "Wednesday",
                 "group_name": "Assisting Beginners Wednesday",
                 "family": "Assisting",
@@ -1557,13 +1574,66 @@
         "penalties": [
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 16000,
-                "details": "Missed 5 families: Deinstalling Milonga, Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Wednesday"
+                "cost": 27000,
+                "details": "Missed 4 families: Sunday Milonga, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Wednesday"
+            }
+        ]
+    },
+    "Patrycja Niemczuk": {
+        "assignments": [
+            {
+                "week": 17,
+                "day": "Sunday",
+                "group_name": "MC Sunday",
+                "family": "Sunday Milonga",
+                "role": "any",
+                "group_id": "G17_7_1_1"
+            },
+            {
+                "week": 17,
+                "day": "Wednesday",
+                "group_name": "Teaching Beginners Wednesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G17_3_4_2"
+            },
+            {
+                "week": 18,
+                "day": "Sunday",
+                "group_name": "Sunday Milonga Deinstallation",
+                "family": "Sunday Milonga",
+                "role": "any",
+                "group_id": "G18_7_3_1"
+            },
+            {
+                "week": 18,
+                "day": "Wednesday",
+                "group_name": "Teaching Beginners Wednesday",
+                "family": "Teaching",
+                "role": "follower",
+                "group_id": "G18_3_4_2"
+            }
+        ],
+        "penalties": [
+            {
+                "rule": "Teaching/Assisting Equality",
+                "cost": 10000,
+                "details": "Hoarding 2 assignments in Teaching (Active due to new auto assignment)"
             },
             {
                 "rule": "Multi-Day General (Weekday+Sunday)",
                 "cost": 10,
                 "details": "Worked on Weekday + Sunday"
+            },
+            {
+                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+                "cost": 1,
+                "details": "MC Sunday (W17) & Sunday Milonga Deinstallation (W18)"
+            },
+            {
+                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+                "cost": 1,
+                "details": "Teaching Beginners Wednesday (W17) & Teaching Beginners Wednesday (W18)"
             }
         ]
     },
@@ -1577,7 +1647,7 @@
             },
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 2000,
+                "cost": 3000,
                 "details": "Missed 2 families: Monthly Print, Take Care of Team Members"
             }
         ]
@@ -1592,7 +1662,7 @@
             },
             {
                 "rule": "Role Diversity (Cascading)",
-                "cost": 4000,
+                "cost": 9000,
                 "details": "Missed 3 families: Take Care of Team Members, Social Media Posts - Tuesday, Social Media Posts - Wednesday"
             }
         ]
