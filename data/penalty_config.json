@@ -9,7 +9,7 @@
         "Cooldown (Adjacent Weeks)",
         "Role Diversity (Assignments in each capable family)"
     ],
-    "time_limit_seconds": 0.0,
+    "time_limit_seconds": 120.0,
     "scope": {
         "month": "January",
         "year": 2026

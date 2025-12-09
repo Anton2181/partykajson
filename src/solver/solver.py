@@ -518,25 +518,41 @@ class SATSolver:
                      self.debug_vars[person]['multi_weekday'] = []
                      
                      for w_str, vars_list in weekdays_by_week.items():
-                         if len(vars_list) > 1: 
-                             # Cascading Penalty: (N - 1) * P
-                             # excess = max(0, sum(vars) - 1)
-                             # Since we minimize, excess >= sum - 1 and excess >= 0 is sufficient.
+                         if len(vars_list) >= 2: 
+                             # Geometric Cascading Penalty: 
+                             # 2 days -> 1x
+                             # 3 days -> 2x
+                             # 4 days -> 4x
+                             # Formula: P * 2^(count - 2) for count >= 2
                              
-                             excess_var = self.model.NewIntVar(0, 7, f"multi_weekday_excess_{person}_{w_str}")
+                             # 1. Count Total Weekdays Assigned
+                             count_var = self.model.NewIntVar(0, len(vars_list), f"multi_weekday_count_{person}_{w_str}")
+                             self.model.Add(count_var == sum(vars_list))
                              
-                             # Constraints
-                             self.model.Add(excess_var >= sum(vars_list) - 1)
-                             self.model.Add(excess_var >= 0) # Implicit for IntVar(0,7) but good for clarity if range changed
+                             # 2. Build Cost Table
+                             # Index i corresponds to count=i
+                             costs = []
+                             for i in range(len(vars_list) + 1):
+                                 if i < 2:
+                                     costs.append(0)
+                                 else:
+                                     # i=2 -> 2^(0) = 1
+                                     # i=3 -> 2^(1) = 2
+                                     multiplier = 2 ** (i - 2)
+                                     costs.append(P_MULTI_WEEKDAY * multiplier)
                              
-                             objective_terms.append(excess_var * P_MULTI_WEEKDAY)
+                             cost_var = self.model.NewIntVar(0, max(costs), f"multi_weekday_cost_{person}_{w_str}")
+                             self.model.AddElement(count_var, costs, cost_var)
+                             
+                             objective_terms.append(cost_var)
                              
                              self.debug_vars[person]['multi_weekday'].append({
                                  'week': w_str,
-                                 'var': excess_var
+                                 'count_var': count_var,
+                                 'cost_var': cost_var
                              })
                      
-                     # If no weeks had potential (len > 1), list remains empty, which is fine.
+                     # If no weeks had potential (len < 2), list remains empty.
 
                  if P_MULTI_GENERAL > 0:
                      has_weekday = self.model.NewBoolVar(f"has_weekday_{person}")
@@ -627,22 +643,23 @@ class SATSolver:
                 if person in self.debug_vars:
                     # Multi-Day Weekday
                     # Multi-Day Weekday (Cascading)
+                    # Multi-Day Weekday (Cascading Geometric)
                     if 'multi_weekday' in self.debug_vars[person] and isinstance(self.debug_vars[person]['multi_weekday'], list):
-                        total_excess = 0
+                        total_cost = 0
                         weeks_details = []
                         for item in self.debug_vars[person]['multi_weekday']:
-                            exc_val = solver.Value(item['var'])
-                            if exc_val > 0:
-                                total_excess += exc_val
-                                weeks_details.append(f"W{item['week']}: {exc_val} extra days")
+                            c_val = solver.Value(item['cost_var'])
+                            if c_val > 0:
+                                count_val = solver.Value(item['count_var'])
+                                total_cost += c_val
+                                weeks_details.append(f"W{item['week']}: {count_val} days ({c_val} cost)")
                         
-                        if total_excess > 0:
-                            cost = total_excess * P_MULTI_WEEKDAY
+                        if total_cost > 0:
                             incurred_penalties.append({
                                 "person_name": person,
                                 "rule": "Multi-Day Weekdays (e.g. Tue+Wed)",
-                                "cost": cost,
-                                "details": f"Cascading Penalty (Total Excess: {total_excess}): " + ", ".join(weeks_details)
+                                "cost": total_cost,
+                                "details": f"Geometric Penalty: " + ", ".join(weeks_details)
                             })
                     
                     # Multi-Day General

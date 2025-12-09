@@ -1,6 +1,13 @@
 
 import json
 import pathlib
+import sys
+
+# Add project root to sys.path to allow running as script
+root_dir = str(pathlib.Path(__file__).parent.parent)
+if root_dir not in sys.path:
+    sys.path.append(root_dir)
+
 from src.solver.solver import SATSolver
 
 def load_json(path):

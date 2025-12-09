@@ -5,12 +5,14 @@ This document describes the penalties used by the schedule solver to optimize as
 ## 1. Multi-Day Weekdays (Cascading)
 **Rule Name:** `"Multi-Day Weekdays (e.g. Tue+Wed)"`
 **Description:** Penalizes assigning a person to work on multiple weekdays within the same week.
-**Logic:** Cascading (Linear).
+**Logic:** Cascading (Geometric).
 - Assignments on days marked with `day_num != 0` (Null) and `day_num != 7` (Sunday) are counted.
-- **Formula:** `Cost = (WeekdaysWorked - 1) * PenaltyPrice` (per week).
+- **Formula:** `Cost = PenaltyPrice * 2^(WeekdaysWorked - 2)` (for Weekdays >= 2).
 - **Example:**
-    - 2 Weekdays: 1x Penalty
-    - 3 Weekdays: 2x Penalty
+    - 2 Weekdays: 1x Penalty ($2^0$)
+    - 3 Weekdays: 2x Penalty ($2^1$)
+    - 4 Weekdays: 4x Penalty ($2^2$)
+    - 5 Weekdays: 8x Penalty ($2^3$)
 
 ## 2. Role Diversity (Cascading)
 **Rule Name:** `"Role Diversity (Assignments in each capable family)"`
