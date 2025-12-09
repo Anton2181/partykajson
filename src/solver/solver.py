@@ -203,6 +203,82 @@ class SATSolver:
         
         # Term 7: Role Diversity
         P_DIVERSITY = self.penalties.get_penalty_by_name("Role Diversity (Assignments in each capable family)")
+        
+        # Term 8: Teaching/Assisting Coverage
+        P_TEACH_ASSIST = self.penalties.get_penalty_by_name("Teaching or Assisting Coverage")
+        
+        # --- Teaching/Assisting Coverage Logic ---
+        if P_TEACH_ASSIST > 0:
+            # 1. Identify Teaching and Assisting Groups
+            teaching_groups = [g for g in self.groups if g.get('family') == 'Teaching']
+            assisting_groups = [g for g in self.groups if g.get('family') == 'Assisting']
+            
+            # Map person -> can_teach? can_assist?
+            # A person is eligible for this rule if they are a candidate for AT LEAST ONE group in either family.
+            
+            relevant_persons = set()
+            persons_teaching_vars = {} # person -> list of assign vars
+            persons_assisting_vars = {} # person -> list of assign vars
+            
+            for person in all_persons:
+                persons_teaching_vars[person] = []
+                persons_assisting_vars[person] = []
+                
+                can_teach = False
+                for g in teaching_groups:
+                    if person in self.get_group_candidates(g):
+                        can_teach = True
+                        if (g['id'], person) in self.assignments:
+                            persons_teaching_vars[person].append(self.assignments[(g['id'], person)])
+                            
+                can_assist = False
+                for g in assisting_groups:
+                    if person in self.get_group_candidates(g):
+                        can_assist = True
+                        if (g['id'], person) in self.assignments:
+                            persons_assisting_vars[person].append(self.assignments[(g['id'], person)])
+                            
+                if can_teach or can_assist:
+                    relevant_persons.add(person)
+            
+            # 2. Apply Penalty
+            for person in relevant_persons:
+                # Logic:
+                # If capable of Teaching -> Must have > 0 Assignments in Teaching (Assisting doesn't count for coverage)
+                # Else If capable of Assisting -> Must have > 0 Assignments in Assisting
+                
+                check_vars = []
+                
+                # Check capability (re-derive from vars existence or candidate check)
+                can_teach = len(persons_teaching_vars[person]) > 0 or \
+                             any(person in self.get_group_candidates(g) for g in teaching_groups)
+                
+                if can_teach:
+                    check_vars = persons_teaching_vars[person]
+                else:
+                    # Can assist (implied by being in relevant_persons and not can_teach)
+                    check_vars = persons_assisting_vars[person]
+
+                if not check_vars:
+                     # Capable but no vars?! (Should unlikely happen unless all groups exclusive? or Logic error)
+                     # Or maybe they are candidate but all their groups were filtered out?
+                     # Apply penalty safety.
+                     objective_terms.append(P_TEACH_ASSIST)
+                     if person not in self.debug_vars: self.debug_vars[person] = {}
+                     
+                     details = "Teaching (Priority)" if can_teach else "Assisting"
+                     self.debug_vars[person]['teach_assist_penalty_details'] = f"No assignments in {details}"
+                     self.debug_vars[person]['teach_assist_penalty'] = True
+                else:
+                    missed_coverage = self.model.NewBoolVar(f"missed_teach_assist_{person}")
+                    
+                    self.model.Add(sum(check_vars) == 0).OnlyEnforceIf(missed_coverage)
+                    self.model.Add(sum(check_vars) > 0).OnlyEnforceIf(missed_coverage.Not())
+                    
+                    objective_terms.append(missed_coverage * P_TEACH_ASSIST)
+                    
+                    if person not in self.debug_vars: self.debug_vars[person] = {}
+                    self.debug_vars[person]['teach_assist_var'] = missed_coverage
 
         # --- Role Diversity Logic ---
         # "For each defined family in groups we want each person to do at least one assignment 
@@ -641,6 +717,25 @@ class SATSolver:
                 # New Rules
                 # New Rules
                 if person in self.debug_vars:
+                    # Teaching/Assisting Coverage
+                    if 'teach_assist_var' in self.debug_vars[person] and solver.Value(self.debug_vars[person]['teach_assist_var']) == 1:
+                         # Determine detail logic again for report? Or store it?
+                         # For now generic msg or infer
+                         incurred_penalties.append({
+                            "person_name": person,
+                            "rule": "Teaching or Assisting Coverage",
+                            "cost": P_TEACH_ASSIST,
+                            "details": "Missed required Teaching/Assisting assignment (Teaching prioritized)"
+                        })
+                    elif 'teach_assist_penalty' in self.debug_vars[person] and self.debug_vars[person]['teach_assist_penalty']:
+                         det = self.debug_vars[person].get('teach_assist_penalty_details', "No assignments in Teaching or Assisting")
+                         incurred_penalties.append({
+                            "person_name": person,
+                            "rule": "Teaching or Assisting Coverage",
+                            "cost": P_TEACH_ASSIST,
+                            "details": det
+                        })
+
                     # Multi-Day Weekday
                     # Multi-Day Weekday (Cascading)
                     # Multi-Day Weekday (Cascading Geometric)

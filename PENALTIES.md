@@ -59,3 +59,11 @@ This document describes the penalties used by the schedule solver to optimize as
 **Rule Name:** `P_INEFFICIENT` (Internal)
 **Description:** Penalizes coming in on a day to perform fewer than 2 tasks (if configured).
 **Logic:** Active if `TasksOnDay < 2`.
+
+## 9. Teaching or Assisting Coverage
+**Rule Name:** `"Teaching or Assisting Coverage"`
+**Description:** Penalizes if a person capable of Teaching or Assisting has no assignments in their prioritized family.
+**Logic:**
+- **If Capable of Teaching:** Must have $\ge 1$ Teaching assignment. Assisting assignments do **not** satisfy the rule.
+- **If Capable of Assisting Only:** Must have $\ge 1$ Assisting assignment.
+- **Penalty:** Applied if the required assignment count is 0.

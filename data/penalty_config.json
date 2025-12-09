@@ -7,9 +7,10 @@
         "Multi-Day General (Weekday+Sunday)",
         "Intra-Week Cooldown (Same Week)",
         "Cooldown (Adjacent Weeks)",
+        "Teaching or Assisting Coverage",
         "Role Diversity (Assignments in each capable family)"
     ],
-    "time_limit_seconds": 120.0,
+    "time_limit_seconds": 0.0,
     "scope": {
         "month": "January",
         "year": 2026
@@ -19,6 +20,7 @@
         "Unassigned Group",
         "Underworked Team Member (< 8 Effort)",
         "Intra-Week Cooldown (Same Week)",
+        "Teaching or Assisting Coverage",
         "Multi-Day Weekdays (e.g. Tue+Wed)",
         "Role Diversity (Assignments in each capable family)",
         "Inefficient Day (< 2 Tasks)",
