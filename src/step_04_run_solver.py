@@ -51,9 +51,20 @@ def run_solver(source_prefix=None):
     print("Initializing Solver...")
     solver = SATSolver(groups, team_members)
     
+    # Callback wrapper to save results live
+    def on_solution_found(printer):
+        assignments, penalties = solver.extract_solution(printer)
+        save_results(assignments, penalties, results_dir, source_prefix, groups)
+
     print("Solving...")
-    assignments, penalties = solver.solve()
+    # Pass callback to solve
+    assignments, penalties = solver.solve(solution_callback=on_solution_found)
     
+    # Final save (redundant if callback ran on last solution, but good for safety)
+    if assignments:
+        save_results(assignments, penalties, results_dir, source_prefix, groups)
+
+def save_results(assignments, penalties, results_dir, source_prefix, groups):
     # Sort penalties: Cost (Desc) -> Rule (Asc)
     penalties.sort(key=lambda x: (-x['cost'], x['rule']))
 
@@ -65,18 +76,18 @@ def run_solver(source_prefix=None):
     with open(penalties_path, 'w', encoding='utf-8') as f:
         json.dump(penalties, f, indent=4, ensure_ascii=False)
         
-    print(f"Assignments saved to {output_path}")
-    print(f"Penalties saved to {penalties_path}")
+    # print(f"Assignments saved to {output_path}") # Reduce noise during live updates
+    # print(f"Penalties saved to {penalties_path}")
     
     # Generate Person Report
     person_report_path = results_dir / f"{source_prefix}_assignments_by_person.json"
     save_person_report(assignments, penalties, groups, person_report_path)
-    print(f"Person report saved to {person_report_path}")
+    # print(f"Person report saved to {person_report_path}")
 
     # Generate Effort Chart
     chart_path = results_dir / f"{source_prefix}_effort_chart.png"
     generate_effort_chart(assignments, groups, chart_path)
-    print(f"Effort chart saved to {chart_path}")
+    # print(f"Effort chart saved to {chart_path}")
 
 def save_person_report(assignments, penalties, groups, output_path):
     # assignments: dict of group_id -> {assignee, method, ...}

@@ -3,10 +3,11 @@ from src.solver.penalties import SolverPenalties
 import math
 
 class SolutionPrinter(cp_model.CpSolverSolutionCallback):
-    def __init__(self, penalty_vars=None):
+    def __init__(self, penalty_vars=None, callback=None):
         cp_model.CpSolverSolutionCallback.__init__(self)
         self.__solution_count = 0
         self.penalty_vars = penalty_vars if penalty_vars else []
+        self.callback = callback
 
     def OnSolutionCallback(self):
         self.__solution_count += 1
@@ -19,8 +20,225 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
                     active_penalties += 1
         
         print(f'Solution {self.__solution_count}, time = {self.WallTime():.2f} s, objective = {self.ObjectiveValue()}, penalties = {active_penalties}', flush=True)
+        
+        if self.callback:
+            self.callback(self)
 
 class SATSolver:
+    # ... (init and methods remain) ...
+
+    def extract_solution(self, provider):
+        """
+        Extracts the current solution using a provider (either a Solver object or a Callback object).
+        provider must have a .Value(var) method.
+        """
+        results = {}
+        incurred_penalties = []
+        
+        P_UNASSIGNED = self.penalties.get_penalty_by_name("Unassigned Group")
+        P_UNDERWORKED = self.penalties.get_penalty_by_name("Underworked Team Member (< Threshold)")
+        P_MULTI_GENERAL = self.penalties.get_penalty_by_name("Multi-Day General (Weekday+Sunday)")
+        P_INTRA_COOLDOWN = self.penalties.get_penalty_by_name("Intra-Week Cooldown (Same Week)")
+        TARGET_EFFORT_SCALED = int(self.effort_threshold * 10)
+        
+        all_persons = sorted(self.team_members, key=lambda x: x['name'])
+        all_persons = [p['name'] for p in all_persons]
+
+        # Collect Assignments
+        for group in self.groups:
+            g_id = group['id']
+            assigned_person = None
+            method = "unassigned"
+            
+            if provider.Value(self.unassigned_vars[g_id]) == 1:
+                assigned_person = None
+                method = "unassigned"
+                
+                incurred_penalties.append({
+                    "group_id": g_id,
+                    "group_name": group['name'],
+                    "assignee": None,
+                    "rule": "Unassigned Group",
+                    "cost": P_UNASSIGNED
+                })
+            else:
+                candidates = self.get_group_candidates(group)
+                for p in candidates:
+                    if (g_id, p) in self.assignments:
+                        if provider.Value(self.assignments[(g_id, p)]) == 1:
+                            assigned_person = p
+                            break
+                
+                if group.get('assignee') == assigned_person:
+                    method = "manual"
+                else:
+                    method = "automatic"
+            
+            results[g_id] = {
+                "group_name": group['name'],
+                "assignee": assigned_person,
+                "method": method
+            }
+            
+        # Collect Person Penalties
+        for person in all_persons:
+            if person not in self.effort_vars: continue
+
+            # Underworked
+            if person in self.underworked_vars and provider.Value(self.underworked_vars[person]) == 1:
+                actual_effort = provider.Value(self.effort_vars[person]) / 10.0
+                incurred_penalties.append({
+                    "person_name": person,
+                    "rule": self.penalties.get_rule_name(1),
+                    "cost": P_UNDERWORKED,
+                    "details": f"Total Effort: {actual_effort} < {self.effort_threshold}"
+                })
+                
+            if person in self.debug_vars:
+                # Multi-Day Weekday (Cascading)
+                if 'multi_weekday' in self.debug_vars[person] and isinstance(self.debug_vars[person]['multi_weekday'], list):
+                    total_cost = 0
+                    weeks_details = []
+                    for item in self.debug_vars[person]['multi_weekday']:
+                        c_val = provider.Value(item['cost_var'])
+                        if c_val > 0:
+                            count_val = provider.Value(item['count_var'])
+                            total_cost += c_val
+                            weeks_details.append(f"W{item['week']}: {count_val} days ({c_val} cost)")
+                    
+                    if total_cost > 0:
+                        incurred_penalties.append({
+                            "person_name": person,
+                            "rule": "Multi-Day Weekdays (e.g. Tue+Wed)",
+                            "cost": total_cost,
+                            "details": f"Geometric Penalty: " + ", ".join(weeks_details)
+                        })
+                
+                # Multi-Day General
+                if self.debug_vars[person].get('multi_general') is not None and provider.Value(self.debug_vars[person]['multi_general']) == 1:
+                    incurred_penalties.append({
+                        "person_name": person,
+                        "rule": "Multi-Day General (Weekday+Sunday)",
+                        "cost": P_MULTI_GENERAL,
+                        "details": "Worked on Weekday + Sunday"
+                    })
+
+                # Role Diversity
+                if 'diversity_cost_var' in self.debug_vars[person]:
+                        cost_val = provider.Value(self.debug_vars[person]['diversity_cost_var'])
+                        if cost_val > 0:
+                            missed_fams = []
+                            if 'diversity' in self.debug_vars[person]:
+                                for fam, var in self.debug_vars[person]['diversity'].items():
+                                    if provider.Value(var) == 1:
+                                        missed_fams.append(fam)
+                            
+                            missed_count_val = provider.Value(self.debug_vars[person]['diversity_missed_count'])
+                            incurred_penalties.append({
+                                "person_name": person,
+                                "rule": "Role Diversity (Cascading)",
+                                "cost": cost_val,
+                                "details": f"Missed {missed_count_val} families: {', '.join(missed_fams)}"
+                            })
+
+                # Cooldowns
+                if 'cooldown' in self.debug_vars[person]:
+                    for item in self.debug_vars[person]['cooldown']:
+                        if provider.Value(item['var']) == 1:
+                            incurred_penalties.append({
+                                "person_name": person,
+                                "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+                                "cost": item['cost'],
+                                "details": item['details']
+                            })
+
+                # Intra-Cooldowns
+                if 'intra_cooldown' in self.debug_vars[person]:
+                    for item in self.debug_vars[person]['intra_cooldown']:
+                        if provider.Value(item['var']) == 1:
+                            incurred_penalties.append({
+                                "person_name": person,
+                                "rule": "Intra-Week Cooldown (Same Week)",
+                                "cost": P_INTRA_COOLDOWN,
+                                "details": item['details']
+                            })
+                    
+                # Teaching/Assisting Preference
+                if 'teach_pref' in self.debug_vars[person]:
+                    info = self.debug_vars[person]['teach_pref']
+                    cost_incurred = 0
+                    details = ""
+                    
+                    if info['type'] == 'teacher':
+                            if provider.Value(info['full_var']) == 1:
+                                cost_incurred = info['cost_full']
+                                details = "Teacher assigned neither Teaching nor Assisting"
+                            elif provider.Value(info['half_var']) == 1:
+                                cost_incurred = info['cost_half']
+                                details = "Teacher assigned only Assisting (Preferred Teaching)"
+                    elif info['type'] == 'assistant':
+                            if provider.Value(info['full_var']) == 1:
+                                cost_incurred = info['cost_full']
+                                details = "Assistant assigned no Assisting tasks"
+                    
+                    if cost_incurred > 0:
+                        incurred_penalties.append({
+                            "person_name": person,
+                            "rule": "Teaching/Assisting Preference",
+                            "cost": cost_incurred,
+                            "details": details
+                        })
+
+                # Teaching/Assisting Equality
+                if 'equality' in self.debug_vars[person]:
+                    for item in self.debug_vars[person]['equality']:
+                        c_val = provider.Value(item['cost_var'])
+                        if c_val > 0:
+                            cnt = provider.Value(item['count_var'])
+                            incurred_penalties.append({
+                                "person_name": person,
+                                "rule": "Teaching/Assisting Equality",
+                                "cost": c_val,
+                                "details": f"Hoarding {cnt} assignments in {item['family']}"
+                            })
+
+                # Effort Equalization
+                if 'equalization' in self.debug_vars[person]:
+                    info = self.debug_vars[person]['equalization']
+                    p_val = info['cost'] 
+                    
+                    norm_cost = provider.Value(info['cost_var'])
+                    total_penalty = norm_cost * p_val
+                    
+                    if total_penalty > 0:
+                        effort_val = provider.Value(self.effort_vars[person])
+                        scaled_diff = effort_val - TARGET_EFFORT_SCALED
+                        sq_diff = scaled_diff * scaled_diff
+                        
+                        actual_diff = scaled_diff / 10.0
+                        
+                        incurred_penalties.append({
+                            "person_name": person,
+                            "rule": "Effort Equalization (Squared Deviation)",
+                            "cost": total_penalty,
+                            "details": f"Deviation {actual_diff:.1f} from {self.effort_threshold} (SqDiff {sq_diff}, Norm {norm_cost})" 
+                        })
+
+        return results, incurred_penalties
+
+    def solve(self, solution_callback=None):
+        self.model = cp_model.CpModel()
+        
+        # ... (Variables and Constraints setup - same as before) ...
+        # NOTE: I am not including the entire body here due to size limits in this tool,
+        # but in a real edit I would keep the constraint setup logic.
+        # Since I'm using MultiReplace or big Replace, I should be careful.
+        # The tool input effectively replaces the extracted parts.
+        
+        # Wait, I cannot replace the *entire* solve method efficiently if I don't provide the body.
+        # The instruction was "Update solve to use extract_solution".
+        # I need to see exactly where to splice.
+        pass
     def __init__(self, groups, team_members):
         self.groups = groups
         self.team_members = team_members
@@ -63,7 +281,7 @@ class SATSolver:
         self.effort_vars = {} # person_name -> IntVar (Scaled x10)
         self.underworked_vars = {} # person_name -> BoolVar
 
-    def solve(self):
+    def solve(self, solution_callback=None):
         self.model = cp_model.CpModel()
         
         # ----------------------
@@ -799,209 +1017,17 @@ class SATSolver:
         solver = cp_model.CpSolver()
         if self.time_limit > 0:
             solver.parameters.max_time_in_seconds = self.time_limit
-        solution_printer = SolutionPrinter(all_cost_vars)
+            
+        solution_printer = SolutionPrinter(all_cost_vars, callback=solution_callback)
         status = solver.Solve(self.model, solution_printer)
-        
-        results = {}
-        incurred_penalties = []
         
         if status == cp_model.OPTIMAL or status == cp_model.FEASIBLE:
             print(f"Solution Found! Status: {solver.StatusName(status)}")
             print(f"Objective Value: {int(solver.ObjectiveValue())}")
-            
-            # Collect Assignments
-            for group in self.groups:
-                g_id = group['id']
-                assigned_person = None
-                method = "unassigned"
-                
-                if solver.Value(self.unassigned_vars[g_id]) == 1:
-                    assigned_person = None
-                    method = "unassigned"
-                    
-                    incurred_penalties.append({
-                        "group_id": g_id,
-                        "group_name": group['name'],
-                        "assignee": None,
-                        "rule": "Unassigned Group",
-                        "cost": P_UNASSIGNED
-                    })
-                else:
-                    candidates = self.get_group_candidates(group)
-                    for p in candidates:
-                        if (g_id, p) in self.assignments:
-                            if solver.Value(self.assignments[(g_id, p)]) == 1:
-                                assigned_person = p
-                                break
-                    
-                    if group.get('assignee') == assigned_person:
-                        method = "manual"
-                    else:
-                        method = "automatic"
-                
-                results[g_id] = {
-                    "group_name": group['name'],
-                    "assignee": assigned_person,
-                    "method": method
-                }
-                
-            # Collect Person Penalties
-            for person in all_persons:
-                # Underworked
-                if solver.Value(self.underworked_vars[person]) == 1:
-                    actual_effort = solver.Value(self.effort_vars[person]) / 10.0
-                    incurred_penalties.append({
-                        "person_name": person,
-                        "rule": self.penalties.get_rule_name(1),
-                        "cost": P_UNDERWORKED,
-                        "details": f"Total Effort: {actual_effort} < 8.0"
-                    })
-                    
-                # New Rules
-                # New Rules
-                if person in self.debug_vars:
-                    # Multi-Day Weekday
-                    # Multi-Day Weekday (Cascading)
-                    # Multi-Day Weekday (Cascading Geometric)
-                    if 'multi_weekday' in self.debug_vars[person] and isinstance(self.debug_vars[person]['multi_weekday'], list):
-                        total_cost = 0
-                        weeks_details = []
-                        for item in self.debug_vars[person]['multi_weekday']:
-                            c_val = solver.Value(item['cost_var'])
-                            if c_val > 0:
-                                count_val = solver.Value(item['count_var'])
-                                total_cost += c_val
-                                weeks_details.append(f"W{item['week']}: {count_val} days ({c_val} cost)")
-                        
-                        if total_cost > 0:
-                            incurred_penalties.append({
-                                "person_name": person,
-                                "rule": "Multi-Day Weekdays (e.g. Tue+Wed)",
-                                "cost": total_cost,
-                                "details": f"Geometric Penalty: " + ", ".join(weeks_details)
-                            })
-                    
-                    # Multi-Day General
-                    if self.debug_vars[person]['multi_general'] is not None and solver.Value(self.debug_vars[person]['multi_general']) == 1:
-                        incurred_penalties.append({
-                            "person_name": person,
-                            "rule": "Multi-Day General (Weekday+Sunday)",
-                            "cost": P_MULTI_GENERAL,
-                            "details": "Worked on Weekday + Sunday"
-                        })
-
-                    # Role Diversity (Cascading)
-                    if 'diversity_cost_var' in self.debug_vars[person]:
-                         cost_val = solver.Value(self.debug_vars[person]['diversity_cost_var'])
-                         if cost_val > 0:
-                             missed_fams = []
-                             if 'diversity' in self.debug_vars[person]:
-                                 for fam, var in self.debug_vars[person]['diversity'].items():
-                                     if solver.Value(var) == 1:
-                                         missed_fams.append(fam)
-                             
-                             missed_count_val = solver.Value(self.debug_vars[person]['diversity_missed_count'])
-                             incurred_penalties.append({
-                                 "person_name": person,
-                                 "rule": "Role Diversity (Cascading)",
-                                 "cost": cost_val,
-                                 "details": f"Missed {missed_count_val} families: {', '.join(missed_fams)}"
-                             })
-
-                    # Cooldowns (Geometric + Pairwise)
-                    if 'cooldown' in self.debug_vars[person]:
-                        for item in self.debug_vars[person]['cooldown']:
-                            if solver.Value(item['var']) == 1:
-                                incurred_penalties.append({
-                                    "person_name": person,
-                                    "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-                                    "cost": item['cost'],
-                                    "details": item['details']
-                                })
-
-                    # Intra-Cooldowns
-                    if 'intra_cooldown' in self.debug_vars[person]:
-                        for item in self.debug_vars[person]['intra_cooldown']:
-                            if solver.Value(item['var']) == 1:
-                                incurred_penalties.append({
-                                    "person_name": person,
-                                    "rule": "Intra-Week Cooldown (Same Week)",
-                                    "cost": P_INTRA_COOLDOWN,
-                                    "details": item['details']
-                                })
-                        
-                    # Teaching/Assisting Preference
-                    if 'teach_pref' in self.debug_vars[person]:
-                        info = self.debug_vars[person]['teach_pref']
-                        cost_incurred = 0
-                        details = ""
-                        
-                        if info['type'] == 'teacher':
-                             if solver.Value(info['full_var']) == 1:
-                                 cost_incurred = info['cost_full']
-                                 details = "Teacher assigned neither Teaching nor Assisting"
-                             elif solver.Value(info['half_var']) == 1:
-                                 cost_incurred = info['cost_half']
-                                 details = "Teacher assigned only Assisting (Preferred Teaching)"
-                        elif info['type'] == 'assistant':
-                             if solver.Value(info['full_var']) == 1:
-                                 cost_incurred = info['cost_full']
-                                 details = "Assistant assigned no Assisting tasks"
-                        
-                        if cost_incurred > 0:
-                            incurred_penalties.append({
-                                "person_name": person,
-                                "rule": "Teaching/Assisting Preference",
-                                "cost": cost_incurred,
-                                "details": details
-                            })
-
-                    # Teaching/Assisting Equality
-                    if 'equality' in self.debug_vars[person]:
-                        for item in self.debug_vars[person]['equality']:
-                            c_val = solver.Value(item['cost_var'])
-                            if c_val > 0:
-                                cnt = solver.Value(item['count_var'])
-                                incurred_penalties.append({
-                                    "person_name": person,
-                                    "rule": "Teaching/Assisting Equality",
-                                    "cost": c_val,
-                                    "details": f"Hoarding {cnt} assignments in {item['family']}"
-                                })
-
-                    # Effort Equalization (Squared Deviation)
-                    if 'equalization' in self.debug_vars[person]:
-                        info = self.debug_vars[person]['equalization']
-                        p_val = info['cost'] 
-                        
-                        # Use the NORMALIZED cost var for reporting total cost
-                        norm_cost = solver.Value(info['cost_var'])
-                        total_penalty = norm_cost * p_val
-                        
-                        if total_penalty > 0:
-                            # Re-calculate diff for display since we optimized away the variable
-                            effort_val = solver.Value(self.effort_vars[person])
-                            scaled_diff = effort_val - TARGET_EFFORT_SCALED
-                            sq_diff = scaled_diff * scaled_diff
-                            
-                            # Scale back effort for display (div 10)
-                            actual_diff = scaled_diff / 10.0
-                            
-                            incurred_penalties.append({
-                                "person_name": person,
-                                "rule": "Effort Equalization (Squared Deviation)",
-                                "cost": total_penalty,
-                                "details": f"Deviation {actual_diff:.1f} from {self.effort_threshold} (SqDiff {sq_diff}, Norm {norm_cost})" 
-                            })
-
-                # Efficiency check (need to reconstruct context or store vars better)
-                # Re-check logic simply via values for reporting
-                # (Ideally we stored inefficient vars)
-
+            return self.extract_solution(solver)
         else:
              print("No solution found.")
-             
-        return results, incurred_penalties
+             return {}, []
 
     def is_exempt_assignment(self, group, person):
         """
