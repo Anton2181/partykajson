@@ -2,6 +2,7 @@ import sys
 import json
 import subprocess
 import time
+import platform
 from pathlib import Path
 
 from PyQt6.QtWidgets import (
