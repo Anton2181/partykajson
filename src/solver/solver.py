@@ -19,7 +19,7 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
                 if self.Value(var) > 0:
                     active_penalties += 1
         
-        print(f'Solution {self.__solution_count}, time = {self.WallTime():.2f} s, objective = {self.ObjectiveValue()}, penalties = {active_penalties}', flush=True)
+        print(f'Solution {self.__solution_count}, time = {self.WallTime():.2f} s, objective = {int(self.ObjectiveValue())}, penalties = {active_penalties}', flush=True)
         
         if self.callback:
             self.callback(self)
@@ -263,6 +263,7 @@ class SATSolver:
             self.time_limit = t.get('time_limit_seconds', 30.0)
             self.penalty_ratio = t.get('penalty_ratio', 10)
             self.effort_threshold = t.get('effort_threshold', 8.0)
+            self.preferred_pairs = t.get('preferred_pairs', [])
             
             # Or should I pass the full implemented_rules? 
             # SolverPenalties usually takes the ladder (the rules that determine cost).
@@ -992,7 +993,24 @@ class SATSolver:
                 norm = sq // 100 # Normalize by 100
                 cost_table.append(norm)
                 
+            # Identify Prepass/Priority People to exempt from Equalization
+            # If a person is forced/priority for ANY task, they are "Special/Exempt" from fairness deviations.
+            prepass_people = set()
+            for g in self.groups:
+                 # Check 'assignee' (Manual)
+                 if g.get('assignee'):
+                     prepass_people.add(g.get('assignee'))
+                 # Check 'filtered_priority_candidates_list' (Priority)
+                 for p in g.get('filtered_priority_candidates_list', []):
+                     prepass_people.add(p)
+                 
             for person in all_persons:
+                 if person in prepass_people:
+                     # Skip Equalization for Prepass candidates
+                     if person not in self.debug_vars: self.debug_vars[person] = {}
+                     # Log it?
+                     continue
+            
                  effort_var = self.effort_vars[person]
                  
                  # Optimization: Table Lookup instead of Quadratic Math constraints
@@ -1010,6 +1028,84 @@ class SATSolver:
                      'cost_var': cost_var,
                      'cost': P_EQUALIZATION
                  }
+
+        # Term 11: Preferred Pair Split (Separate Rungs of same Ladder)
+        # Goal: If preferred pair members are assigned to SAME Logical Group (Name, Week, Day),
+        # but in different repeats, that is GOOD.
+        # User: "incentivize them being assigned to different repeats of the same group"
+        # Implies: If A is in G_1 (Rep 1) and B is NOT in any G (Rep 1..N) of same type -> ?
+        # Or: Group them together.
+        # Let's interpret "Separate Rungs" as: They should appear in the set of assignees for the Logical Group.
+        # Logic: For each Logical Group (Name, Week, Day):
+        #   If (A is present) XOR (B is present) -> Penalty.
+        #   If A and B both present -> Good.
+        #   If neither -> Good (Neutral).
+        
+        P_PAIR_SPLIT = self.penalties.get_penalty_by_name("Preferred Pair Split (Working separately on same group)")
+        
+        if P_PAIR_SPLIT > 0 and self.preferred_pairs:
+            # 1. Group IDs by Logical Group (Name, Week, Day)
+            logical_groups = {} # (Name, Week, Day) -> [GroupIDs]
+            for g in self.groups:
+                # Assuming standard group naming/ID structure isn't needed if we use attributes
+                key = (g['name'], g['week'], g['day'])
+                if key not in logical_groups:
+                    logical_groups[key] = []
+                logical_groups[key].append(g['id'])
+            
+            # 2. Iterate Pairs and Logical Groups
+            for p1_name, p2_name in self.preferred_pairs:
+                # Verify names exist to avoid errors
+                if p1_name not in self.member_map or p2_name not in self.member_map:
+                    print(f"Warning: Preferred pair [{p1_name}, {p2_name}] contains unknown members.")
+                    continue
+                    
+                for key, g_ids in logical_groups.items():
+                    # Create presence vars for this logical group
+                    # is_p1_present = OR(assignments[g_id, p1])
+                    # is_p2_present = OR(assignments[g_id, p2])
+                    
+                    p1_vars = []
+                    p2_vars = []
+                    
+                    for gid in g_ids:
+                        if (gid, p1_name) in self.assignments:
+                            p1_vars.append(self.assignments[(gid, p1_name)])
+                        if (gid, p2_name) in self.assignments:
+                            p2_vars.append(self.assignments[(gid, p2_name)])
+                            
+                    if not p1_vars and not p2_vars:
+                        continue
+                        
+                    p1_present = self.model.NewBoolVar(f"pair_{p1_name}_{key}")
+                    p2_present = self.model.NewBoolVar(f"pair_{p2_name}_{key}")
+                    
+                    if p1_vars:
+                        self.model.AddBoolOr(p1_vars).OnlyEnforceIf(p1_present)
+                        self.model.AddBoolAnd([v.Not() for v in p1_vars]).OnlyEnforceIf(p1_present.Not())
+                    else:
+                        self.model.Add(p1_present == 0)
+
+                    if p2_vars:
+                        self.model.AddBoolOr(p2_vars).OnlyEnforceIf(p2_present)
+                        self.model.AddBoolAnd([v.Not() for v in p2_vars]).OnlyEnforceIf(p2_present.Not())
+                    else:
+                        self.model.Add(p2_present == 0)
+                        
+                    # 3. Penalty if XOR (One present, other missing)
+                    # split_var = p1_present != p2_present
+                    split_var = self.model.NewBoolVar(f"split_{p1_name}_{p2_name}_{key}")
+                    self.model.Add(p1_present != p2_present).OnlyEnforceIf(split_var)
+                    self.model.Add(p1_present == p2_present).OnlyEnforceIf(split_var.Not())
+                    
+                    objective_terms.append(split_var * P_PAIR_SPLIT)
+                    all_cost_vars.append(split_var)
+                    
+                    # Debug logic (attach to P1 for visibility)
+                    if p1_name not in self.debug_vars: self.debug_vars[p1_name] = {}
+                    # Accumulate if multiple splits? Complex to show in flat dict.
+                    # Just showing last for now or unique key
+                    # self.debug_vars[p1_name][f'split_{p2_name}'] = split_var
 
         self.model.Minimize(sum(objective_terms))
 

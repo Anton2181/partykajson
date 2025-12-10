@@ -29,6 +29,13 @@
         "Inefficient Day (< 2 Tasks)",
         "Multi-Day General (Weekday+Sunday)",
         "Cooldown (Adjacent Weeks)",
+        "Preferred Pair Split (Working separately on same group)",
         "Effort Equalization (Squared Deviation)"
+    ],
+    "preferred_pairs": [
+        [
+            "Antoni Domanowski",
+            "Nina Andrzejczyk"
+        ]
     ]
 }
