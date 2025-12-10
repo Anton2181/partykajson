@@ -32,9 +32,13 @@ def build_app():
     
     # Data Files to Include
     # Format: "source_path{sep}dest_path"
+    # Use absolute paths for source to avoid CWD issues
+    data_path = base_dir / "data"
+    src_path = base_dir / "src"
+    
     add_data = [
-        f"data{sep}data",       # Bundle entire data folder (config, members)
-        f"src{sep}src",         # Bundle source code for subprocess execution
+        f"{data_path}{sep}data",       # Bundle entire data folder (config, members)
+        f"{src_path}{sep}src",         # Bundle source code for subprocess execution
     ]
     
     # Hidden Imports (OR-Tools, Pandas often need help)
