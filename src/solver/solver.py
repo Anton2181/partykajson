@@ -18,7 +18,7 @@ class SolutionPrinter(cp_model.CpSolverSolutionCallback):
                 if self.Value(var) > 0:
                     active_penalties += 1
         
-        print(f'Solution {self.__solution_count}, time = {self.WallTime():.2f} s, objective = {self.ObjectiveValue()}, penalties = {active_penalties}')
+        print(f'Solution {self.__solution_count}, time = {self.WallTime():.2f} s, objective = {self.ObjectiveValue()}, penalties = {active_penalties}', flush=True)
 
 class SATSolver:
     def __init__(self, groups, team_members):

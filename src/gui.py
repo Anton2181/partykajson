@@ -174,9 +174,17 @@ class ScriptWorker(QThread):
         self.process = None
 
     def run(self):
+        # Force unbuffered output to get real-time updates
+        env = os.environ.copy()
+        env["PYTHONUNBUFFERED"] = "1"
+        
         if getattr(sys, 'frozen', False):
             # Dispatch to internal script
             # VENV_PYTHON is the app executable
+            # Add -u manually if dispatch doesn't automatically imply it (it implies python execution)
+            # Actually, we can't easily pass -u to the *internal* python interpreter of a frozen app 
+            # via argv unless we handle it in our dispatch logic. 
+            # But PYTHONUNBUFFERED env var should work.
             cmd = [str(VENV_PYTHON), "--dispatch", self.script_name] + self.args
         else:
             # Normal python execution
@@ -186,10 +194,10 @@ class ScriptWorker(QThread):
             self.process = subprocess.Popen(
                 cmd,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
+                stderr=subprocess.STDOUT, # Merge stderr
                 text=True,
-                bufsize=1, # Line buffered
-                cwd=str(BASE_DIR)
+                env=env, # Pass env with PYTHONUNBUFFERED
+                bufsize=0 # Unbuffered pipe
             )
             
             for line in self.process.stdout:
