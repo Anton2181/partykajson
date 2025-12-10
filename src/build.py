@@ -44,6 +44,8 @@ def build_app():
     # Hidden Imports (OR-Tools, Pandas often need help)
     hidden_imports = [
         "pandas",
+        "matplotlib",
+        "matplotlib.backends.backend_svg",
         "pyqtgraph",
         "PyQt6.QtSvgWidgets",
         "PyQt6.QtSvg"
