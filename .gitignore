@@ -17,5 +17,4 @@ env/
 .idea/
 
 # Output / Debug / Results
-data/results/
 *.log

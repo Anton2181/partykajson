@@ -1,0 +1,722 @@
+{
+    "G15_7_1_1": {
+        "group_name": "MC Sunday",
+        "assignee": "Jan Mężyński",
+        "method": "automatic"
+    },
+    "G15_7_2_1": {
+        "group_name": "Sunday Milonga Installation",
+        "assignee": "Maria Merchel",
+        "method": "automatic"
+    },
+    "G15_7_3_1": {
+        "group_name": "Sunday Milonga Deinstallation",
+        "assignee": "Iana Kain",
+        "method": "automatic"
+    },
+    "G15_2_1_1": {
+        "group_name": "Teaching Advanced Tuesday",
+        "assignee": "Yulia Talybova",
+        "method": "manual"
+    },
+    "G15_2_2_2": {
+        "group_name": "Teaching Advanced Tuesday",
+        "assignee": "Natalia Khotsianovska",
+        "method": "manual"
+    },
+    "G15_2_3_1": {
+        "group_name": "Teaching Beginners Tuesday",
+        "assignee": "Marius Latinis",
+        "method": "automatic"
+    },
+    "G15_2_4_2": {
+        "group_name": "Teaching Beginners Tuesday",
+        "assignee": "Sylwia Woźniak",
+        "method": "automatic"
+    },
+    "G15_2_5_1": {
+        "group_name": "Assisting Beginners Tuesday",
+        "assignee": "Antoni Domanowski",
+        "method": "automatic"
+    },
+    "G15_2_6_2": {
+        "group_name": "Assisting Beginners Tuesday",
+        "assignee": "Nina Andrzejczyk",
+        "method": "automatic"
+    },
+    "G15_2_7_1": {
+        "group_name": "Take Care of Newcomers - Tuesday",
+        "assignee": "Krzysiek Rećko",
+        "method": "automatic"
+    },
+    "G15_2_8_1": {
+        "group_name": "Tuesday Milonga Installation",
+        "assignee": "Alicja Nowak",
+        "method": "automatic"
+    },
+    "G15_2_9_1": {
+        "group_name": "MC Tuesday",
+        "assignee": "Sylwia Woźniak",
+        "method": "automatic"
+    },
+    "G15_2_10_1": {
+        "group_name": "DJ Tuesday",
+        "assignee": "Iana Kain",
+        "method": "automatic"
+    },
+    "G15_2_11_1": {
+        "group_name": "Deistalling the Venue + Cleaning - Tuesday",
+        "assignee": "Krzysiek Rećko",
+        "method": "automatic"
+    },
+    "G15_2_12_1": {
+        "group_name": "Photographer Tuesday",
+        "assignee": "Diana Siwicka",
+        "method": "automatic"
+    },
+    "G15_3_1_1": {
+        "group_name": "Teaching Intermediate Wednesday",
+        "assignee": "Pawel Wypijewski",
+        "method": "automatic"
+    },
+    "G15_3_2_2": {
+        "group_name": "Teaching Intermediate Wednesday",
+        "assignee": "Maria Merchel",
+        "method": "automatic"
+    },
+    "G15_3_3_1": {
+        "group_name": "Teaching Beginners Wednesday",
+        "assignee": "Michał Dziedziniewicz",
+        "method": "automatic"
+    },
+    "G15_3_4_2": {
+        "group_name": "Teaching Beginners Wednesday",
+        "assignee": "Anna Kolomenkina",
+        "method": "automatic"
+    },
+    "G15_3_5_1": {
+        "group_name": "Assisting Beginners Wednesday",
+        "assignee": "Damian Bartosiewicz",
+        "method": "automatic"
+    },
+    "G15_3_6_2": {
+        "group_name": "Assisting Beginners Wednesday",
+        "assignee": "Julia Borychowska",
+        "method": "automatic"
+    },
+    "G15_3_7_1": {
+        "group_name": "Take Care of Newcomers - Wednesday",
+        "assignee": "Jan Mężyński",
+        "method": "automatic"
+    },
+    "G15_3_8_1": {
+        "group_name": "Third Registrator Wednesday",
+        "assignee": "Anna Sidorowicz",
+        "method": "automatic"
+    },
+    "G15_3_9_1": {
+        "group_name": "Wednesday Milonga Installation",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G15_3_10_1": {
+        "group_name": "MC Wednesday",
+        "assignee": "Julia Borychowska",
+        "method": "automatic"
+    },
+    "G15_3_11_1": {
+        "group_name": "DJ Wednesday",
+        "assignee": "Maria Merchel",
+        "method": "automatic"
+    },
+    "G15_3_12_1": {
+        "group_name": "Deistalling the Venue + Cleaning - Wednesday",
+        "assignee": "Jan Mężyński",
+        "method": "automatic"
+    },
+    "G15_3_13_1": {
+        "group_name": "Photographer Wednesday",
+        "assignee": "Tomasz Wilk",
+        "method": "automatic"
+    },
+    "G16_7_1_1": {
+        "group_name": "MC Sunday",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G16_7_2_1": {
+        "group_name": "Sunday Milonga Installation",
+        "assignee": "Anna Sidorowicz",
+        "method": "automatic"
+    },
+    "G16_7_3_1": {
+        "group_name": "Sunday Milonga Deinstallation",
+        "assignee": "Aleksander Nowak",
+        "method": "automatic"
+    },
+    "G16_2_1_1": {
+        "group_name": "Teaching Advanced Tuesday",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G16_2_2_2": {
+        "group_name": "Teaching Advanced Tuesday",
+        "assignee": "Yulia Talybova",
+        "method": "automatic"
+    },
+    "G16_2_3_1": {
+        "group_name": "Teaching Beginners Tuesday",
+        "assignee": "Michał Dziedziniewicz",
+        "method": "automatic"
+    },
+    "G16_2_4_2": {
+        "group_name": "Teaching Beginners Tuesday",
+        "assignee": "Anna Sidorowicz",
+        "method": "automatic"
+    },
+    "G16_2_5_1": {
+        "group_name": "Assisting Beginners Tuesday",
+        "assignee": "Damian Bagnowski",
+        "method": "automatic"
+    },
+    "G16_2_6_2": {
+        "group_name": "Assisting Beginners Tuesday",
+        "assignee": "Natalia Khotsianovska",
+        "method": "automatic"
+    },
+    "G16_2_7_1": {
+        "group_name": "Take Care of Newcomers - Tuesday",
+        "assignee": "Damian Karas",
+        "method": "automatic"
+    },
+    "G16_2_8_1": {
+        "group_name": "Tuesday Milonga Installation",
+        "assignee": "Jan Mężyński",
+        "method": "automatic"
+    },
+    "G16_2_9_1": {
+        "group_name": "MC Tuesday",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G16_2_10_1": {
+        "group_name": "DJ Tuesday",
+        "assignee": "Maciek Oficialski",
+        "method": "automatic"
+    },
+    "G16_2_11_1": {
+        "group_name": "Deistalling the Venue + Cleaning - Tuesday",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G16_2_12_1": {
+        "group_name": "Photographer Tuesday",
+        "assignee": "Iana Kain",
+        "method": "automatic"
+    },
+    "G16_3_1_1": {
+        "group_name": "Teaching Intermediate Wednesday",
+        "assignee": "Pawel Wypijewski",
+        "method": "automatic"
+    },
+    "G16_3_2_2": {
+        "group_name": "Teaching Intermediate Wednesday",
+        "assignee": "Sylwia Woźniak",
+        "method": "automatic"
+    },
+    "G16_3_3_1": {
+        "group_name": "Teaching Beginners Wednesday",
+        "assignee": "Tomasz Wilk",
+        "method": "automatic"
+    },
+    "G16_3_4_2": {
+        "group_name": "Teaching Beginners Wednesday",
+        "assignee": "Martyna Gosz",
+        "method": "automatic"
+    },
+    "G16_3_5_1": {
+        "group_name": "Assisting Beginners Wednesday",
+        "assignee": "Aleksander Nowak",
+        "method": "automatic"
+    },
+    "G16_3_6_2": {
+        "group_name": "Assisting Beginners Wednesday",
+        "assignee": "Maria Merchel",
+        "method": "automatic"
+    },
+    "G16_3_7_1": {
+        "group_name": "Take Care of Newcomers - Wednesday",
+        "assignee": "Damian Karas",
+        "method": "automatic"
+    },
+    "G16_3_8_1": {
+        "group_name": "Third Registrator Wednesday",
+        "assignee": "Krzysiek Rećko",
+        "method": "automatic"
+    },
+    "G16_3_9_1": {
+        "group_name": "Wednesday Milonga Installation",
+        "assignee": "Julia Borychowska",
+        "method": "automatic"
+    },
+    "G16_3_10_1": {
+        "group_name": "MC Wednesday",
+        "assignee": "Alicja Nowak",
+        "method": "automatic"
+    },
+    "G16_3_11_1": {
+        "group_name": "DJ Wednesday",
+        "assignee": "Martyna Gosz",
+        "method": "automatic"
+    },
+    "G16_3_12_1": {
+        "group_name": "Deistalling the Venue + Cleaning - Wednesday",
+        "assignee": "Alicja Nowak",
+        "method": "automatic"
+    },
+    "G16_3_13_1": {
+        "group_name": "Photographer Wednesday",
+        "assignee": "Anna Kolomenkina",
+        "method": "automatic"
+    },
+    "G17_7_1_1": {
+        "group_name": "MC Sunday",
+        "assignee": "Krzysiek Rećko",
+        "method": "automatic"
+    },
+    "G17_7_2_1": {
+        "group_name": "Sunday Milonga Installation",
+        "assignee": "Patrycja Niemczuk",
+        "method": "automatic"
+    },
+    "G17_7_3_1": {
+        "group_name": "Sunday Milonga Deinstallation",
+        "assignee": "Alicja Nowak",
+        "method": "automatic"
+    },
+    "G17_2_1_1": {
+        "group_name": "Teaching Advanced Tuesday",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G17_2_2_2": {
+        "group_name": "Teaching Advanced Tuesday",
+        "assignee": "Yulia Talybova",
+        "method": "automatic"
+    },
+    "G17_2_3_1": {
+        "group_name": "Teaching Beginners Tuesday",
+        "assignee": "Jan Mężyński",
+        "method": "automatic"
+    },
+    "G17_2_4_2": {
+        "group_name": "Teaching Beginners Tuesday",
+        "assignee": "Anna Sidorowicz",
+        "method": "automatic"
+    },
+    "G17_2_5_1": {
+        "group_name": "Assisting Beginners Tuesday",
+        "assignee": "Antoni Domanowski",
+        "method": "automatic"
+    },
+    "G17_2_6_2": {
+        "group_name": "Assisting Beginners Tuesday",
+        "assignee": "Nina Andrzejczyk",
+        "method": "automatic"
+    },
+    "G17_2_7_1": {
+        "group_name": "Take Care of Newcomers - Tuesday",
+        "assignee": "Michał Dziedziniewicz",
+        "method": "automatic"
+    },
+    "G17_2_8_1": {
+        "group_name": "Tuesday Milonga Installation",
+        "assignee": "Maciek Oficialski",
+        "method": "automatic"
+    },
+    "G17_2_9_1": {
+        "group_name": "MC Tuesday",
+        "assignee": "Krzysiek Rećko",
+        "method": "automatic"
+    },
+    "G17_2_10_1": {
+        "group_name": "DJ Tuesday",
+        "assignee": "Jan Mężyński",
+        "method": "automatic"
+    },
+    "G17_2_11_1": {
+        "group_name": "Deistalling the Venue + Cleaning - Tuesday",
+        "assignee": "Anna Sidorowicz",
+        "method": "automatic"
+    },
+    "G17_2_12_1": {
+        "group_name": "Photographer Tuesday",
+        "assignee": "Krzysiek Rećko",
+        "method": "automatic"
+    },
+    "G17_3_1_1": {
+        "group_name": "Teaching Intermediate Wednesday",
+        "assignee": "Pawel Wypijewski",
+        "method": "automatic"
+    },
+    "G17_3_2_2": {
+        "group_name": "Teaching Intermediate Wednesday",
+        "assignee": "Natalia Khotsianovska",
+        "method": "automatic"
+    },
+    "G17_3_3_1": {
+        "group_name": "Teaching Beginners Wednesday",
+        "assignee": "Tomasz Wilk",
+        "method": "automatic"
+    },
+    "G17_3_4_2": {
+        "group_name": "Teaching Beginners Wednesday",
+        "assignee": "Patrycja Niemczuk",
+        "method": "automatic"
+    },
+    "G17_3_5_1": {
+        "group_name": "Assisting Beginners Wednesday",
+        "assignee": "Marius Latinis",
+        "method": "automatic"
+    },
+    "G17_3_6_2": {
+        "group_name": "Assisting Beginners Wednesday",
+        "assignee": "Anna Kolomenkina",
+        "method": "automatic"
+    },
+    "G17_3_7_1": {
+        "group_name": "Take Care of Newcomers - Wednesday",
+        "assignee": "Martyna Gosz",
+        "method": "automatic"
+    },
+    "G17_3_8_1": {
+        "group_name": "Third Registrator Wednesday",
+        "assignee": "Iana Kain",
+        "method": "automatic"
+    },
+    "G17_3_9_1": {
+        "group_name": "Wednesday Milonga Installation",
+        "assignee": "Aleksander Nowak",
+        "method": "automatic"
+    },
+    "G17_3_10_1": {
+        "group_name": "MC Wednesday",
+        "assignee": "Martyna Gosz",
+        "method": "automatic"
+    },
+    "G17_3_11_1": {
+        "group_name": "DJ Wednesday",
+        "assignee": "Anna Kolomenkina",
+        "method": "automatic"
+    },
+    "G17_3_12_1": {
+        "group_name": "Deistalling the Venue + Cleaning - Wednesday",
+        "assignee": "Iana Kain",
+        "method": "automatic"
+    },
+    "G17_3_13_1": {
+        "group_name": "Photographer Wednesday",
+        "assignee": "Julia Borychowska",
+        "method": "automatic"
+    },
+    "G18_7_1_1": {
+        "group_name": "MC Sunday",
+        "assignee": "Patrycja Niemczuk",
+        "method": "automatic"
+    },
+    "G18_7_2_1": {
+        "group_name": "Sunday Milonga Installation",
+        "assignee": "Julia Borychowska",
+        "method": "automatic"
+    },
+    "G18_7_3_1": {
+        "group_name": "Sunday Milonga Deinstallation",
+        "assignee": "Aleksander Nowak",
+        "method": "automatic"
+    },
+    "G18_2_1_1": {
+        "group_name": "Teaching Advanced Tuesday",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G18_2_2_2": {
+        "group_name": "Teaching Advanced Tuesday",
+        "assignee": "Yulia Talybova",
+        "method": "automatic"
+    },
+    "G18_2_3_1": {
+        "group_name": "Teaching Beginners Tuesday",
+        "assignee": "Tomasz Wilk",
+        "method": "automatic"
+    },
+    "G18_2_4_2": {
+        "group_name": "Teaching Beginners Tuesday",
+        "assignee": "Maria Merchel",
+        "method": "automatic"
+    },
+    "G18_2_5_1": {
+        "group_name": "Assisting Beginners Tuesday",
+        "assignee": "Damian Bagnowski",
+        "method": "automatic"
+    },
+    "G18_2_6_2": {
+        "group_name": "Assisting Beginners Tuesday",
+        "assignee": "Alicja Nowak",
+        "method": "automatic"
+    },
+    "G18_2_7_1": {
+        "group_name": "Take Care of Newcomers - Tuesday",
+        "assignee": "Iana Kain",
+        "method": "automatic"
+    },
+    "G18_2_8_1": {
+        "group_name": "Tuesday Milonga Installation",
+        "assignee": "Krzysiek Rećko",
+        "method": "automatic"
+    },
+    "G18_2_9_1": {
+        "group_name": "MC Tuesday",
+        "assignee": "Iana Kain",
+        "method": "automatic"
+    },
+    "G18_2_10_1": {
+        "group_name": "DJ Tuesday",
+        "assignee": "Alicja Nowak",
+        "method": "automatic"
+    },
+    "G18_2_11_1": {
+        "group_name": "Deistalling the Venue + Cleaning - Tuesday",
+        "assignee": "Julia Borychowska",
+        "method": "automatic"
+    },
+    "G18_2_12_1": {
+        "group_name": "Photographer Tuesday",
+        "assignee": "Natalia Khotsianovska",
+        "method": "automatic"
+    },
+    "G18_3_1_1": {
+        "group_name": "Teaching Intermediate Wednesday",
+        "assignee": "Pawel Wypijewski",
+        "method": "automatic"
+    },
+    "G18_3_2_2": {
+        "group_name": "Teaching Intermediate Wednesday",
+        "assignee": "Anna Kolomenkina",
+        "method": "automatic"
+    },
+    "G18_3_3_1": {
+        "group_name": "Teaching Beginners Wednesday",
+        "assignee": "Michał Dziedziniewicz",
+        "method": "automatic"
+    },
+    "G18_3_4_2": {
+        "group_name": "Teaching Beginners Wednesday",
+        "assignee": "Patrycja Niemczuk",
+        "method": "automatic"
+    },
+    "G18_3_5_1": {
+        "group_name": "Assisting Beginners Wednesday",
+        "assignee": "Damian Bartosiewicz",
+        "method": "automatic"
+    },
+    "G18_3_6_2": {
+        "group_name": "Assisting Beginners Wednesday",
+        "assignee": "Diana Siwicka",
+        "method": "automatic"
+    },
+    "G18_3_7_1": {
+        "group_name": "Take Care of Newcomers - Wednesday",
+        "assignee": "Anna Sidorowicz",
+        "method": "automatic"
+    },
+    "G18_3_8_1": {
+        "group_name": "Third Registrator Wednesday",
+        "assignee": "Aleksander Nowak",
+        "method": "automatic"
+    },
+    "G18_3_9_1": {
+        "group_name": "Wednesday Milonga Installation",
+        "assignee": "Martyna Gosz",
+        "method": "automatic"
+    },
+    "G18_3_10_1": {
+        "group_name": "MC Wednesday",
+        "assignee": "Jan Mężyński",
+        "method": "automatic"
+    },
+    "G18_3_11_1": {
+        "group_name": "DJ Wednesday",
+        "assignee": "Sylwia Woźniak",
+        "method": "automatic"
+    },
+    "G18_3_12_1": {
+        "group_name": "Deistalling the Venue + Cleaning - Wednesday",
+        "assignee": "Aleksander Nowak",
+        "method": "automatic"
+    },
+    "G18_3_13_1": {
+        "group_name": "Photographer Wednesday",
+        "assignee": "Jan Mężyński",
+        "method": "automatic"
+    },
+    "G15_0_1_1": {
+        "group_name": "CRM Manteince",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G15_0_2_1": {
+        "group_name": "Monthly Monitoring",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G15_0_3_1": {
+        "group_name": "Monthly Payments",
+        "assignee": "Maciek Oficialski",
+        "method": "automatic"
+    },
+    "G15_0_4_1": {
+        "group_name": "Monthly Print",
+        "assignee": "Maciek Oficialski",
+        "method": "automatic"
+    },
+    "G15_0_5_1": {
+        "group_name": "Monthly Report",
+        "assignee": "Antoni Domanowski",
+        "method": "automatic"
+    },
+    "G15_0_6_2": {
+        "group_name": "Monthly Report",
+        "assignee": "Maciek Oficialski",
+        "method": "automatic"
+    },
+    "G15_0_7_1": {
+        "group_name": "Planning of the Month / Food Supply",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G15_0_8_1": {
+        "group_name": "Planning of the Month / Master of Cerimony",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G15_0_9_1": {
+        "group_name": "Planning of the Month / Registrations",
+        "assignee": "Natalia Khotsianovska",
+        "method": "automatic"
+    },
+    "G15_0_10_1": {
+        "group_name": "Planning of the Month / Teachers and Assistants",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G15_0_11_1": {
+        "group_name": "Project Management",
+        "assignee": "Daniele Donzello",
+        "method": "automatic"
+    },
+    "G15_0_12_1": {
+        "group_name": "Take Care of Team Members",
+        "assignee": "Damian Karas",
+        "method": "automatic"
+    },
+    "G15_2_13_1": {
+        "group_name": "Registrations / Advanced - Tuesday",
+        "assignee": "Marius Latinis",
+        "method": "automatic"
+    },
+    "G15_2_14_1": {
+        "group_name": "Social Media Posts - Tuesday",
+        "assignee": "Iana Kain",
+        "method": "automatic"
+    },
+    "G15_2_15_1": {
+        "group_name": "Take Care of Partyka Students - Tuesday",
+        "assignee": "Diana Siwicka",
+        "method": "automatic"
+    },
+    "G15_3_14_1": {
+        "group_name": "Social Media Posts - Wednesday",
+        "assignee": "Jan Mężyński",
+        "method": "automatic"
+    },
+    "G15_3_15_1": {
+        "group_name": "Take Care of Partyka Students - Wednesday",
+        "assignee": "Damian Bartosiewicz",
+        "method": "automatic"
+    },
+    "G16_2_13_1": {
+        "group_name": "Registrations / Advanced - Tuesday",
+        "assignee": "Iana Kain",
+        "method": "automatic"
+    },
+    "G16_2_14_1": {
+        "group_name": "Social Media Posts - Tuesday",
+        "assignee": "Anna Sidorowicz",
+        "method": "automatic"
+    },
+    "G16_2_15_1": {
+        "group_name": "Take Care of Partyka Students - Tuesday",
+        "assignee": "Damian Karas",
+        "method": "automatic"
+    },
+    "G16_3_14_1": {
+        "group_name": "Social Media Posts - Wednesday",
+        "assignee": "Anna Kolomenkina",
+        "method": "automatic"
+    },
+    "G16_3_15_1": {
+        "group_name": "Take Care of Partyka Students - Wednesday",
+        "assignee": "Damian Karas",
+        "method": "automatic"
+    },
+    "G17_2_13_1": {
+        "group_name": "Registrations / Advanced - Tuesday",
+        "assignee": "Krzysiek Rećko",
+        "method": "automatic"
+    },
+    "G17_2_14_1": {
+        "group_name": "Social Media Posts - Tuesday",
+        "assignee": "Krzysiek Rećko",
+        "method": "automatic"
+    },
+    "G17_2_15_1": {
+        "group_name": "Take Care of Partyka Students - Tuesday",
+        "assignee": "Nina Andrzejczyk",
+        "method": "automatic"
+    },
+    "G17_3_14_1": {
+        "group_name": "Social Media Posts - Wednesday",
+        "assignee": "Julia Borychowska",
+        "method": "automatic"
+    },
+    "G17_3_15_1": {
+        "group_name": "Take Care of Partyka Students - Wednesday",
+        "assignee": "Marius Latinis",
+        "method": "automatic"
+    },
+    "G18_2_13_1": {
+        "group_name": "Registrations / Advanced - Tuesday",
+        "assignee": "Julia Borychowska",
+        "method": "automatic"
+    },
+    "G18_2_14_1": {
+        "group_name": "Social Media Posts - Tuesday",
+        "assignee": "Julia Borychowska",
+        "method": "automatic"
+    },
+    "G18_2_15_1": {
+        "group_name": "Take Care of Partyka Students - Tuesday",
+        "assignee": "Damian Bagnowski",
+        "method": "automatic"
+    },
+    "G18_3_14_1": {
+        "group_name": "Social Media Posts - Wednesday",
+        "assignee": "Anna Sidorowicz",
+        "method": "automatic"
+    },
+    "G18_3_15_1": {
+        "group_name": "Take Care of Partyka Students - Wednesday",
+        "assignee": "Diana Siwicka",
+        "method": "automatic"
+    }
+}
