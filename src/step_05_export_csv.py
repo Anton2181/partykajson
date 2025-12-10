@@ -159,7 +159,15 @@ def run_export(source_prefix=None):
         if task_id in task_id_to_assignee:
             jan_df.at[idx, 'Assignee'] = task_id_to_assignee[task_id]
 
-    # 5. Save Output
+    # 5. Sanitize Output (Remove newlines that break simple parsers)
+    # Replace \n and \r with spaces in all object (string) columns
+    print("Sanitizing output (removing newlines)...")
+    for col in jan_df.columns:
+        if jan_df[col].dtype == 'object':
+            # Use regex to replace newlines/carriage returns
+            jan_df[col] = jan_df[col].replace(r'[\r\n]+', ' ', regex=True)
+
+    # 6. Save Output
     output_path = results_dir / f"{source_prefix}_filled.csv"
     
     # Use standard CSV settings
