@@ -19,6 +19,11 @@ env/
 # Output / Debug / Results
 *.log
 
+# raw/processed/
+raw/
+processed/
+results/
+
 # PyInstaller / Build Artifacts
 build/
 dist/
