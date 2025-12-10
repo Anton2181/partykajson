@@ -43,16 +43,30 @@ def build_app():
     
     # Hidden Imports (OR-Tools, Pandas often need help)
     hidden_imports = [
-        "ortools",
-        "ortools.sat",
-        "ortools.sat.python",
-        "ortools.sat.python.cp_model",
         "pandas",
         "pyqtgraph",
         "PyQt6.QtSvgWidgets",
         "PyQt6.QtSvg"
     ]
     
+    # Collect OR-Tools dependencies automatically (fixes DLL load errors)
+    from PyInstaller.utils.hooks import collect_all
+    tmp_ret = collect_all('ortools')
+    
+    # Add collected data to our lists
+    # datas, binaries, hiddenimports
+    for d in tmp_ret[0]:
+        add_data.append(f"{d[0]}{sep}{d[1]}")
+        
+    for h in tmp_ret[2]:
+        hidden_imports.append(h)
+        
+    # Binaries need to be passed effectively, but PyInstaller command line args 
+    # for binaries are --add-binary. Let's collect them.
+    add_binaries = []
+    for b in tmp_ret[1]:
+        add_binaries.append(f"{b[0]}{sep}{b[1]}")
+
     dist_dir = base_dir / "dist"
     build_dir = base_dir / "build"
     
@@ -69,6 +83,10 @@ def build_app():
     # Add Data
     for d in add_data:
         args.append(f"--add-data={d}")
+        
+    # Add Binaries
+    for b in add_binaries:
+        args.append(f"--add-binary={b}")
         
     # Add Hidden Imports
     for h in hidden_imports:
