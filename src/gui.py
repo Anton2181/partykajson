@@ -40,6 +40,12 @@ else:
     BASE_DIR = Path(__file__).parent.parent
     VENV_PYTHON = BASE_DIR / ".venv" / "bin" / "python"
 
+# Force CWD to BASE_DIR to ensure relative paths (like "data/") work consistentl
+# This is critical for the frozen app to find the external 'data' folder
+import os
+os.chdir(BASE_DIR)
+print(f"Set Working Directory to: {os.getcwd()}")
+
 # --- Dispatcher for Subprocesses in Frozen Mode ---
 # If arguments are passed, we might be trying to run a script
 if len(sys.argv) > 1 and sys.argv[1] == "--dispatch":

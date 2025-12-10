@@ -545,6 +545,10 @@ DATA_DIR = pathlib.Path("data")
 RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"
 
+print(f"DEBUG: CWD is {sys.argv[0]} -> {pathlib.Path.cwd()}")
+print(f"DEBUG: Data Dir resolved to: {DATA_DIR.resolve()}")
+print(f"DEBUG: Checking for {DATA_DIR / 'task_families.json'}")
+
 def aggregate_groups(source_prefix=None):
     # Load Config to determine scope if not provided
     penalty_config_path = DATA_DIR / "penalty_config.json"
