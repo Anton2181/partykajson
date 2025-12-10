@@ -335,7 +335,8 @@ class PartykaSolverApp(QMainWindow):
         time_layout = QHBoxLayout()
         time_layout.addWidget(QLabel("Time Limit (s):"))
         self.time_spin = QSpinBox()
-        self.time_spin.setRange(10, 3600)
+        self.time_spin.setRange(0, 86400) # 0 to 24 hours
+        self.time_spin.setSpecialValueText("Infinity") # Display "Infinity" for 0
         self.time_spin.setValue(int(self.config.get("time_limit_seconds", 120)))
         self.time_spin.valueChanged.connect(self.update_config_values)
         time_layout.addWidget(self.time_spin)
