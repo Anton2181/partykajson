@@ -40,6 +40,9 @@ def run_solver(source_prefix=None):
         if not source_prefix:
              source_prefix = "january_2026"
              print("Config not found, defaulting to january_2026")
+             
+    # Default threshold if config not found
+    effort_threshold = config.get("effort_threshold", 8.0) if 'config' in locals() else 8.0
 
     groups_file = processed_dir / f"{source_prefix}_groups.json"
     team_file = data_dir / "team_members.json"
@@ -54,7 +57,7 @@ def run_solver(source_prefix=None):
     # Callback wrapper to save results live
     def on_solution_found(printer):
         assignments, penalties = solver.extract_solution(printer)
-        save_results(assignments, penalties, results_dir, source_prefix, groups)
+        save_results(assignments, penalties, results_dir, source_prefix, groups, effort_threshold)
 
     print("Solving...")
     # Pass callback to solve
@@ -62,9 +65,9 @@ def run_solver(source_prefix=None):
     
     # Final save (redundant if callback ran on last solution, but good for safety)
     if assignments:
-        save_results(assignments, penalties, results_dir, source_prefix, groups)
+        save_results(assignments, penalties, results_dir, source_prefix, groups, effort_threshold)
 
-def save_results(assignments, penalties, results_dir, source_prefix, groups):
+def save_results(assignments, penalties, results_dir, source_prefix, groups, effort_threshold=8.0):
     # Sort penalties: Cost (Desc) -> Rule (Asc)
     penalties.sort(key=lambda x: (-x['cost'], x['rule']))
 
@@ -86,7 +89,7 @@ def save_results(assignments, penalties, results_dir, source_prefix, groups):
 
     # Generate Effort Chart
     chart_path = results_dir / f"{source_prefix}_effort_chart.png"
-    generate_effort_chart(assignments, groups, chart_path)
+    generate_effort_chart(assignments, groups, chart_path, effort_threshold)
     # print(f"Effort chart saved to {chart_path}")
 
 def save_person_report(assignments, penalties, groups, output_path):
@@ -148,7 +151,7 @@ def save_person_report(assignments, penalties, groups, output_path):
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(person_data, f, indent=4, ensure_ascii=False)
 
-def generate_effort_chart(assignments, groups, output_path, args=None):
+def generate_effort_chart(assignments, groups, output_path, effort_threshold=8.0, args=None):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -254,8 +257,8 @@ def generate_effort_chart(assignments, groups, output_path, args=None):
     plt.title("Per-person load (chosen model) — ascending, layered")
     plt.legend()
     
-    # Add dashed line at y=8
-    plt.axhline(y=8, color='black', linestyle='--')
+    # Add dashed line at configured threshold
+    plt.axhline(y=effort_threshold, color='black', linestyle='--')
     
     plt.tight_layout()
     # Save as SVG for infinite scalability/sharpness in GUI
