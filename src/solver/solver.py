@@ -3,13 +3,22 @@ from src.solver.penalties import SolverPenalties
 import math
 
 class SolutionPrinter(cp_model.CpSolverSolutionCallback):
-    def __init__(self):
+    def __init__(self, penalty_vars=None):
         cp_model.CpSolverSolutionCallback.__init__(self)
         self.__solution_count = 0
+        self.penalty_vars = penalty_vars if penalty_vars else []
 
     def OnSolutionCallback(self):
         self.__solution_count += 1
-        print(f'Solution {self.__solution_count}, time = {self.WallTime():.2f} s, objective = {self.ObjectiveValue()}')
+        
+        active_penalties = 0
+        if self.penalty_vars:
+            # Count how many penalty variables (bool or int > 0) are triggered
+            for var in self.penalty_vars:
+                if self.Value(var) > 0:
+                    active_penalties += 1
+        
+        print(f'Solution {self.__solution_count}, time = {self.WallTime():.2f} s, objective = {self.ObjectiveValue()}, penalties = {active_penalties}')
 
 class SATSolver:
     def __init__(self, groups, team_members):
@@ -35,6 +44,7 @@ class SATSolver:
             self.rule_definitions = t['ladder'] # User said ladder is the sorted subsection
             self.time_limit = t.get('time_limit_seconds', 30.0)
             self.penalty_ratio = t.get('penalty_ratio', 10)
+            self.effort_threshold = t.get('effort_threshold', 8.0)
             
             # Or should I pass the full implemented_rules? 
             # SolverPenalties usually takes the ladder (the rules that determine cost).
@@ -150,10 +160,10 @@ class SATSolver:
             else:
                 self.model.Add(self.effort_vars[person] == 0)
                 
-            # Define Underworked: Effort < 8.0 (80 scaled)
-            # underworked => effort < 80
-            # !underworked => effort >= 80
-            TARGET_EFFORT = 80
+            # Define Underworked: Effort < Threshold (scaled)
+            # underworked => effort < threshold_scaled
+            # !underworked => effort >= threshold_scaled
+            TARGET_EFFORT = int(self.effort_threshold * 10)
             
             self.model.Add(self.effort_vars[person] < TARGET_EFFORT).OnlyEnforceIf(self.underworked_vars[person])
             self.model.Add(self.effort_vars[person] >= TARGET_EFFORT).OnlyEnforceIf(self.underworked_vars[person].Not())
@@ -161,19 +171,22 @@ class SATSolver:
 
         # 4. Objective Function & Penalty Tracking
         objective_terms = []
+        all_cost_vars = [] # Track variables responsible for costs for live reporting
         
         P_UNASSIGNED = self.penalties.get_penalty_by_name("Unassigned Group")
-        P_UNDERWORKED = self.penalties.get_penalty_by_name("Underworked Team Member (< 8 Effort)")
+        P_UNDERWORKED = self.penalties.get_penalty_by_name("Underworked Team Member (< Threshold)")
         
         # Term 1: Unassigned Groups
         if P_UNASSIGNED > 0:
             for group in self.groups:
                 objective_terms.append(self.unassigned_vars[group['id']] * P_UNASSIGNED)
+                all_cost_vars.append(self.unassigned_vars[group['id']])
             
         # Term 2: Underworked People
         if P_UNDERWORKED > 0:
             for person in all_persons:
                 objective_terms.append(self.underworked_vars[person] * P_UNDERWORKED)
+                all_cost_vars.append(self.underworked_vars[person])
 
         # Term 3: Multi-Day Weekdays (e.g. Tue+Wed) -> "First Rule"
         P_MULTI_WEEKDAY = self.penalties.get_penalty_by_name("Multi-Day Weekdays (e.g. Tue+Wed)")
@@ -257,6 +270,8 @@ class SATSolver:
                         
                         objective_terms.append(is_half_bad * P_HALF)
                         objective_terms.append(is_full_bad * P_TEACH_PREF)
+                        all_cost_vars.append(is_half_bad)
+                        all_cost_vars.append(is_full_bad)
                         
                         # Debug logic remains similar but simplified context
                         if person not in self.debug_vars: self.debug_vars[person] = {}
@@ -275,6 +290,7 @@ class SATSolver:
                         self.model.Add(has_assisting == 1).OnlyEnforceIf(is_bad.Not())
                         
                         objective_terms.append(is_bad * P_TEACH_PREF)
+                        all_cost_vars.append(is_bad)
                         
                         if person not in self.debug_vars: self.debug_vars[person] = {}
                         self.debug_vars[person]['teach_pref'] = {
@@ -350,8 +366,8 @@ class SATSolver:
                                  
                              final_cost_var = self.model.NewIntVar(0, max(costs), f"equality_final_cost_{fam_name}_{person}")
                              self.model.AddMultiplicationEquality(final_cost_var, [base_cost_var, has_auto])
-                             
                              objective_terms.append(final_cost_var)
+                             all_cost_vars.append(final_cost_var)
                              
                              if person not in self.debug_vars: self.debug_vars[person] = {}
                              if 'equality' not in self.debug_vars[person]: self.debug_vars[person]['equality'] = []
@@ -431,6 +447,7 @@ class SATSolver:
                     self.model.AddElement(missed_count, costs, div_cost_var)
                     
                     objective_terms.append(div_cost_var)
+                    all_cost_vars.append(div_cost_var)
                     
                     # Save for debug reporting (override the dict logic partly or augment it?)
                     # We still keep 'diversity' dict for details, but maybe store cost var too
@@ -476,6 +493,7 @@ class SATSolver:
                                  self.model.AddBoolAnd([var_g, var_t]).OnlyEnforceIf(penalty_var)
                                  self.model.AddBoolOr([var_g.Not(), var_t.Not()]).OnlyEnforceIf(penalty_var.Not())
                                  objective_terms.append(penalty_var * P_INTRA_COOLDOWN)
+                                 all_cost_vars.append(penalty_var)
                                  
                                  # Track
                                  if person not in self.debug_vars: self.debug_vars[person] = {}
@@ -515,6 +533,7 @@ class SATSolver:
                                     self.model.AddBoolAnd([var_g, var_t]).OnlyEnforceIf(penalty_var)
                                     self.model.AddBoolOr([var_g.Not(), var_t.Not()]).OnlyEnforceIf(penalty_var.Not())
                                     objective_terms.append(penalty_var * P_COOLDOWN)
+                                    all_cost_vars.append(penalty_var)
                                     
                                     # Track
                                     if person not in self.debug_vars: self.debug_vars[person] = {}
@@ -575,6 +594,7 @@ class SATSolver:
                                 self.model.AddBoolOr([v.Not() for v in vars_in_chain]).OnlyEnforceIf(chain_var.Not())
                                 
                                 objective_terms.append(chain_var * extra_cost)
+                                all_cost_vars.append(chain_var)
                                 
                                 # Track
                                 if person not in self.debug_vars: self.debug_vars[person] = {}
@@ -658,6 +678,7 @@ class SATSolver:
                              self.model.AddBoolOr([inefficient_var, worked_var.Not(), is_low_tasks.Not()])
                              
                              objective_terms.append(inefficient_var * P_INEFFICIENT)
+                             all_cost_vars.append(inefficient_var)
                      
                      days_worked_vars.append(worked_var)
                      
@@ -705,6 +726,7 @@ class SATSolver:
                              self.model.AddElement(count_var, costs, cost_var)
                              
                              objective_terms.append(cost_var)
+                             all_cost_vars.append(cost_var)
                              
                              self.debug_vars[person]['multi_weekday'].append({
                                  'week': w_str,
@@ -732,15 +754,52 @@ class SATSolver:
                      self.model.AddBoolOr([has_weekday.Not(), has_sunday.Not()]).OnlyEnforceIf(multi_general.Not())
                      
                      objective_terms.append(multi_general * P_MULTI_GENERAL)
+                     all_cost_vars.append(multi_general)
                      self.debug_vars[person]['multi_general'] = multi_general
         
+                     self.debug_vars[person]['multi_general'] = multi_general
+        
+        # Term 10: Effort Equalization (Squared Deviation)
+        P_EQUALIZATION = self.penalties.get_penalty_by_name("Effort Equalization (Squared Deviation)")
+        
+        if P_EQUALIZATION > 0:
+            TARGET_EFFORT_SCALED = int(self.effort_threshold * 10)
+            
+            # Pre-compute cost table for all possible effort values
+            # Domain of effort_var is [0, max_scaled_effort]
+            cost_table = []
+            for e in range(max_scaled_effort + 1):
+                diff = e - TARGET_EFFORT_SCALED
+                sq = diff * diff
+                norm = sq // 100 # Normalize by 100
+                cost_table.append(norm)
+                
+            for person in all_persons:
+                 effort_var = self.effort_vars[person]
+                 
+                 # Optimization: Table Lookup instead of Quadratic Math constraints
+                 # Cost = cost_table[effort_var]
+                 
+                 cost_var = self.model.NewIntVar(0, max(cost_table), f"effort_cost_{person}")
+                 self.model.AddElement(effort_var, cost_table, cost_var)
+                 
+                 objective_terms.append(cost_var * P_EQUALIZATION)
+                 all_cost_vars.append(cost_var)
+                 
+                 # Debug
+                 if person not in self.debug_vars: self.debug_vars[person] = {}
+                 self.debug_vars[person]['equalization'] = {
+                     'cost_var': cost_var,
+                     'cost': P_EQUALIZATION
+                 }
+
         self.model.Minimize(sum(objective_terms))
 
         # 5. Solve
         solver = cp_model.CpSolver()
         if self.time_limit > 0:
             solver.parameters.max_time_in_seconds = self.time_limit
-        solution_printer = SolutionPrinter()
+        solution_printer = SolutionPrinter(all_cost_vars)
         status = solver.Solve(self.model, solution_printer)
         
         results = {}
@@ -906,8 +965,33 @@ class SATSolver:
                                     "person_name": person,
                                     "rule": "Teaching/Assisting Equality",
                                     "cost": c_val,
-                                    "details": f"Hoarding {cnt} assignments in {item['family']} (Active due to new auto assignment)"
+                                    "details": f"Hoarding {cnt} assignments in {item['family']}"
                                 })
+
+                    # Effort Equalization (Squared Deviation)
+                    if 'equalization' in self.debug_vars[person]:
+                        info = self.debug_vars[person]['equalization']
+                        p_val = info['cost'] 
+                        
+                        # Use the NORMALIZED cost var for reporting total cost
+                        norm_cost = solver.Value(info['cost_var'])
+                        total_penalty = norm_cost * p_val
+                        
+                        if total_penalty > 0:
+                            # Re-calculate diff for display since we optimized away the variable
+                            effort_val = solver.Value(self.effort_vars[person])
+                            scaled_diff = effort_val - TARGET_EFFORT_SCALED
+                            sq_diff = scaled_diff * scaled_diff
+                            
+                            # Scale back effort for display (div 10)
+                            actual_diff = scaled_diff / 10.0
+                            
+                            incurred_penalties.append({
+                                "person_name": person,
+                                "rule": "Effort Equalization (Squared Deviation)",
+                                "cost": total_penalty,
+                                "details": f"Deviation {actual_diff:.1f} from {self.effort_threshold} (SqDiff {sq_diff}, Norm {norm_cost})" 
+                            })
 
                 # Efficiency check (need to reconstruct context or store vars better)
                 # Re-check logic simply via values for reporting

@@ -51,9 +51,9 @@ This document describes the penalties used by the schedule solver to optimize as
     - Miss 4 Families: 27x Base Penalty
 
 ## 5. Underworked Team Member
-**Rule Name:** `"Underworked Team Member (< 8 Effort)"`
-**Description:** Huge penalty if a person's total effort is below the minimum threshold (default 8.0).
-**Logic:** Binary. Active if TotalEffort < MinEffort.
+**Rule Name:** `"Underworked Team Member (< Threshold)"`
+**Description:** Huge penalty if a person's total effort is below the minimum threshold (Configured in `penalty_config.json`, default 8.0).
+**Logic:** Binary. Active if TotalEffort < ConfiguredThreshold.
 
 ## 6. Unassigned Group
 **Rule Name:** `"Unassigned Group"`
@@ -84,6 +84,14 @@ This document describes the penalties used by the schedule solver to optimize as
 **Rule Name:** `P_INEFFICIENT` (Internal)
 **Description:** Penalizes coming in on a day to perform fewer than 2 tasks (if configured).
 **Logic:** Active if `TasksOnDay < 2`.
+
+## 11. Effort Equalization (Squared Deviation)
+**Rule Name:** `"Effort Equalization (Squared Deviation)"`
+**Description:** Soft penalty to encourage all team members to be close to the target effort (Configured Threshold, default 8.0).
+**Logic:** Quadratic.
+- **Formula:** $Cost = P \cdot \lfloor(Effort - Threshold)^2\rfloor$.
+- Note: Effort is scaled by 10 internally, so we calculate $SqDiff = (ScaledEffort - ScaledThreshold)^2$ and then normalize by dividing by 100 to get the deviation squared in range.
+
 
 ## 11. Code Dependencies (Performance Optimization)
 Some penalties share computationally expensive logic. To optimize performance, the solver groups these rules into shared blocks. If **all** rules in a block are disabled (Penalty 0), the overhead for that logic is skipped entirely.

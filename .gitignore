@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Mac
+.DS_Store
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Output / Debug / Results
+data/results/
+*.log

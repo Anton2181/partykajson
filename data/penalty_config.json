@@ -1,23 +1,26 @@
 {
     "implemented_rules": [
-        "Unassigned Group",
-        "Underworked Team Member (< 8 Effort)",
+        "Underworked Team Member (< Threshold)",
         "Multi-Day Weekdays (e.g. Tue+Wed)",
         "Inefficient Day (< 2 Tasks)",
         "Multi-Day General (Weekday+Sunday)",
         "Intra-Week Cooldown (Same Week)",
         "Cooldown (Adjacent Weeks)",
-        "Role Diversity (Assignments in each capable family)"
+        "Role Diversity (Assignments in each capable family)",
+        "Teaching/Assisting Preference",
+        "Teaching/Assisting Equality",
+        "Effort Equalization (Squared Deviation)"
     ],
-    "time_limit_seconds": 0.0,
+    "time_limit_seconds": 120.0,
     "scope": {
         "month": "January",
         "year": 2026
     },
     "penalty_ratio": 10,
+    "effort_threshold": 8.0,
     "ladder": [
         "Unassigned Group",
-        "Underworked Team Member (< 8 Effort)",
+        "Underworked Team Member (< Threshold)",
         "Intra-Week Cooldown (Same Week)",
         "Teaching/Assisting Preference",
         "Multi-Day Weekdays (e.g. Tue+Wed)",
@@ -25,6 +28,7 @@
         "Role Diversity (Assignments in each capable family)",
         "Inefficient Day (< 2 Tasks)",
         "Multi-Day General (Weekday+Sunday)",
-        "Cooldown (Adjacent Weeks)"
+        "Cooldown (Adjacent Weeks)",
+        "Effort Equalization (Squared Deviation)"
     ]
 }
