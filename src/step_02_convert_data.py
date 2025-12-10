@@ -240,7 +240,7 @@ def process_schedule(jan_df, tasks_data, calendar_data):
     return jan_tasks_data
 
 def convert_data():
-    base_dir = Path(__file__).parent.parent
+    base_dir = Path(".")
     raw_dir = base_dir / "data" / "raw"
     processed_dir = base_dir / "data" / "processed"
     processed_dir.mkdir(parents=True, exist_ok=True)

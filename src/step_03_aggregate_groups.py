@@ -530,13 +530,24 @@ def process_groups(tasks_list, task_families, team_members):
 
     return groups_output
 
+# Add project root to sys.path to allow imports
+# Assuming CWD is root
+import sys
+import pathlib
+if str(pathlib.Path.cwd()) not in sys.path:
+    sys.path.append(str(pathlib.Path.cwd()))
+
+from src.data_processing import load_json # Assuming load_json is in src.data_processing
+# from src.data_processing import aggregate_groups, load_availability, load_member_config # These imports are not used in this file
+# from src.step_02_load_and_clean_data import clean_raw_data # This import is not used in this file
+
+DATA_DIR = pathlib.Path("data")
+RAW_DIR = DATA_DIR / "raw"
+PROCESSED_DIR = DATA_DIR / "processed"
+
 def aggregate_groups(source_prefix=None):
-    base_dir = pathlib.Path(__file__).parent.parent
-    processed_dir = base_dir / "data" / "processed"
-    data_dir = base_dir / "data"
-    
     # Load Config to determine scope if not provided
-    penalty_config_path = data_dir / "penalty_config.json"
+    penalty_config_path = DATA_DIR / "penalty_config.json"
     if penalty_config_path.exists():
         config = load_json(penalty_config_path)
         if not source_prefix:

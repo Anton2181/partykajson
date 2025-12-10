@@ -7,15 +7,18 @@ def load_json(path):
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def run_export(source_prefix=None):
-    base_dir = Path(__file__).parent.parent
-    raw_dir = base_dir / "data" / "raw"
-    processed_dir = base_dir / "data" / "processed"
-    results_dir = base_dir / "data" / "results"
-    
-    # 1. Determine Prefix (Logic from step_03/04)
+def export_csv_for_month(month="january", year="2026"):
+    # Use CWD-relative data path
+    base_dir = Path(".")
     data_dir = base_dir / "data"
+    results_dir = data_dir / "results"
+    raw_dir = data_dir / "raw"
+    processed_dir = data_dir / "processed" # Needed? groups_path uses it.
+
+    # 1. Determine Prefix
     penalty_config_path = data_dir / "penalty_config.json"
+    source_prefix = None
+    
     if penalty_config_path.exists():
         config = load_json(penalty_config_path)
         if not source_prefix:

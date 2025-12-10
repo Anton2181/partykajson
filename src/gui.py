@@ -21,16 +21,46 @@ import pyqtgraph as pg
 # --- Constants & Paths ---
 if getattr(sys, 'frozen', False):
     # Running in a PyInstaller bundle
-    BASE_DIR = Path(sys._MEIPASS)
-    # In a one-file/dir app, sys.executable is the binary, but for executing scripts
-    # we usually want the internal python if possible, or just the same executable if it can dispatch?
-    # Actually, simplistic approach: use sys.executable as the python interpreter
-    # This works for one-folder builds where python dylib is present.
+    # sys.executable points to the binary (e.g. .../PartykaSolverPro.exe)
+    # We want BASE_DIR to be the persistent folder containing the app (where 'data' lives)
+    if platform.system() == "Darwin":
+        # On Mac, if it's an App Bundle, sys.executable is inside Contents/MacOS
+        # We generally want the folder *containing* the .app for portable usage
+        # OR Resources inside. Let's assume adjacent to .app for portable data.
+        # .../PartykaSolverPro.app/Contents/MacOS/PartykaSolverPro
+        BASE_DIR = Path(sys.executable).parent.parent.parent.parent
+    else:
+        # Windows/Linux: folder containing the executable
+        BASE_DIR = Path(sys.executable).parent
+        
     VENV_PYTHON = sys.executable 
 else:
     # Running in normal python environment
     BASE_DIR = Path(__file__).parent.parent
     VENV_PYTHON = BASE_DIR / ".venv" / "bin" / "python"
+
+# --- Dispatcher for Subprocesses in Frozen Mode ---
+# If arguments are passed, we might be trying to run a script
+if len(sys.argv) > 1 and sys.argv[1] == "--dispatch":
+    import runpy
+    script_name = sys.argv[2]
+    script_args = sys.argv[3:]
+    
+    # Locate script inside the bundle
+    # Source code IS bundled in _MEIPASS
+    bundle_src = Path(sys._MEIPASS) / "src"
+    target_script = bundle_src / script_name
+    
+    # Fake argv so the script sees its own args
+    sys.argv = [str(target_script)] + script_args
+    
+    # Run
+    print(f"Dispatching {script_name}...")
+    try:
+        runpy.run_path(str(target_script), run_name="__main__")
+    except Exception as e:
+        print(f"Execution Error: {e}")
+    sys.exit(0)
 
 DATA_DIR = BASE_DIR / "data"
 PROCESSED_DIR = DATA_DIR / "processed"
@@ -137,7 +167,13 @@ class ScriptWorker(QThread):
         self.process = None
 
     def run(self):
-        cmd = [str(VENV_PYTHON), "-u", str(SRC_DIR / self.script_name)] + self.args
+        if getattr(sys, 'frozen', False):
+            # Dispatch to internal script
+            # VENV_PYTHON is the app executable
+            cmd = [str(VENV_PYTHON), "--dispatch", self.script_name] + self.args
+        else:
+            # Normal python execution
+            cmd = [str(VENV_PYTHON), "-u", str(SRC_DIR / self.script_name)] + self.args
         
         try:
             self.process = subprocess.Popen(

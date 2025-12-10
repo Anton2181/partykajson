@@ -37,8 +37,8 @@ def build_app():
     src_path = base_dir / "src"
     
     add_data = [
-        f"{data_path}{sep}data",       # Bundle entire data folder (config, members)
-        f"{src_path}{sep}src",         # Bundle source code for subprocess execution
+        # Only bundle source code. Data is external.
+        f"{src_path}{sep}src",         
     ]
     
     # Hidden Imports (OR-Tools, Pandas often need help)
@@ -77,6 +77,29 @@ def build_app():
         
     print(f"Building {app_name}...")
     PyInstaller.__main__.run(args)
+    
+    # --- Post-Build: Copy External Data ---
+    print("Post-processing data files...")
+    dist_dir = base_dir / "dist"
+    
+    # Target Data Directory
+    if platform.system() == "Windows":
+        target_data_dir = dist_dir / app_name / "data"
+    else:
+        # Mac - put data next to .app
+        target_data_dir = dist_dir / "data"
+        
+    target_data_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Copy Static Config
+    files_to_copy = ["penalty_config.json", "team_members.json", "task_families.json"]
+    for f in files_to_copy:
+        src = data_path / f
+        dst = target_data_dir / f
+        if src.exists():
+            shutil.copy2(src, dst)
+            print(f"Copied {f} to {target_data_dir}")
+            
     print("Build Complete. Check 'dist' folder.")
 
 if __name__ == "__main__":

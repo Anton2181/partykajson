@@ -38,7 +38,7 @@ class SATSolver:
         import json
         from pathlib import Path
         
-        config_path = Path(__file__).parent.parent.parent / 'data' / 'penalty_config.json'
+        config_path = Path('data') / 'penalty_config.json'
         with open(config_path, 'r') as f:
             t = json.load(f)
             self.rule_definitions = t['ladder'] # User said ladder is the sorted subsection

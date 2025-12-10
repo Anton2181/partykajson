@@ -4,9 +4,9 @@ import pathlib
 import sys
 
 # Add project root to sys.path to allow running as script
-root_dir = str(pathlib.Path(__file__).parent.parent)
-if root_dir not in sys.path:
-    sys.path.append(root_dir)
+# Assuming CWD is root
+if str(pathlib.Path.cwd()) not in sys.path:
+    sys.path.append(str(pathlib.Path.cwd()))
 
 from src.solver.solver import SATSolver
 
@@ -15,10 +15,11 @@ def load_json(path):
         return json.load(f)
 
 def run_solver(source_prefix=None):
-    base_dir = pathlib.Path(__file__).parent.parent
-    processed_dir = base_dir / "data" / "processed"
+    # Use CWD-relative data path
+    base_dir = pathlib.Path(".")
     data_dir = base_dir / "data"
-    results_dir = base_dir / "data" / "results"
+    processed_dir = data_dir / "processed"
+    results_dir = data_dir / "results"
     
     # Ensure results directory exists
     results_dir.mkdir(parents=True, exist_ok=True)

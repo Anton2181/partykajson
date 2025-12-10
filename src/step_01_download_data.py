@@ -28,7 +28,8 @@ def download_data():
             
             # Save to CSV for verification
             from pathlib import Path
-            output_dir = Path(__file__).parent.parent / "data" / "raw"
+            # Use data relative to CWD (set by GUI or user)
+            output_dir = Path("data") / "raw"
             output_dir.mkdir(parents=True, exist_ok=True)
 
             filename = output_dir / f"{name.replace(' ', '_').lower()}.csv"
