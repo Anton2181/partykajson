@@ -149,6 +149,8 @@ def save_person_report(assignments, penalties, groups, output_path):
         json.dump(person_data, f, indent=4, ensure_ascii=False)
 
 def generate_effort_chart(assignments, groups, output_path, args=None):
+    import matplotlib
+    matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     import numpy as np
 
