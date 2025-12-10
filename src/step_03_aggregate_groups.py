@@ -565,15 +565,15 @@ def aggregate_groups(source_prefix=None):
 
     # Load Data
     tasks_filename = f"{source_prefix}_tasks.json"
-    tasks_list = load_json(processed_dir / tasks_filename)
+    tasks_list = load_json(PROCESSED_DIR / tasks_filename)
     
-    task_families = load_json(data_dir / "task_families.json")
-    team_members = load_json(data_dir / "team_members.json")
+    task_families = load_json(DATA_DIR / "task_families.json")
+    team_members = load_json(DATA_DIR / "team_members.json")
 
     groups_output = process_groups(tasks_list, task_families, team_members)
     
     output_filename = f"{source_prefix}_groups.json"
-    output_path = processed_dir / output_filename
+    output_path = PROCESSED_DIR / output_filename
     
     save_json(groups_output, output_path)
     print(f"Aggregated {len(groups_output)} groups to {output_path}")
