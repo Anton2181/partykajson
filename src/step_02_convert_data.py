@@ -247,7 +247,7 @@ def convert_data():
 
     # --- Process Task Availability ---
     print("Processing Task Availability...")
-    task_df = pd.read_csv(raw_dir / "task_availability.csv")
+    task_df = pd.read_csv(raw_dir / "task_availability.csv", encoding='utf-8')
     tasks_data = process_task_availability(task_df)
 
     # Save tasks.json
@@ -258,7 +258,7 @@ def convert_data():
 
     # --- Process Calendar Availability ---
     print("Processing Calendar Availability...")
-    cal_df = pd.read_csv(raw_dir / "calendar_availability.csv", header=None)
+    cal_df = pd.read_csv(raw_dir / "calendar_availability.csv", header=None, encoding='utf-8')
     calendar_data = process_calendar_availability(cal_df)
     
     # Save calendar.json
@@ -270,7 +270,7 @@ def convert_data():
 
     # --- Process January 2026 Schedule ---
     print("Processing January 2026 Schedule...")
-    jan_df = pd.read_csv(raw_dir / "january_2026.csv")
+    jan_df = pd.read_csv(raw_dir / "january_2026.csv", encoding='utf-8')
     jan_tasks_data = process_schedule(jan_df, tasks_data, calendar_data)
 
     # Save

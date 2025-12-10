@@ -33,7 +33,7 @@ def download_data():
             output_dir.mkdir(parents=True, exist_ok=True)
 
             filename = output_dir / f"{name.replace(' ', '_').lower()}.csv"
-            df.to_csv(filename, index=False)
+            df.to_csv(filename, index=False, encoding='utf-8')
             print(f"Saved to {filename}")
             
     except Exception as e:

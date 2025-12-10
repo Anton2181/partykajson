@@ -40,7 +40,7 @@ def export_csv_for_month(month="january", year="2026"):
         print(f"Error: Raw CSV not found at {raw_csv_path}")
         return
 
-    jan_df = pd.read_csv(raw_csv_path)
+    jan_df = pd.read_csv(raw_csv_path, encoding='utf-8')
     
     # B. Groups Definition (Maps Task ID <-> Group)
     groups_path = processed_dir / f"{source_prefix}_groups.json"
@@ -174,7 +174,7 @@ def export_csv_for_month(month="january", year="2026"):
     output_path = results_dir / f"{source_prefix}_filled.csv"
     
     # Use standard CSV settings
-    jan_df.to_csv(output_path, index=False)
+    jan_df.to_csv(output_path, index=False, encoding='utf-8-sig')
     print(f"Exported filled CSV to {output_path}")
 
 if __name__ == "__main__":

@@ -293,12 +293,12 @@ class PartykaSolverApp(QMainWindow):
         
     def load_config(self):
         if CONFIG_PATH.exists():
-            with open(CONFIG_PATH, 'r') as f:
+            with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
                 return json.load(f)
         return {"ladder": [], "time_limit_seconds": 120, "effort_threshold": 8.0}
 
     def save_config(self):
-        with open(CONFIG_PATH, 'w') as f:
+        with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
             json.dump(self.config, f, indent=4)
 
     def setup_ui(self):
@@ -446,6 +446,9 @@ class PartykaSolverApp(QMainWindow):
         # Disable SI prefix
         p1.getAxis('left').enableAutoSIPrefix(False)
         
+        # Restrict View: Time > 0, Objective > 1 (Log 0)
+        p1.setLimits(xMin=0, yMin=0)
+        
         self.curve_obj = p1.plot(name="Objective", pen=pg.mkPen('c', width=2))
         
         # Axis 2: Penalties (Right, Linear)
@@ -464,6 +467,8 @@ class PartykaSolverApp(QMainWindow):
         
         # Enable Auto-Range for the secondary ViewBox
         self.vb2.enableAutoRange(axis=pg.ViewBox.YAxis)
+        # Restrict View: Time > 0, Penalties > 0
+        self.vb2.setLimits(xMin=0, yMin=0)
         
         self.curve_pen = pg.PlotCurveItem(pen=pg.mkPen('m', width=2), name="Penalties")
         self.vb2.addItem(self.curve_pen)
@@ -682,8 +687,9 @@ class PartykaSolverApp(QMainWindow):
         assign_path = RESULTS_DIR / f"{prefix}_assignments_by_person.json"
         
         self.tree_assign.clear()
+        self.tree_assign.clear()
         if assign_path.exists():
-            with open(assign_path, 'r') as f:
+            with open(assign_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
                 
             for person, info in data.items():
@@ -705,8 +711,9 @@ class PartykaSolverApp(QMainWindow):
         # 3. Load Penalties
         pen_path = RESULTS_DIR / f"{prefix}_penalties.json"
         self.tree_pen.clear()
+        self.tree_pen.clear()
         if pen_path.exists():
-            with open(pen_path, 'r') as f:
+            with open(pen_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             
             for p in data:
