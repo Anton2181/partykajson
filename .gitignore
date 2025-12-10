@@ -19,7 +19,7 @@ env/
 # Output / Debug / Results
 *.log
 
-# PyInstaller / Build
-dist/
+# PyInstaller / Build Artifacts
 build/
+dist/
 *.spec

@@ -1,608 +1,548 @@
 [
     {
         "person_name": "Ephraim Eshak",
-        "rule": "Effort Equalization (Squared Deviation)",
-        "cost": 300000000000,
-        "details": "Deviation -5.5 from 8.0 (SqDiff 3025, Norm 30)"
+        "rule": "Underworked Team Member (< Threshold)",
+        "cost": 1000000000,
+        "details": "Total Effort: 0.0 < 8.0"
     },
     {
         "person_name": "Anna Brzoza",
-        "rule": "Effort Equalization (Squared Deviation)",
-        "cost": 160000000000,
-        "details": "Deviation -4.0 from 8.0 (SqDiff 1600, Norm 16)"
-    },
-    {
-        "person_name": "Damian Karas",
-        "rule": "Effort Equalization (Squared Deviation)",
-        "cost": 40000000000,
-        "details": "Deviation -2.0 from 8.0 (SqDiff 400, Norm 4)"
-    },
-    {
-        "group_id": "G15_3_4_2",
-        "group_name": "Teaching Beginners Wednesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G15_3_5_1",
-        "group_name": "Assisting Beginners Wednesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G15_3_11_1",
-        "group_name": "DJ Wednesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G16_2_2_2",
-        "group_name": "Teaching Advanced Tuesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G17_2_1_1",
-        "group_name": "Teaching Advanced Tuesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G17_3_4_2",
-        "group_name": "Teaching Beginners Wednesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G17_3_6_2",
-        "group_name": "Assisting Beginners Wednesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G18_2_1_1",
-        "group_name": "Teaching Advanced Tuesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G18_2_2_2",
-        "group_name": "Teaching Advanced Tuesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G18_3_1_1",
-        "group_name": "Teaching Intermediate Wednesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G18_3_13_1",
-        "group_name": "Photographer Wednesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "group_id": "G15_2_13_1",
-        "group_name": "Registrations / Advanced - Tuesday",
-        "assignee": null,
-        "rule": "Unassigned Group",
-        "cost": 1000000000
-    },
-    {
-        "person_name": "Ephraim Eshak",
-        "rule": "Unassigned Group",
-        "cost": 100000000,
-        "details": "Total Effort: 2.5 < 8.0"
-    },
-    {
-        "person_name": "Damian Karas",
-        "rule": "Unassigned Group",
-        "cost": 100000000,
-        "details": "Total Effort: 6.0 < 8.0"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Unassigned Group",
-        "cost": 100000000,
-        "details": "Total Effort: 4.0 < 8.0"
-    },
-    {
-        "person_name": "Jan Mężyński",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 19683000,
-        "details": "Missed 10 families: Teaching, Assisting, DJing, Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
-    },
-    {
-        "person_name": "Iana Kain",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 19683000,
-        "details": "Missed 10 families: Sunday Milonga, Food Supply, MCing, Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
+        "rule": "Underworked Team Member (< Threshold)",
+        "cost": 1000000000,
+        "details": "Total Effort: 0.0 < 8.0"
     },
     {
         "person_name": "Damian Karas",
         "rule": "Intra-Week Cooldown (Same Week)",
-        "cost": 10000000,
+        "cost": 100000000,
         "details": " Intra-week: Take Care of Newcomers - Tuesday & Take Care of Newcomers - Wednesday"
-    },
-    {
-        "person_name": "Daniele Donzello",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 6561000,
-        "details": "Missed 9 families: Sunday Milonga, Teaching, Food Supply, MCing, DJing, Deinstalling Milonga, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
-    },
-    {
-        "person_name": "Krzysiek Rećko",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 2187000,
-        "details": "Missed 8 families: MCing, DJing, Media, Take Care of Team Members, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
     },
     {
         "person_name": "Anna Sidorowicz",
         "rule": "Role Diversity (Cascading)",
-        "cost": 2187000,
-        "details": "Missed 8 families: Sunday Milonga, Assisting, Take Care of Team Members, Registrations / Advanced - Tuesday, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
-    },
-    {
-        "person_name": "Julia Borychowska",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 2187000,
-        "details": "Missed 8 families: Assisting, Deinstalling Milonga, Take Care of Team Members, Registrations / Advanced - Tuesday, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
-    },
-    {
-        "person_name": "Jan Mężyński",
-        "rule": "Teaching/Assisting Preference",
-        "cost": 1000000,
-        "details": "Teacher assigned neither Teaching nor Assisting"
-    },
-    {
-        "person_name": "Julia Borychowska",
-        "rule": "Teaching/Assisting Preference",
-        "cost": 1000000,
-        "details": "Assistant assigned no Assisting tasks"
-    },
-    {
-        "person_name": "Maria Merchel",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 729000,
-        "details": "Missed 7 families: Sunday Milonga, Assisting, Media, Third Registrator Wednesday, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
-    },
-    {
-        "person_name": "Anna Kolomenkina",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 729000,
-        "details": "Missed 7 families: Media, Third Registrator Wednesday, Registrations / Advanced - Tuesday, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
-    },
-    {
-        "person_name": "Alicja Nowak",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 729000,
-        "details": "Missed 7 families: Food Supply, Deinstalling Milonga, Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
-    },
-    {
-        "person_name": "Daniele Donzello",
-        "rule": "Teaching/Assisting Preference",
-        "cost": 500000,
-        "details": "Teacher assigned only Assisting (Preferred Teaching)"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Multi-Day Weekdays (e.g. Tue+Wed)",
-        "cost": 400000,
-        "details": "Geometric Penalty: W15: 2 days (100000 cost), W16: 2 days (100000 cost), W17: 2 days (100000 cost), W18: 2 days (100000 cost)"
-    },
-    {
-        "person_name": "Martyna Gosz",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 243000,
-        "details": "Missed 6 families: Sunday Milonga, Assisting, DJing, Media, Take Care of Team Members, Take Care of Partyka Students - Tuesday"
-    },
-    {
-        "person_name": "Natalia Khotsianovska",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 243000,
-        "details": "Missed 6 families: Media, Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+        "cost": 2430000,
+        "details": "Missed 6 families: Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday, Take Care of Partyka Students - Wednesday"
     },
     {
         "person_name": "Damian Karas",
         "rule": "Multi-Day Weekdays (e.g. Tue+Wed)",
-        "cost": 100000,
-        "details": "Geometric Penalty: W16: 2 days (100000 cost)"
+        "cost": 1000000,
+        "details": "Geometric Penalty: W16: 2 days (1000000 cost)"
     },
     {
-        "person_name": "Diana Siwicka",
+        "person_name": "Pawel Wypijewski",
+        "rule": "Teaching/Assisting Equality",
+        "cost": 900000,
+        "details": "Hoarding 4 assignments in Teaching"
+    },
+    {
+        "person_name": "Maria Merchel",
         "rule": "Role Diversity (Cascading)",
-        "cost": 81000,
+        "cost": 810000,
+        "details": "Missed 5 families: Sunday Milonga, Media, Third Registrator Wednesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Alicja Nowak",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
         "details": "Missed 5 families: Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
     },
     {
         "person_name": "Tomasz Wilk",
         "rule": "Role Diversity (Cascading)",
-        "cost": 81000,
+        "cost": 810000,
+        "details": "Missed 5 families: Sunday Milonga, Assisting, Media, Take Care of Team Members, Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Krzysiek Rećko",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
+        "details": "Missed 5 families: DJing, Media, Third Registrator Wednesday, Take Care of Team Members, Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Jan Mężyński",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
+        "details": "Missed 5 families: Assisting, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Social Media Posts - Wednesday"
+    },
+    {
+        "person_name": "Yulia Talybova",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
         "details": "Missed 5 families: Sunday Milonga, Assisting, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
     },
     {
-        "person_name": "Maciek Oficialski",
+        "person_name": "Julia Borychowska",
         "rule": "Role Diversity (Cascading)",
-        "cost": 81000,
-        "details": "Missed 5 families: Deinstalling Milonga, Media, Monthly Print, Take Care of Team Members, Social Media Posts - Tuesday"
+        "cost": 810000,
+        "details": "Missed 5 families: Third Registrator Wednesday, Take Care of Team Members, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
     },
     {
-        "person_name": "Michał Dziedziniewicz",
-        "rule": "Teaching/Assisting Equality",
-        "cost": 30000,
-        "details": "Hoarding 3 assignments in Teaching"
+        "person_name": "Daniele Donzello",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
+        "details": "Missed 5 families: Assisting, DJing, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
     },
     {
-        "person_name": "Diana Siwicka",
+        "person_name": "Aleksander Nowak",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
+        "details": "Missed 5 families: Deinstalling Milonga, Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
+        "details": "Missed 5 families: Food Supply, Third Registrator Wednesday, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Natalia Khotsianovska",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
+        "details": "Missed 5 families: Third Registrator Wednesday, Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Martyna Gosz",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
+        "details": "Missed 5 families: Assisting, DJing, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Anna Kolomenkina",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
+        "details": "Missed 5 families: Third Registrator Wednesday, Registrations / Advanced - Tuesday, Social Media Posts - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Sylwia Woźniak",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 810000,
+        "details": "Missed 5 families: Assisting, MCing, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Nina Andrzejczyk",
         "rule": "Teaching/Assisting Equality",
-        "cost": 30000,
+        "cost": 300000,
         "details": "Hoarding 3 assignments in Assisting"
     },
     {
         "person_name": "Tomasz Wilk",
         "rule": "Teaching/Assisting Equality",
-        "cost": 30000,
+        "cost": 300000,
         "details": "Hoarding 3 assignments in Teaching"
     },
     {
-        "person_name": "Marius Latinis",
+        "person_name": "Daniele Donzello",
         "rule": "Teaching/Assisting Equality",
-        "cost": 30000,
+        "cost": 300000,
         "details": "Hoarding 3 assignments in Teaching"
     },
     {
-        "person_name": "Yulia Talybova",
-        "rule": "Teaching/Assisting Equality",
-        "cost": 30000,
-        "details": "Hoarding 3 assignments in Teaching"
-    },
-    {
-        "person_name": "Sylwia Woźniak",
+        "person_name": "Diana Siwicka",
         "rule": "Role Diversity (Cascading)",
-        "cost": 27000,
-        "details": "Missed 4 families: Sunday Milonga, Assisting, Take Care of Team Members, Take Care of Partyka Students - Wednesday"
-    },
-    {
-        "person_name": "Aleksander Nowak",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 27000,
+        "cost": 270000,
         "details": "Missed 4 families: Take Care of Team Members, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
     },
     {
-        "person_name": "Marius Latinis",
+        "person_name": "Maciek Oficialski",
         "rule": "Role Diversity (Cascading)",
-        "cost": 27000,
-        "details": "Missed 4 families: Sunday Milonga, Assisting, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+        "cost": 270000,
+        "details": "Missed 4 families: Deinstalling Milonga, Media, Take Care of Team Members, Social Media Posts - Tuesday"
     },
     {
-        "person_name": "Yulia Talybova",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 27000,
-        "details": "Missed 4 families: Sunday Milonga, Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
-    },
-    {
-        "person_name": "Patrycja Niemczuk",
+        "person_name": "Antoni Domanowski",
         "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
-        "details": "Hoarding 2 assignments in Teaching"
+        "cost": 100000,
+        "details": "Hoarding 2 assignments in Assisting"
     },
     {
         "person_name": "Maria Merchel",
         "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
+        "cost": 100000,
         "details": "Hoarding 2 assignments in Teaching"
     },
     {
-        "person_name": "Nina Andrzejczyk",
+        "person_name": "Diana Siwicka",
         "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
+        "cost": 100000,
         "details": "Hoarding 2 assignments in Assisting"
     },
     {
-        "person_name": "Damian Karas",
+        "person_name": "Michał Dziedziniewicz",
         "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
-        "details": "Hoarding 2 assignments in Assisting"
+        "cost": 100000,
+        "details": "Hoarding 2 assignments in Teaching"
+    },
+    {
+        "person_name": "Marius Latinis",
+        "rule": "Teaching/Assisting Equality",
+        "cost": 100000,
+        "details": "Hoarding 2 assignments in Teaching"
     },
     {
         "person_name": "Damian Bartosiewicz",
         "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
+        "cost": 100000,
         "details": "Hoarding 2 assignments in Assisting"
     },
     {
         "person_name": "Damian Bagnowski",
         "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
+        "cost": 100000,
         "details": "Hoarding 2 assignments in Assisting"
-    },
-    {
-        "person_name": "Anna Sidorowicz",
-        "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
-        "details": "Hoarding 2 assignments in Teaching"
     },
     {
         "person_name": "Natalia Khotsianovska",
         "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
+        "cost": 100000,
         "details": "Hoarding 2 assignments in Teaching"
     },
     {
-        "person_name": "Pawel Wypijewski",
+        "person_name": "Martyna Gosz",
         "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
+        "cost": 100000,
         "details": "Hoarding 2 assignments in Teaching"
     },
     {
-        "person_name": "Antoni Domanowski",
+        "person_name": "Anna Kolomenkina",
         "rule": "Teaching/Assisting Equality",
-        "cost": 10000,
-        "details": "Hoarding 2 assignments in Assisting"
-    },
-    {
-        "person_name": "Damian Bartosiewicz",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 9000,
-        "details": "Missed 3 families: Third Registrator Wednesday, Take Care of Team Members, Take Care of Partyka Students - Tuesday"
+        "cost": 100000,
+        "details": "Hoarding 2 assignments in Teaching"
     },
     {
         "person_name": "Damian Karas",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 1000,
-        "details": "Missed 1 families: Take Care of Team Members"
+        "rule": "Teaching/Assisting Equality",
+        "cost": 100000,
+        "details": "Hoarding 2 assignments in Assisting"
     },
     {
-        "person_name": "Michał Dziedziniewicz",
-        "rule": "Role Diversity (Cascading)",
-        "cost": 1000,
-        "details": "Missed 1 families: Take Care of Team Members"
+        "person_name": "Patrycja Niemczuk",
+        "rule": "Teaching/Assisting Equality",
+        "cost": 100000,
+        "details": "Hoarding 2 assignments in Teaching"
     },
     {
-        "person_name": "Damian Bagnowski",
+        "person_name": "Sylwia Woźniak",
+        "rule": "Teaching/Assisting Equality",
+        "cost": 100000,
+        "details": "Hoarding 2 assignments in Teaching"
+    },
+    {
+        "person_name": "Marius Latinis",
         "rule": "Role Diversity (Cascading)",
-        "cost": 1000,
-        "details": "Missed 1 families: Registrations / Advanced - Tuesday"
+        "cost": 90000,
+        "details": "Missed 3 families: Sunday Milonga, Registrations / Advanced - Tuesday, Take Care of Partyka Students - Wednesday"
     },
     {
         "person_name": "Anna Brzoza",
         "rule": "Role Diversity (Cascading)",
-        "cost": 1000,
-        "details": "Missed 1 families: Take Care of Team Members"
+        "cost": 90000,
+        "details": "Missed 3 families: Take Care of Team Members, Social Media Posts - Tuesday, Social Media Posts - Wednesday"
+    },
+    {
+        "person_name": "Damian Bartosiewicz",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 90000,
+        "details": "Missed 3 families: Take Care of Team Members, Take Care of Partyka Students - Tuesday, Take Care of Partyka Students - Wednesday"
+    },
+    {
+        "person_name": "Ephraim Eshak",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 30000,
+        "details": "Missed 2 families: Monthly Print, Take Care of Team Members"
+    },
+    {
+        "person_name": "Nina Andrzejczyk",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 10000,
+        "details": "Missed 1 families: Take Care of Partyka Students - Tuesday"
     },
     {
         "person_name": "Antoni Domanowski",
         "rule": "Role Diversity (Cascading)",
-        "cost": 1000,
+        "cost": 10000,
         "details": "Missed 1 families: Take Care of Partyka Students - Tuesday"
     },
     {
-        "person_name": "Patrycja Niemczuk",
-        "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
-        "details": "Worked on Weekday + Sunday"
+        "person_name": "Michał Dziedziniewicz",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 10000,
+        "details": "Missed 1 families: Take Care of Team Members"
+    },
+    {
+        "person_name": "Pawel Wypijewski",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 10000,
+        "details": "Missed 1 families: Sunday Milonga"
+    },
+    {
+        "person_name": "Damian Bagnowski",
+        "rule": "Role Diversity (Cascading)",
+        "cost": 10000,
+        "details": "Missed 1 families: Registrations / Advanced - Tuesday"
     },
     {
         "person_name": "Daniele Donzello",
-        "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
-        "details": "Worked on Weekday + Sunday"
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 121,
+        "details": "Deviation 11.0 from 8.0 (SqDiff 12100, Norm 121)"
     },
     {
-        "person_name": "Jan Mężyński",
+        "person_name": "Antoni Domanowski",
         "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
-        "details": "Worked on Weekday + Sunday"
-    },
-    {
-        "person_name": "Krzysiek Rećko",
-        "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
+        "cost": 100,
         "details": "Worked on Weekday + Sunday"
     },
     {
         "person_name": "Alicja Nowak",
         "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
+        "cost": 100,
         "details": "Worked on Weekday + Sunday"
     },
     {
-        "person_name": "Aleksander Nowak",
+        "person_name": "Krzysiek Rećko",
         "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
+        "cost": 100,
         "details": "Worked on Weekday + Sunday"
     },
     {
-        "person_name": "Natalia Khotsianovska",
+        "person_name": "Jan Mężyński",
         "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
+        "cost": 100,
         "details": "Worked on Weekday + Sunday"
     },
     {
-        "person_name": "Pawel Wypijewski",
+        "person_name": "Anna Sidorowicz",
         "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
+        "cost": 100,
         "details": "Worked on Weekday + Sunday"
     },
     {
         "person_name": "Julia Borychowska",
         "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
+        "cost": 100,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Daniele Donzello",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 100,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Aleksander Nowak",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 100,
         "details": "Worked on Weekday + Sunday"
     },
     {
         "person_name": "Maciek Oficialski",
         "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
+        "cost": 100,
         "details": "Worked on Weekday + Sunday"
     },
     {
-        "person_name": "Antoni Domanowski",
+        "person_name": "Iana Kain",
         "rule": "Multi-Day General (Weekday+Sunday)",
-        "cost": 10,
+        "cost": 100,
         "details": "Worked on Weekday + Sunday"
     },
     {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 3,
-        "details": "Geometric Streak (4 weeks): W15 -> W16 -> W17 -> W18"
+        "person_name": "Natalia Khotsianovska",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 100,
+        "details": "Worked on Weekday + Sunday"
     },
     {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 3,
-        "details": "Geometric Streak (4 weeks): W15 -> W16 -> W17 -> W18"
+        "person_name": "Martyna Gosz",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 100,
+        "details": "Worked on Weekday + Sunday"
+    },
+    {
+        "person_name": "Damian Karas",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 100,
+        "details": "Worked on Weekday + Sunday"
     },
     {
         "person_name": "Patrycja Niemczuk",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Sunday Milonga Installation (W17) & Sunday Milonga Deinstallation (W18)"
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 100,
+        "details": "Worked on Weekday + Sunday"
     },
     {
-        "person_name": "Patrycja Niemczuk",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Teaching Intermediate Wednesday (W17) & Teaching Intermediate Wednesday (W18)"
+        "person_name": "Sylwia Woźniak",
+        "rule": "Multi-Day General (Weekday+Sunday)",
+        "cost": 100,
+        "details": "Worked on Weekday + Sunday"
     },
     {
-        "person_name": "Michał Dziedziniewicz",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Teaching Beginners Tuesday (W16) & Teaching Beginners Wednesday (W17)"
+        "person_name": "Ephraim Eshak",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 64,
+        "details": "Deviation -8.0 from 8.0 (SqDiff 6400, Norm 64)"
     },
     {
-        "person_name": "Michał Dziedziniewicz",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Teaching Beginners Wednesday (W17) & Teaching Beginners Tuesday (W18)"
+        "person_name": "Anna Brzoza",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 64,
+        "details": "Deviation -8.0 from 8.0 (SqDiff 6400, Norm 64)"
     },
     {
-        "person_name": "Michał Dziedziniewicz",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Geometric Streak (3 weeks): W16 -> W17 -> W18"
+        "person_name": "Jan Mężyński",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 36,
+        "details": "Deviation 6.0 from 8.0 (SqDiff 3600, Norm 36)"
     },
     {
-        "person_name": "Damian Bagnowski",
+        "person_name": "Pawel Wypijewski",
         "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Assisting Beginners Tuesday (W17) & Assisting Beginners Tuesday (W18)"
+        "cost": 30,
+        "details": "Geometric Streak (4 weeks): W15 -> W16 -> W17 -> W18"
     },
     {
-        "person_name": "Anna Sidorowicz",
+        "person_name": "Julia Borychowska",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 16,
+        "details": "Deviation 4.0 from 8.0 (SqDiff 1600, Norm 16)"
+    },
+    {
+        "person_name": "Nina Andrzejczyk",
         "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
+        "cost": 10,
+        "details": "Assisting Beginners Tuesday (W15) & Assisting Beginners Tuesday (W16)"
+    },
+    {
+        "person_name": "Maria Merchel",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 10,
         "details": "Teaching Beginners Tuesday (W15) & Teaching Beginners Wednesday (W16)"
     },
     {
         "person_name": "Diana Siwicka",
         "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Take Care of Newcomers - Wednesday (W17) & Assisting Beginners Wednesday (W18)"
+        "cost": 10,
+        "details": "Assisting Beginners Wednesday (W16) & Assisting Beginners Tuesday (W17)"
     },
     {
-        "person_name": "Anna Brzoza",
+        "person_name": "Michał Dziedziniewicz",
         "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Social Media Posts - Tuesday (W15) & Social Media Posts - Tuesday (W16)"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Social Media Posts - Wednesday (W15) & Social Media Posts - Wednesday (W16)"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Social Media Posts - Tuesday (W16) & Social Media Posts - Tuesday (W17)"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Social Media Posts - Wednesday (W16) & Social Media Posts - Wednesday (W17)"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Social Media Posts - Tuesday (W17) & Social Media Posts - Tuesday (W18)"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Social Media Posts - Wednesday (W17) & Social Media Posts - Wednesday (W18)"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Geometric Streak (3 weeks): W15 -> W16 -> W17"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Geometric Streak (3 weeks): W15 -> W16 -> W17"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Geometric Streak (3 weeks): W16 -> W17 -> W18"
-    },
-    {
-        "person_name": "Anna Brzoza",
-        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Geometric Streak (3 weeks): W16 -> W17 -> W18"
+        "cost": 10,
+        "details": "Teaching Beginners Tuesday (W16) & Teaching Beginners Wednesday (W17)"
     },
     {
         "person_name": "Tomasz Wilk",
         "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Teaching Beginners Tuesday (W15) & Teaching Beginners Wednesday (W16)"
+        "cost": 10,
+        "details": "Teaching Beginners Tuesday (W17) & Teaching Beginners Tuesday (W18)"
     },
     {
-        "person_name": "Marius Latinis",
+        "person_name": "Pawel Wypijewski",
         "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Teaching Beginners Wednesday (W15) & Teaching Intermediate Wednesday (W16)"
+        "cost": 10,
+        "details": "Teaching Intermediate Wednesday (W15) & Teaching Beginners Wednesday (W16)"
     },
     {
-        "person_name": "Marius Latinis",
+        "person_name": "Pawel Wypijewski",
         "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
-        "details": "Teaching Intermediate Wednesday (W16) & Teaching Beginners Tuesday (W17)"
+        "cost": 10,
+        "details": "Teaching Beginners Wednesday (W16) & Teaching Intermediate Wednesday (W17)"
     },
     {
-        "person_name": "Marius Latinis",
+        "person_name": "Pawel Wypijewski",
         "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
-        "cost": 1,
+        "cost": 10,
+        "details": "Teaching Intermediate Wednesday (W17) & Teaching Beginners Wednesday (W18)"
+    },
+    {
+        "person_name": "Pawel Wypijewski",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 10,
         "details": "Geometric Streak (3 weeks): W15 -> W16 -> W17"
     },
     {
-        "person_name": "Antoni Domanowski",
+        "person_name": "Pawel Wypijewski",
         "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 10,
+        "details": "Geometric Streak (3 weeks): W16 -> W17 -> W18"
+    },
+    {
+        "person_name": "Patrycja Niemczuk",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 10,
+        "details": "MC Sunday (W17) & Sunday Milonga Installation (W18)"
+    },
+    {
+        "person_name": "Patrycja Niemczuk",
+        "rule": "Cooldown (Adjacent Weeks / Geometric Streak)",
+        "cost": 10,
+        "details": "Teaching Beginners Tuesday (W17) & Teaching Beginners Tuesday (W18)"
+    },
+    {
+        "person_name": "Anna Kolomenkina",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 6,
+        "details": "Deviation 2.5 from 8.0 (SqDiff 625, Norm 6)"
+    },
+    {
+        "person_name": "Pawel Wypijewski",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 4,
+        "details": "Deviation 2.0 from 8.0 (SqDiff 400, Norm 4)"
+    },
+    {
+        "person_name": "Yulia Talybova",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 4,
+        "details": "Deviation 2.0 from 8.0 (SqDiff 400, Norm 4)"
+    },
+    {
+        "person_name": "Maria Merchel",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 2,
+        "details": "Deviation 1.5 from 8.0 (SqDiff 225, Norm 2)"
+    },
+    {
+        "person_name": "Tomasz Wilk",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 2,
+        "details": "Deviation 1.5 from 8.0 (SqDiff 225, Norm 2)"
+    },
+    {
+        "person_name": "Natalia Khotsianovska",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 2,
+        "details": "Deviation 1.5 from 8.0 (SqDiff 225, Norm 2)"
+    },
+    {
+        "person_name": "Martyna Gosz",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 2,
+        "details": "Deviation 1.5 from 8.0 (SqDiff 225, Norm 2)"
+    },
+    {
+        "person_name": "Sylwia Woźniak",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 2,
+        "details": "Deviation 1.5 from 8.0 (SqDiff 225, Norm 2)"
+    },
+    {
+        "person_name": "Nina Andrzejczyk",
+        "rule": "Effort Equalization (Squared Deviation)",
         "cost": 1,
-        "details": "Assisting Beginners Tuesday (W15) & Assisting Beginners Tuesday (W16)"
+        "details": "Deviation 1.0 from 8.0 (SqDiff 100, Norm 1)"
+    },
+    {
+        "person_name": "Anna Sidorowicz",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 1,
+        "details": "Deviation 1.0 from 8.0 (SqDiff 100, Norm 1)"
+    },
+    {
+        "person_name": "Iana Kain",
+        "rule": "Effort Equalization (Squared Deviation)",
+        "cost": 1,
+        "details": "Deviation 1.0 from 8.0 (SqDiff 100, Norm 1)"
     }
 ]
