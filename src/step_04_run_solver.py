@@ -244,7 +244,9 @@ def generate_effort_chart(assignments, groups, output_path, args=None):
     plt.axhline(y=8, color='black', linestyle='--')
     
     plt.tight_layout()
-    plt.savefig(output_path, dpi=160)
+    # Save as SVG for infinite scalability/sharpness in GUI
+    svg_path = output_path.with_suffix('.svg')
+    plt.savefig(svg_path, format='svg')
     plt.close('all')
 
 if __name__ == "__main__":

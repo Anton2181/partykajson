@@ -11,7 +11,7 @@
         "Teaching/Assisting Equality",
         "Effort Equalization (Squared Deviation)"
     ],
-    "time_limit_seconds": 120.0,
+    "time_limit_seconds": 300,
     "scope": {
         "month": "January",
         "year": 2026

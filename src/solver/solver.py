@@ -953,6 +953,7 @@ class SATSolver:
                                 "person_name": person,
                                 "rule": "Teaching/Assisting Preference",
                                 "cost": cost_incurred,
+                                "details": details
                             })
 
                     # Teaching/Assisting Equality

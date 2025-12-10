@@ -2,3 +2,8 @@ pandas
 openpyxl
 ortools
 matplotlib
+fastapi
+uvicorn
+PyQt6
+pyqtgraph
+pyinstaller

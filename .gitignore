@@ -18,3 +18,8 @@ env/
 
 # Output / Debug / Results
 *.log
+
+# PyInstaller / Build
+dist/
+build/
+*.spec
