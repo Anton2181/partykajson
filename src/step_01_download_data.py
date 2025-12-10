@@ -40,11 +40,34 @@ def download_data():
         print(f"Error downloading data: {e}")
 
     # --- Chain Step 2: Convert Data ---
+    # --- Chain Step 2: Convert Data ---
     print("\n--- Running Step 2: Convert Data ---")
+    
+    # Fix imports: Add project root to sys.path if not present
+    # This handles running from src/ or as invoked by GUI
+    import sys
+    import pathlib
+    # Assuming standard structure: project/src/step_01.py
+    # We want 'project' in sys.path so 'import src.step_02' works
+    # OR we want 'src' in sys.path so 'import step_02' works?
+    # The existing code tries 'from src.step_02...', implying project root is expected.
+    
+    root_dir = str(pathlib.Path(__file__).parent.parent)
+    if root_dir not in sys.path:
+        sys.path.append(root_dir)
+
     try:
         from src.step_02_convert_data import convert_data
         convert_data()
         print("Step 2 Completed Successfully")
+    except ImportError:
+         # Fallback: Maybe we are IN src and src is not a package
+         try:
+             from step_02_convert_data import convert_data
+             convert_data()
+             print("Step 2 Completed Successfully (Local Import)")
+         except Exception as e:
+             print(f"Error running Step 2: {e}")
     except Exception as e:
         print(f"Error running Step 2: {e}")
 
