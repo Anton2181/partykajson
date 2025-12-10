@@ -53,12 +53,17 @@ def build_app():
         "PyQt6.QtSvg"
     ]
     
+    dist_dir = base_dir / "dist"
+    build_dir = base_dir / "build"
+    
     args = [
         script,
         f"--name={app_name}",
         "--windowed",            # No console window
         "--noconfirm",           # Overwrite output directory
         "--clean",               # Clean cache
+        f"--distpath={dist_dir}",
+        f"--workpath={build_dir}",
     ]
     
     # Add Data
