@@ -609,6 +609,9 @@ class PartykaSolverApp(QMainWindow):
             self.worker.stop()
             return
 
+        # Explicitly save any pending config changes from spinboxes
+        self.update_config_values()
+        
         # Clear Graph
         self.times = []
         self.objs = []
