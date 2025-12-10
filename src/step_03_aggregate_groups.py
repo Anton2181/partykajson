@@ -537,9 +537,9 @@ import pathlib
 if str(pathlib.Path.cwd()) not in sys.path:
     sys.path.append(str(pathlib.Path.cwd()))
 
-from src.data_processing import load_json # Assuming load_json is in src.data_processing
-# from src.data_processing import aggregate_groups, load_availability, load_member_config # These imports are not used in this file
-# from src.step_02_load_and_clean_data import clean_raw_data # This import is not used in this file
+DATA_DIR = pathlib.Path("data")
+RAW_DIR = DATA_DIR / "raw"
+PROCESSED_DIR = DATA_DIR / "processed"
 
 DATA_DIR = pathlib.Path("data")
 RAW_DIR = DATA_DIR / "raw"

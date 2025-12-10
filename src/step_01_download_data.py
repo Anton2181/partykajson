@@ -39,5 +39,14 @@ def download_data():
     except Exception as e:
         print(f"Error downloading data: {e}")
 
+    # --- Chain Step 2: Convert Data ---
+    print("\n--- Running Step 2: Convert Data ---")
+    try:
+        from src.step_02_convert_data import convert_data
+        convert_data()
+        print("Step 2 Completed Successfully")
+    except Exception as e:
+        print(f"Error running Step 2: {e}")
+
 if __name__ == "__main__":
     download_data()
