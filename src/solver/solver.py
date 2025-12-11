@@ -59,7 +59,8 @@ class SATSolver:
                     "group_name": group['name'],
                     "assignee": None,
                     "rule": "Unassigned Group",
-                    "cost": P_UNASSIGNED
+                    "cost": P_UNASSIGNED,
+                    "details": f"Group: {group['name']}"
                 })
             else:
                 candidates = self.get_group_candidates(group)
@@ -354,12 +355,22 @@ class SATSolver:
                 excl_id = excl[0]
                 if excl_id not in group_map: continue
                 
+                excl_group = group_map[excl_id]
+                
                 candidates_g = self.get_group_candidates(group)
-                candidates_e = self.get_group_candidates(group_map[excl_id])
+                candidates_e = self.get_group_candidates(excl_group)
                 common = set(candidates_g).intersection(candidates_e)
                 
                 for p in common:
                     if (g_id, p) in self.assignments and (excl_id, p) in self.assignments:
+                        # Check for Manual Override
+                        # If the user manually assigned 'p' to BOTH groups, we allow it.
+                        is_manual_g = (group.get('assignee') == p)
+                        is_manual_e = (excl_group.get('assignee') == p)
+                        
+                        if is_manual_g and is_manual_e:
+                            continue 
+                            
                         self.model.Add(self.assignments[(g_id, p)] + self.assignments[(excl_id, p)] <= 1)
 
         # 3. Soft Constraints (Min Effort)

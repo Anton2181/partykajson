@@ -105,3 +105,46 @@ def test_basic_constraint_one_person_per_group(sample_team):
     assert res["G1"]["assignee"] in ["Alice", "Bob"]
     assert res["G1"]["method"] in ["automatic", "manual", "unassigned"]
     # Should not be unassigned if penalty is high enough and feasible
+
+def test_manual_override_exclusivity(sample_team):
+    """
+    Verify that if a person is manually assigned to two mutually exclusive groups,
+    the solver respects the manual assignment and DOES NOT return UNSAT.
+    """
+    # Create two groups that are exclusive
+    groups = [
+        {
+            "id": "G1", 
+            "name": "Task A", 
+            "week": 1, 
+            "day": "Mon", 
+            # Manually assign Alice
+            "assignee": "Alice", 
+            "filtered_candidates_list": ["Alice"],
+            "exclusive_groups": [["G2", "Task B"]],
+            "task_count": 1
+        },
+        {
+            "id": "G2", 
+            "name": "Task B", 
+            "week": 1, 
+            "day": "Mon", 
+            # Manually assign Alice
+            "assignee": "Alice",
+            "filtered_candidates_list": ["Alice"],
+            "exclusive_groups": [["G1", "Task A"]],
+            "task_count": 1
+        }
+    ]
+    
+    solver = SATSolver(groups, sample_team)
+    res, penalties = solver.solve()
+    
+    # Needs to find a solution
+    assert res, "Solver returned NO solution (empty result) for manual override scenario."
+    
+    # Alice should be assigned to both
+    assert res["G1"]["assignee"] == "Alice"
+    assert res["G2"]["assignee"] == "Alice"
+    assert res["G1"]["method"] == "manual"
+    assert res["G2"]["method"] == "manual"
