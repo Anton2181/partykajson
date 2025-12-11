@@ -40,8 +40,8 @@ def test_cascading_multi_day_penalty(sample_team_members):
     
     # Check Cost
     # We don't know exact 'P' from here easily without reading config, but check logic details
-    assert "Cascading Penalty" in md_penalty['details']
-    assert "Total Excess: 2" in md_penalty['details'] # 3 days - 1 = 2 excess
+    assert "Geometric Penalty" in md_penalty['details']
+    assert "3 days" in md_penalty['details'] # 3 days - 1 = 2 excess logic represented by count
 
 def test_cascading_role_diversity_penalty(sample_team_members):
     # Setup: Alice behaves, but misses families.

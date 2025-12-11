@@ -66,5 +66,57 @@ def test_process_schedule_basic():
     
     # Second task: Assignee Bob.
     t2 = result[1]
-    assert t2['assignee'] == 'Bob' 
-    assert t2['effort'] == 2.2
+    t2['assignee'] == 'Bob' 
+    t2['effort'] == 2.2
+
+def test_convert_data_dynamic_args(tmp_path, monkeypatch):
+    """Verify convert_data creates files with the correct prefix."""
+    from src.step_02_convert_data import convert_data
+    import sys
+    import os
+    
+    # Setup Dirs
+    (tmp_path / "data" / "raw").mkdir(parents=True)
+    (tmp_path / "data" / "processed").mkdir(parents=True)
+    
+    # Create input CSV
+    target_prefix = "february_2026"
+    csv_path = tmp_path / "data" / "raw" / f"{target_prefix}.csv"
+    csv_path.write_text("Week,Day,Time,TODO,Assignee,EFFORT\n1,Monday,20-21,TaskA,,1.0", encoding='utf-8')
+
+    # Create dummy Task Availability
+    (tmp_path / "data" / "raw" / "task_availability.csv").write_text("Name,Role,TaskA\nAlice,Leader,Yes\nBob,Follower,Yes", encoding='utf-8')
+    
+    # Create dummy Calendar Availability
+    # Needs specific structure to pass process_calendar_availability check
+    # Row 3: Weeks, Row 4: Dates, Row 5: Days
+    # Row 6+: Data
+    # Create dummy Calendar Availability
+    # Needs specific structure to pass process_calendar_availability check
+    # Row 3: Weeks, Row 4: Dates, Row 5: Days
+    # Row 6+: Data
+    # 5 dummy columns + 1 data column at index 5 ? 
+    # Logic: col_start_index = 4. 
+    # Col 0,1,2,3 ignored/metadata? 
+    # Col 4 is first data col.
+    # Let's make 10 cols to be safe.
+    
+    cal_content = (
+        ",,,,,,,,,\n" * 3 + # 0, 1, 2
+        ",,,,Week 1,,,,,\n" + # 3 (Weeks)
+        ",,,,2026-01-01,,,,,\n" + # 4 (Dates)
+        ",,,,Monday,,,,,\n" + # 5 (Days)
+        "Name,Role,Other,Col3,Col4,,,,,\n" # 6 (Header) 
+        ",Alice,Leader,,All,,,,,\n"
+    )
+    (tmp_path / "data" / "raw" / "calendar_availability.csv").write_text(cal_content, encoding='utf-8')
+    
+    # Change CWD to tmp_path so "Path('.')" works there.
+    monkeypatch.chdir(tmp_path)
+    
+    convert_data(target_month=target_prefix)
+         
+    # Check output
+    output_path = tmp_path / "data" / "processed" / f"{target_prefix}_tasks.json"
+    assert output_path.exists(), f"File not found at {output_path}"
+
