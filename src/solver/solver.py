@@ -571,8 +571,10 @@ class SATSolver:
                                  if i < 2:
                                      costs.append(0)
                                  else:
-                                     multiplier = 3 ** (i - 2)
-                                     costs.append(P_TEACH_EQUALITY * multiplier)
+                                     multiplier = 2 ** (i - 2)
+                                     val = P_TEACH_EQUALITY * multiplier
+                                     if val > 9000000000000000000: val = 9000000000000000000
+                                     costs.append(val)
                             
                              base_cost_var = self.model.NewIntVar(0, max(costs), f"equality_base_cost_{fam_name}_{person}")
                              self.model.AddElement(total_count_var, costs, base_cost_var)
@@ -660,7 +662,9 @@ class SATSolver:
                     # Formula: Cost = P * 2^(N-1) for N >= 1, else 0
                     costs = [0]
                     for i in range(1, len(missed_vars) + 1):
-                         costs.append(P_DIVERSITY * (3**(i-1)))
+                         val = P_DIVERSITY * (2**(i-1))
+                         if val > 9000000000000000000: val = 9000000000000000000
+                         costs.append(val)
                     
                     div_cost_var = self.model.NewIntVar(0, max(costs), f"div_cost_{person}")
                     self.model.AddElement(missed_count, costs, div_cost_var)
@@ -938,8 +942,10 @@ class SATSolver:
                                  else:
                                      # i=2 -> 2^(0) = 1
                                      # i=3 -> 2^(1) = 2
-                                     multiplier = 3 ** (i - 2)
-                                     costs.append(P_MULTI_WEEKDAY * multiplier)
+                                     multiplier = 2 ** (i - 2)
+                                     val = P_MULTI_WEEKDAY * multiplier
+                                     if val > 9000000000000000000: val = 9000000000000000000
+                                     costs.append(val)
                              
                              cost_var = self.model.NewIntVar(0, max(costs), f"multi_weekday_cost_{person}_{w_str}")
                              self.model.AddElement(count_var, costs, cost_var)
