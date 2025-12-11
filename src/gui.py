@@ -605,6 +605,7 @@ class PartykaSolverApp(QMainWindow):
             "Inefficient Day (< 2 Tasks)",
             "Multi-Day General (Weekday+Sunday)",
             "Cooldown (Adjacent Weeks)",
+            "Preferred Pair Split (Working separately on same group)",
             "Effort Equalization (Squared Deviation)"
         ]
         
@@ -704,7 +705,8 @@ class PartykaSolverApp(QMainWindow):
         
         self.worker = ScriptWorker(script_name, args)
         self.worker.progress_signal.connect(self.log)
-        self.worker.finished_signal.connect(self.on_step_finished)
+        # Use built-in 'finished' signal which is emitted AFTER run() returns
+        self.worker.finished.connect(self.on_step_finished) 
         self.worker.start()
 
     def run_download_flow(self):
@@ -762,7 +764,7 @@ class PartykaSolverApp(QMainWindow):
         self.worker = ScriptWorker("step_04_run_solver.py", script_args, parse_output=True)
         self.worker.progress_signal.connect(self.log)
         self.worker.data_signal.connect(self.update_graph)
-        self.worker.finished_signal.connect(self.on_solver_finished)
+        self.worker.finished.connect(self.on_solver_finished)
         self.worker.start()
 
     def update_graph(self, data):
@@ -773,15 +775,34 @@ class PartykaSolverApp(QMainWindow):
         self.curve_pen.setData(self.times, self.pens)
 
     def on_step_finished(self):
+        script_name = self.worker.script_name if self.worker else None
+        
         self.log("Finished.", "#28a745")
         self.worker = None
         self.update_button_states()
         
-        # Re-enable all if they were disabled purely for "running" state
-        # But update_button_states will handle the "file missing" logic.
-        # We also need to re-enable them if they were disabled by run_step
-        # Actually run_step disabled them. update_button_states will re-enable them IF satisfied.
-        pass
+        # Check if we just finished Export
+        if script_name == "step_05_export_csv.py":
+            month = self.month_combo.currentText().lower()
+            year = self.year_combo.currentText()
+            prefix = f"{month}_{year}"
+            
+            # Construct path (RESULTS_DIR is defined globally in this file)
+            # Standard output is {prefix}_filled.csv
+            csv_path = RESULTS_DIR / f"{prefix}_filled.csv"
+            
+            if csv_path.exists():
+                self.log(f"Opening {csv_path.name}...", "#17a2b8")
+                try:
+                    if platform.system() == "Windows":
+                        os.startfile(str(csv_path))
+                    elif platform.system() == "Darwin":
+                        subprocess.call(["open", str(csv_path)])
+                    else:
+                        subprocess.call(["xdg-open", str(csv_path)])
+                except Exception as e:
+                    self.log(f"Failed to open file: {e}", "red")
+
         self.log("--- Finished ---", "#0d6efd")
 
     def on_solver_finished(self):
