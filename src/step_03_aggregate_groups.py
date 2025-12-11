@@ -545,6 +545,52 @@ DATA_DIR = pathlib.Path("data")
 RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"
 
+def ensure_family_consistency(task_families):
+    """
+    Ensures that exclusive relationships are bidirectional.
+    If 'A' excludes 'B', then 'B' must exclude 'A'.
+    Auto-corrects and returns True if changes were made.
+    """
+    groups_map = {} # name -> group_def
+    
+    # 1. Build Map
+    for fam in task_families:
+        for g in fam['groups']:
+            groups_map[g['name']] = g
+
+    changes_made = False
+    logs = []
+
+    # 2. Check & Fix
+    for g_name, g_def in groups_map.items():
+        exclusives = g_def.get('exclusive', [])
+        
+        for excluded_name in exclusives:
+            # Check if the target exists
+            if excluded_name not in groups_map:
+                # Warning: Excluded group doesn't exist? (Optional: warn user)
+                continue
+                
+            target_group = groups_map[excluded_name]
+            target_exclusives = target_group.get('exclusive', [])
+            
+            if g_name not in target_exclusives:
+                # Fix it
+                target_exclusives.append(g_name)
+                # target_group is a ref to the dict in task_families list, so it updates in place
+                target_group['exclusive'] = target_exclusives 
+                
+                changes_made = True
+                logs.append(f"Fixed: '{excluded_name}' now excludes '{g_name}' (reciprocal of existing rule)")
+
+    if changes_made:
+        print("\n--- Task Family Consistency Check ---")
+        for log in logs:
+            print(log)
+        print("Saving updated task_families.json...")
+
+    return changes_made
+
 def aggregate_groups(source_prefix=None):
     # Load Config to determine scope if not provided
     penalty_config_path = DATA_DIR / "penalty_config.json"
@@ -567,7 +613,15 @@ def aggregate_groups(source_prefix=None):
     tasks_filename = f"{source_prefix}_tasks.json"
     tasks_list = load_json(PROCESSED_DIR / tasks_filename)
     
-    task_families = load_json(DATA_DIR / "task_families.json")
+    task_families_path = DATA_DIR / "task_families.json"
+    task_families = load_json(task_families_path)
+    
+    # --- Consistency Check ---
+    if ensure_family_consistency(task_families):
+        save_json(task_families, task_families_path)
+        # Reload to be safe (though local object is updated in place)
+        # task_families = load_json(task_families_path) 
+    
     team_members = load_json(DATA_DIR / "team_members.json")
 
     groups_output = process_groups(tasks_list, task_families, team_members)
