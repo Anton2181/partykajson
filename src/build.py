@@ -6,15 +6,37 @@ import subprocess
 from pathlib import Path
 import PyInstaller.__main__
 
+import time
+
 def clean_build():
-    """Remove previous build artifacts."""
-    for d in ["build", "dist"]:
+    """Remove previous build artifacts with retry logic for Windows locks."""
+    directories = ["build", "dist"]
+    
+    for d in directories:
         if os.path.exists(d):
-            shutil.rmtree(d, ignore_errors=True)
+            print(f"Cleaning {d}...")
+            # Try up to 5 times
+            for attempt in range(5):
+                try:
+                    shutil.rmtree(d)
+                    break # Success
+                except PermissionError:
+                    if attempt < 4:
+                        print(f"  [Attempt {attempt+1}] File locked. Retrying in 1s...")
+                        time.sleep(1)
+                    else:
+                        print(f"  [ERROR] Could not delete '{d}'. Please close any open folders or running instances of the app.")
+                        raise
+                except Exception as e:
+                    print(f"  [ERROR] Deleting '{d}' failed: {e}")
+                    raise
     
     spec_file = "PartykaSolverPro.spec"
     if os.path.exists(spec_file):
-        os.remove(spec_file)
+        try:
+            os.remove(spec_file)
+        except OSError:
+            pass
 
 def build_app():
     """Run PyInstaller."""
