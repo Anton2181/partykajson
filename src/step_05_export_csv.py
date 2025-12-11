@@ -7,7 +7,9 @@ def load_json(path):
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def export_csv_for_month(month="january", year="2026"):
+import sys
+
+def export_csv_for_month(source_prefix=None):
     # Use CWD-relative data path
     base_dir = Path(".")
     data_dir = base_dir / "data"
@@ -17,18 +19,16 @@ def export_csv_for_month(month="january", year="2026"):
 
     # 1. Determine Prefix
     penalty_config_path = data_dir / "penalty_config.json"
-    source_prefix = None
     
-    if penalty_config_path.exists():
-        config = load_json(penalty_config_path)
-        if not source_prefix:
+    if not source_prefix:
+        if penalty_config_path.exists():
+            config = load_json(penalty_config_path)
             scope = config.get("scope", {})
             if "month" in scope and "year" in scope:
                 source_prefix = f"{scope['month'].lower()}_{scope['year']}"
             else:
                 source_prefix = scope.get("prefix", "january_2026")
-    else:
-        if not source_prefix:
+        else:
              source_prefix = "january_2026"
 
     print(f"Exporting for prefix: {source_prefix}")
@@ -178,4 +178,7 @@ def export_csv_for_month(month="january", year="2026"):
     print(f"Exported filled CSV to {output_path}")
 
 if __name__ == "__main__":
-    export_csv_for_month()
+    p = None
+    if len(sys.argv) > 1:
+        p = sys.argv[1]
+    export_csv_for_month(p)

@@ -624,4 +624,7 @@ def finalize_candidate_lists(group, member_map, group_def = None):
 
 
 if __name__ == "__main__":
-    aggregate_groups()
+    prefix = None
+    if len(sys.argv) > 1:
+        prefix = sys.argv[1]
+    aggregate_groups(prefix)

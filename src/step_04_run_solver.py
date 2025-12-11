@@ -267,4 +267,7 @@ def generate_effort_chart(assignments, groups, output_path, effort_threshold=8.0
     plt.close('all')
 
 if __name__ == "__main__":
-    run_solver()
+    p = None
+    if len(sys.argv) > 1:
+        p = sys.argv[1]
+    run_solver(p)

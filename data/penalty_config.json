@@ -1,5 +1,6 @@
 {
     "implemented_rules": [
+        "Unassigned Group",
         "Underworked Team Member (< Threshold)",
         "Multi-Day Weekdays (e.g. Tue+Wed)",
         "Inefficient Day (< 2 Tasks)",
@@ -9,6 +10,7 @@
         "Role Diversity (Assignments in each capable family)",
         "Teaching/Assisting Preference",
         "Teaching/Assisting Equality",
+        "Preferred Pair Split (Working separately on same group)",
         "Effort Equalization (Squared Deviation)"
     ],
     "time_limit_seconds": 120,

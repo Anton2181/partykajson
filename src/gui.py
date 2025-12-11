@@ -449,7 +449,7 @@ class PartykaSolverApp(QMainWindow):
         actions_layout = QVBoxLayout()
         
         self.btn_download = QPushButton("1. Download Data")
-        self.btn_download.clicked.connect(lambda: self.run_step("step_01_download_data.py"))
+        self.btn_download.clicked.connect(self.run_download_flow)
         
         self.btn_aggregate = QPushButton("2. Aggregate Groups")
         self.btn_aggregate.clicked.connect(lambda: self.run_aggregate_flow())
@@ -459,7 +459,7 @@ class PartykaSolverApp(QMainWindow):
         self.btn_solve.clicked.connect(self.start_solver)
         
         self.btn_export = QPushButton("4. Export CSV")
-        self.btn_export.clicked.connect(lambda: self.run_step("step_05_export_csv.py"))
+        self.btn_export.clicked.connect(self.run_export_flow)
 
         actions_layout.addWidget(self.btn_download)
         actions_layout.addWidget(self.btn_aggregate)
@@ -707,8 +707,24 @@ class PartykaSolverApp(QMainWindow):
         self.worker.finished_signal.connect(self.on_step_finished)
         self.worker.start()
 
+    def run_download_flow(self):
+        # Pass "January 2026"
+        arg = f"{self.month_combo.currentText()} {self.year_combo.currentText()}" 
+        self.run_step("step_01_download_data.py", args=[arg])
+
     def run_aggregate_flow(self):
-        self.run_step("step_03_aggregate_groups.py") 
+        # Pass "january_2026"
+        month = self.month_combo.currentText().lower()
+        year = self.year_combo.currentText()
+        prefix = f"{month}_{year}"
+        self.run_step("step_03_aggregate_groups.py", args=[prefix]) 
+
+    def run_export_flow(self):
+        # Pass "january_2026"
+        month = self.month_combo.currentText().lower()
+        year = self.year_combo.currentText()
+        prefix = f"{month}_{year}"
+        self.run_step("step_05_export_csv.py", args=[prefix])
 
     def start_solver(self):
         if self.worker and self.worker.isRunning():
@@ -736,7 +752,11 @@ class PartykaSolverApp(QMainWindow):
         self.btn_aggregate.setEnabled(False)
         self.btn_export.setEnabled(False)
         
-        script_args = [] # Pass time limit via args if script supported it, currently via config
+        # Pass "january_2026"
+        month = self.month_combo.currentText().lower()
+        year = self.year_combo.currentText()
+        prefix = f"{month}_{year}"
+        script_args = [prefix] 
         
         self.log("--- Starting Solver ---", "#198754")
         self.worker = ScriptWorker("step_04_run_solver.py", script_args, parse_output=True)

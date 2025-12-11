@@ -239,11 +239,22 @@ def process_schedule(jan_df, tasks_data, calendar_data):
         
     return jan_tasks_data
 
-def convert_data():
+import sys
+
+def convert_data(target_month=None):
     base_dir = Path(".")
     raw_dir = base_dir / "data" / "raw"
     processed_dir = base_dir / "data" / "processed"
     processed_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Determine Target Month
+    if target_month is None:
+        if len(sys.argv) > 1:
+            target_month = sys.argv[1].lower().replace(" ", "_")
+        else:
+             target_month = "january_2026" # Default
+             
+    print(f"Target Month: {target_month}")
 
     # --- Process Task Availability ---
     print("Processing Task Availability...")
@@ -268,16 +279,26 @@ def convert_data():
         
     print(f"Saved calendar to {calendar_output_path}")
 
-    # --- Process January 2026 Schedule ---
-    print("Processing January 2026 Schedule...")
-    jan_df = pd.read_csv(raw_dir / "january_2026.csv", encoding='utf-8')
+    # --- Process Target Schedule ---
+    print(f"Processing {target_month} Schedule...")
+    input_csv = raw_dir / f"{target_month}.csv"
+    
+    if not input_csv.exists():
+        print(f"[ERROR] Input file not found: {input_csv}")
+        # Identify what files ARE there to be helpful
+        found = list(raw_dir.glob("*_20*.csv"))
+        if found:
+            print(f"Found similar files: {[f.name for f in found]}")
+        return
+
+    jan_df = pd.read_csv(input_csv, encoding='utf-8')
     jan_tasks_data = process_schedule(jan_df, tasks_data, calendar_data)
 
     # Save
-    jan_output_path = processed_dir / "january_2026_tasks.json"
-    with open(jan_output_path, "w", encoding='utf-8') as f:
+    yan_output_path = processed_dir / f"{target_month}_tasks.json"
+    with open(yan_output_path, "w", encoding='utf-8') as f:
         json.dump(jan_tasks_data, f, indent=4, ensure_ascii=False)
-    print(f"Saved monthly schedule to {jan_output_path}")
+    print(f"Saved monthly schedule to {yan_output_path}")
 
 if __name__ == "__main__":
     convert_data()
