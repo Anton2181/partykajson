@@ -1,20 +1,21 @@
 @echo off
 setlocal
-cd /d "%~dp0.."
+cd /d "%~dp0"
+cd ..
 
 echo ==========================================
 echo    Building PartykaSolverPro for Windows
 echo ==========================================
 
-:: 1. Check for Virtual Environment
-if not exist ".venv" (
+REM 1. Check for Virtual Environment
+if not exist .venv (
     echo [ERROR] Virtual environment '.venv' not found!
     echo Please run setup first (or create .venv manually).
     pause
     exit /b 1
 )
 
-:: 2. Activate Venv
+REM 2. Activate Venv
 echo [1/3] Activating Virtual Environment...
 call .venv\Scripts\activate.bat
 if errorlevel 1 (
@@ -23,14 +24,14 @@ if errorlevel 1 (
     exit /b 1
 )
 
-:: 3. Install Requirements (Optional but good safety)
+REM 3. Install Requirements (Optional but good safety)
 echo [2/3] Checking dependencies...
 pip install -r requirements.txt
 if errorlevel 1 (
     echo [WARNING] Failed to install requirements. Trying to proceed...
 )
 
-:: 4. Run Build Script
+REM 4. Run Build Script
 echo [3/3] Running Build...
 python src\build.py
 if errorlevel 1 (
