@@ -20,31 +20,79 @@ import pyqtgraph as pg
 
 # --- Constants & Paths ---
 # --- Constants & Paths ---
-if getattr(sys, 'frozen', False):
-    # Running in a PyInstaller bundle
-    # sys.executable points to the binary (e.g. .../PartykaSolverPro.exe)
-    # We want BASE_DIR to be the persistent folder containing the app (where 'data' lives)
-    if platform.system() == "Darwin":
-        # On Mac, if it's an App Bundle, sys.executable is inside Contents/MacOS
-        # We generally want the folder *containing* the .app for portable usage
-        # OR Resources inside. Let's assume adjacent to .app for portable data.
-        # .../PartykaSolverPro.app/Contents/MacOS/PartykaSolverPro
-        BASE_DIR = Path(sys.executable).parent.parent.parent.parent
-    else:
-        # Windows/Linux: folder containing the executable
-        BASE_DIR = Path(sys.executable).parent
-        
-    VENV_PYTHON = sys.executable 
-else:
-    # Running in normal python environment
-    BASE_DIR = Path(__file__).parent.parent
-    VENV_PYTHON = BASE_DIR / ".venv" / "bin" / "python"
-
-# Force CWD to BASE_DIR to ensure relative paths (like "data/") work consistentl
-# This is critical for the frozen app to find the external 'data' folder
+# --- Path Setup & Writability Check ---
+import shutil
 import os
-os.chdir(BASE_DIR)
-print(f"Set Working Directory to: {os.getcwd()}")
+
+def is_writable(path):
+    if not path.exists():
+        return False # Or try to create it?
+    return os.access(path, os.W_OK)
+
+def setup_paths():
+    base_dir = None
+    if getattr(sys, 'frozen', False):
+        if platform.system() == "Darwin":
+            candidate = Path(sys.executable).parent.parent.parent.parent
+        else:
+            candidate = Path(sys.executable).parent
+    else:
+        candidate = Path(__file__).parent.parent
+
+    # Check Writability (Fix for Mac Read-Only / Translocation)
+    # We try to create a temp file to verify true write access
+    try:
+        test_file = candidate / ".write_test"
+        with open(test_file, 'w') as f:
+            f.write("test")
+        os.remove(test_file)
+        base_dir = candidate
+        # print(f"[Startup] Base Directory is Writable: {base_dir}")
+    except Exception as e:
+        print(f"[Startup] Base Directory READ-ONLY ({e}). Failure fallback.")
+        # Fallback to User Documents
+        docs_dir = Path.home() / "Documents" / "PartykaSolverSaves"
+        docs_dir.mkdir(parents=True, exist_ok=True)
+        base_dir = docs_dir
+        print(f"[Startup] Switched to Documents: {base_dir}")
+
+    # Set CWD
+    os.chdir(base_dir)
+    
+    # Ensure Data Structure Exists
+    data_dir = base_dir / "data"
+    data_dir.mkdir(exist_ok=True)
+    (data_dir / "raw").mkdir(exist_ok=True)
+    (data_dir / "processed").mkdir(exist_ok=True)
+    (data_dir / "results").mkdir(exist_ok=True)
+
+    # Initial Config Copy (If missing)
+    # If we are frozen, we bundled defaults in _MEIPASS/data_defaults
+    if getattr(sys, 'frozen', False):
+        bundled_defaults = Path(sys._MEIPASS) / "data_defaults"
+        if bundled_defaults.exists():
+            for f in ["penalty_config.json", "team_members.json", "task_families.json"]:
+                target = data_dir / f
+                if not target.exists():
+                    source = bundled_defaults / f
+                    if source.exists():
+                        shutil.copy2(source, target)
+    
+    return base_dir
+
+BASE_DIR = setup_paths()
+
+# Define Execution Python
+if getattr(sys, 'frozen', False):
+    VENV_PYTHON = sys.executable
+else:
+    # In source mode, we assume .venv is in the project root (parent of src)
+    # NOT in the potentially redirected 'Documents' BASE_DIR
+    PROJECT_ROOT = Path(__file__).parent.parent
+    if platform.system() == "Windows":
+        VENV_PYTHON = PROJECT_ROOT / ".venv" / "Scripts" / "python.exe"
+    else:
+        VENV_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
 
 # --- Dispatcher for Subprocesses in Frozen Mode ---
 # If arguments are passed, we might be trying to run a script
@@ -60,6 +108,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "--dispatch":
     
     # Fake argv so the script sees its own args
     sys.argv = [str(target_script)] + script_args
+    # Preserve CWD as BASE_DIR so script can find data
     
     # Run
     print(f"Dispatching {script_name}...")
@@ -69,11 +118,14 @@ if len(sys.argv) > 1 and sys.argv[1] == "--dispatch":
         print(f"Execution Error: {e}")
     sys.exit(0)
 
+# Paths relative to the verified writable BASE_DIR
 DATA_DIR = BASE_DIR / "data"
 PROCESSED_DIR = DATA_DIR / "processed"
 RESULTS_DIR = DATA_DIR / "results"
 CONFIG_PATH = DATA_DIR / "penalty_config.json"
 SRC_DIR = BASE_DIR / "src"
+# If frozen, logic refers to SRC in bundle, but we don't use SRC_DIR much
+# scripts use sys._MEIPASS logic usually.
 
 # --- Styles ---
 DARK_THEME = """
@@ -197,6 +249,7 @@ class ScriptWorker(QThread):
                 stderr=subprocess.STDOUT, # Merge stderr
                 text=True,
                 env=env, # Pass env with PYTHONUNBUFFERED
+                cwd=BASE_DIR, # EXPLICITLY set CWD to the writable directory
                 bufsize=0 # Unbuffered pipe
             )
             
@@ -329,6 +382,9 @@ class PartykaSolverApp(QMainWindow):
         
         date_layout.addWidget(self.month_combo)
         date_layout.addWidget(self.year_combo)
+        
+        # Signal connection moved to end of setup_ui to avoid AttributeErrors
+        
         config_layout.addLayout(date_layout)
         
         # Time Limit
@@ -525,6 +581,16 @@ class PartykaSolverApp(QMainWindow):
         
         # Initial sizing of splitter
         viz_splitter.setSizes([500, 300])
+        
+        # Initial sizing of splitter
+        viz_splitter.setSizes([500, 300])
+        
+        # Connect Signals (Now that all widgets exist)
+        self.month_combo.currentIndexChanged.connect(self.update_button_states)
+        self.year_combo.currentIndexChanged.connect(self.update_button_states)
+        
+        # Initial State Check
+        self.update_button_states()
 
     def restore_defaults(self):
         # 1. Reset Values
@@ -590,6 +656,41 @@ class PartykaSolverApp(QMainWindow):
         self.config["effort_threshold"] = self.thresh_spin.value()
         self.save_config()
 
+    def update_button_states(self):
+        """Enable/Disable buttons based on file availability."""
+        month = self.month_combo.currentText().lower()
+        year = self.year_combo.currentText()
+        
+        
+        # 1. Download: Always Enabled
+        self.btn_download.setEnabled(True)
+        
+        # Note: Step 1 (Download) automatically chains Step 2 (Convert).
+        # So we don't have a separate Convert button.
+        # But we DO check Step 2 outputs to enable Step 3 (Aggregate).
+        
+        # 3. Aggregate: Requires Processed Tasks
+        processed_tasks = PROCESSED_DIR / f"{month}_{year}_tasks.json"
+        can_aggregate = processed_tasks.exists()
+        self.btn_aggregate.setEnabled(can_aggregate)
+        self.btn_aggregate.setToolTip("Requires processed tasks" if not can_aggregate else "")
+
+        # 4. Solve: Requires Aggregated Groups
+        groups_file = PROCESSED_DIR / f"{month}_{year}_groups.json"
+        can_solve = groups_file.exists()
+        self.btn_solve.setEnabled(can_solve)
+        self.btn_solve.setToolTip("Requires aggregated groups" if not can_solve else "")
+
+        # 5. Export: Requires Results
+        assignments_file = RESULTS_DIR / f"{month}_{year}_assignments_by_person.json"
+        # Or checking general results existence? "step_05" uses `assignments.json` usually?
+        # step_05 reads: assignments_path = results_dir / f"{month}_{year}_assignments.json"
+        # Let's check that one.
+        assignments_file = RESULTS_DIR / f"{month}_{year}_assignments.json"
+        can_export = assignments_file.exists()
+        self.btn_export.setEnabled(can_export)
+        self.btn_export.setToolTip("Requires solution results" if not can_export else "")
+
     def run_step(self, script_name, args=None):
         if self.worker and self.worker.isRunning():
             return
@@ -652,10 +753,15 @@ class PartykaSolverApp(QMainWindow):
         self.curve_pen.setData(self.times, self.pens)
 
     def on_step_finished(self):
-        self.btn_download.setEnabled(True)
-        self.btn_aggregate.setEnabled(True)
-        self.btn_solve.setEnabled(True)
-        self.btn_export.setEnabled(True)
+        self.log("Finished.", "#28a745")
+        self.worker = None
+        self.update_button_states()
+        
+        # Re-enable all if they were disabled purely for "running" state
+        # But update_button_states will handle the "file missing" logic.
+        # We also need to re-enable them if they were disabled by run_step
+        # Actually run_step disabled them. update_button_states will re-enable them IF satisfied.
+        pass
         self.log("--- Finished ---", "#0d6efd")
 
     def on_solver_finished(self):

@@ -178,4 +178,4 @@ def export_csv_for_month(month="january", year="2026"):
     print(f"Exported filled CSV to {output_path}")
 
 if __name__ == "__main__":
-    run_export()
+    export_csv_for_month()

@@ -10,7 +10,7 @@ def clean_build():
     """Remove previous build artifacts."""
     for d in ["build", "dist"]:
         if os.path.exists(d):
-            shutil.rmtree(d)
+            shutil.rmtree(d, ignore_errors=True)
     
     spec_file = "PartykaSolverPro.spec"
     if os.path.exists(spec_file):
@@ -38,7 +38,9 @@ def build_app():
     
     add_data = [
         # Only bundle source code. Data is external.
-        f"{src_path}{sep}src",         
+        f"{src_path}{sep}src", 
+        # Bundle defaults for fallback (User Docs mode)
+        f"{data_path}{sep}data_defaults"
     ]
     
     # Hidden Imports (OR-Tools, Pandas often need help)
@@ -101,6 +103,11 @@ def build_app():
         pass
         
     print(f"Building {app_name}...")
+    # Clean previous build artifacts again to be safe
+    # PyInstaller.__main__.run(args)
+    # Actually run process to handle arch switching if needed? 
+    # Calling run() directly runs in-process. 
+    # If python is universal, this *should* work.
     PyInstaller.__main__.run(args)
     
     # --- Post-Build: Copy External Data ---

@@ -993,41 +993,27 @@ class SATSolver:
                 norm = sq // 100 # Normalize by 100
                 cost_table.append(norm)
                 
-            # Identify Prepass/Priority People to exempt from Equalization
-            # If a person is forced/priority for ANY task, they are "Special/Exempt" from fairness deviations.
-            prepass_people = set()
-            for g in self.groups:
-                 # Check 'assignee' (Manual)
-                 if g.get('assignee'):
-                     prepass_people.add(g.get('assignee'))
-                 # Check 'filtered_priority_candidates_list' (Priority)
-                 for p in g.get('filtered_priority_candidates_list', []):
-                     prepass_people.add(p)
-                 
             for person in all_persons:
-                 if person in prepass_people:
-                     # Skip Equalization for Prepass candidates
-                     if person not in self.debug_vars: self.debug_vars[person] = {}
-                     # Log it?
-                     continue
-            
-                 effort_var = self.effort_vars[person]
+                # No exemption: All users (Manual/Priority/Auto) are subject to equalization
+                # regarding their TOTAL consolidated effort.
+                
+                effort_var = self.effort_vars[person]
                  
-                 # Optimization: Table Lookup instead of Quadratic Math constraints
-                 # Cost = cost_table[effort_var]
-                 
-                 cost_var = self.model.NewIntVar(0, max(cost_table), f"effort_cost_{person}")
-                 self.model.AddElement(effort_var, cost_table, cost_var)
-                 
-                 objective_terms.append(cost_var * P_EQUALIZATION)
-                 all_cost_vars.append(cost_var)
-                 
-                 # Debug
-                 if person not in self.debug_vars: self.debug_vars[person] = {}
-                 self.debug_vars[person]['equalization'] = {
-                     'cost_var': cost_var,
-                     'cost': P_EQUALIZATION
-                 }
+                # Optimization: Table Lookup instead of Quadratic Math constraints
+                # Cost = cost_table[effort_var]
+                
+                cost_var = self.model.NewIntVar(0, max(cost_table), f"effort_cost_{person}")
+                self.model.AddElement(effort_var, cost_table, cost_var)
+                
+                objective_terms.append(cost_var * P_EQUALIZATION)
+                all_cost_vars.append(cost_var)
+                
+                # Debug
+                if person not in self.debug_vars: self.debug_vars[person] = {}
+                self.debug_vars[person]['equalization'] = {
+                    'cost_var': cost_var,
+                    'cost': P_EQUALIZATION
+                }
 
         # Term 11: Preferred Pair Split (Separate Rungs of same Ladder)
         # Goal: If preferred pair members are assigned to SAME Logical Group (Name, Week, Day),
