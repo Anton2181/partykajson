@@ -1,0 +1,302 @@
+/* Assignment Panel Styles */
+
+#assignment-panel .panel-content {
+    padding: 0;
+    background: white;
+}
+
+.assignment-table {
+    width: 100%;
+    min-width: 800px;
+    /* Force scroll if container is too small */
+    border-collapse: collapse;
+    font-size: 13px;
+    color: #333;
+    table-layout: fixed;
+    /* Prevent overflow */
+}
+
+.assignment-table th {
+    background: #f5f5f5;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 12px 8px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.assignment-table td {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+    /* overflow: hidden;  <-- Removed to allow dropdown */
+    /* text-overflow: ellipsis; <-- Removed */
+}
+
+/* Column Widths */
+.col-group {
+    width: 20%;
+}
+
+.col-task {
+    width: 25%;
+}
+
+.col-candidates {
+    width: 25%;
+}
+
+.col-optimal {
+    width: 20%;
+    min-width: 180px;
+    /* Increased from 150px */
+}
+
+.col-assignee {
+    width: 20%;
+    min-width: 220px;
+    /* Increased further */
+}
+
+/* Group Merging */
+.group-cell {
+    background: #fafafa;
+    border-right: 1px solid #eee;
+    vertical-align: middle !important;
+    font-weight: 500;
+    color: #444;
+}
+
+/* Group Variants - Enhanced Vibrancy (Matching Canvas Tiles) */
+.group-cell.variant-1 {
+    background: linear-gradient(135deg, #FFF5F5 0%, #FFE3E3 100%);
+    border-right: 3px solid #FFC9C9;
+    color: #8a5a5a;
+}
+
+.group-cell.variant-2 {
+    background: linear-gradient(135deg, #F0FFF4 0%, #C6F6D5 100%);
+    border-right: 3px solid #9AE6B4;
+    color: #2a5a3a;
+}
+
+.group-cell.variant-3 {
+    background: linear-gradient(135deg, #EBF8FF 0%, #BEE3F8 100%);
+    border-right: 3px solid #90CDF4;
+    color: #2a4a6a;
+}
+
+.group-cell.variant-4 {
+    background: linear-gradient(135deg, #FAF5FF 0%, #E9D8FD 100%);
+    border-right: 3px solid #D6BCFA;
+    color: #4a2a6a;
+}
+
+.group-cell.variant-5 {
+    background: linear-gradient(135deg, #FFFFF0 0%, #FEFCBF 100%);
+    border-right: 3px solid #FAF089;
+    color: #6a6a2a;
+}
+
+.group-cell.empty {
+    background: #ffffff !important;
+    color: #ccc;
+    text-align: center;
+    border-right: 1px solid #eee;
+}
+
+/* Merged Cells */
+.candidates-cell,
+.optimal-cell {
+    vertical-align: middle !important;
+}
+
+/* Week Separator */
+.week-separator td {
+    background: #f0f0f0;
+    height: 8px;
+    padding: 0;
+    border: none;
+}
+
+/* Header Rows */
+.week-header-row td {
+    background: #e3f2fd;
+    color: #1565c0;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px 12px;
+    border-bottom: 2px solid #bbdefb;
+}
+
+.day-header-row td {
+    background: #fff8e1;
+    /* Light yellow/cream for day header */
+    color: #5d4037;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-top: 1px solid #ffe0b2;
+    border-bottom: 1px solid #ffe0b2;
+}
+
+.day-date {
+    color: #8d6e63;
+    font-weight: normal;
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+/* Assignee Custom Dropdown */
+.assignee-input-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.assignee-input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #333;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    /* Ensure padding doesn't affect width */
+}
+
+.assignee-input:focus {
+    outline: none;
+    border-color: #4A90E2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.assignee-input.valid {
+    border-color: #43A047;
+    background-color: #F1F8E9;
+}
+
+.assignee-input.invalid {
+    border-color: #E53935;
+    background-color: #FFEBEE;
+}
+
+.assignee-input.input-warning {
+    border-color: #FBC02D;
+    background-color: #FFF9C4;
+}
+
+.assignee-dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+    margin-top: 4px;
+}
+
+.assignee-dropdown-list.show {
+    display: block;
+}
+
+.assignee-dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #333;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.assignee-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.assignee-dropdown-item:hover {
+    background-color: #f5f5f5;
+}
+
+.assignee-dropdown-item.selected {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+/* Checkmarks */
+.optimal-check-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: white;
+    color: #ccc;
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.optimal-check-btn:hover {
+    border-color: #43A047;
+    color: #43A047;
+    background: #F1F8E9;
+}
+
+.master-check-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background: white;
+    color: #666;
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 14px;
+    vertical-align: middle;
+    transition: all 0.2s;
+}
+
+.master-check-btn:hover {
+    border-color: #43A047;
+    color: #43A047;
+    background: #F1F8E9;
+}
+
+/* Vertical Centering Override */
+.assignment-table td {
+    vertical-align: middle;
+}
+
+/* No Candidates */
+.no-candidates {
+    color: #999;
+    font-style: italic;
+}
+
+/* Blocked Candidate Link */
+.candidate-link.blocked {
+    color: #ccc !important;
+    cursor: not-allowed !important;
+    pointer-events: none;
+    text-decoration: none !important;
+    opacity: 0.6;
+}

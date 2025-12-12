@@ -1043,8 +1043,12 @@ class SATSolver:
         #   If (A is present) XOR (B is present) -> Penalty.
         #   If A and B both present -> Good.
         #   If neither -> Good (Neutral).
-        
-        P_PAIR_SPLIT = self.penalties.get_penalty_by_name("Preferred Pair Split (Working separately on same group)")
+        # "Preferred Pair" (Renamed from Split)
+        # logic: if pair_pref=True for (p1,p2), then if both assigned to same Group, GOOD.
+        # If assigned to incompatible groups (split) -> BAD.
+        # BUT logic in code: check if assigned to different groups at same time?
+        # Actually solver likely checks `is_preferred_pair_split`.
+        P_PAIR_SPLIT = self.penalties.get_penalty_by_name("Preferred Pair")
         
         if P_PAIR_SPLIT > 0 and self.preferred_pairs:
             # 1. Group IDs by Logical Group (Name, Week, Day)

@@ -1,0 +1,17 @@
+:root {
+    --bg-color: #FDFCF8;
+    --surface-color: #FFFFFF;
+    --surface-hover: #FAFAFA;
+    --text-primary: #2D2A26;
+    --text-secondary: #6B665E;
+    --border-color: #EBE8E0;
+    --accent-primary: #E2B49A;
+    --accent-secondary: #A8C6A3;
+    --accent-gold: #DBCB96;
+    --conn-obligatory: #A8C6A3;
+    --conn-exclusion: #E29A9A;
+    --shadow-soft: 0 4px 20px rgba(45, 42, 38, 0.05);
+    --shadow-hover: 0 8px 30px rgba(45, 42, 38, 0.08);
+    --radius-md: 12px;
+    --radius-lg: 20px;
+}

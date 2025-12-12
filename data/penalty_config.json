@@ -10,7 +10,7 @@
         "Role Diversity (Assignments in each capable family)",
         "Teaching/Assisting Preference",
         "Teaching/Assisting Equality",
-        "Preferred Pair Split (Working separately on same group)",
+        "Preferred Pair",
         "Effort Equalization (Squared Deviation)"
     ],
     "time_limit_seconds": 120,
@@ -31,7 +31,7 @@
         "Inefficient Day (< 2 Tasks)",
         "Multi-Day General (Weekday+Sunday)",
         "Cooldown (Adjacent Weeks)",
-        "Preferred Pair Split (Working separately on same group)",
+        "Preferred Pair",
         "Effort Equalization (Squared Deviation)"
     ],
     "preferred_pairs": [

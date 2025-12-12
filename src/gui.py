@@ -10,19 +10,46 @@ from PyQt6.QtWidgets import (
     QLabel, QComboBox, QPushButton, QListWidget, QListWidgetItem, 
     QAbstractItemView, QSpinBox, QCheckBox, QSplitter, QTextEdit, 
     QFrame, QGroupBox, QScrollArea, QSizePolicy, QTabWidget,
-    QTreeWidget, QTreeWidgetItem, QDoubleSpinBox
+    QTreeWidget, QTreeWidgetItem, QDoubleSpinBox, QDialog, QTableWidget, 
+    QTableWidgetItem, QHeaderView, QToolButton, QLineEdit, QMenu
 )
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QSize, QRectF
-from PyQt6.QtGui import QIcon, QFont, QColor, QPixmap, QPainter
+from PyQt6.QtCore import Qt, QThread, pyqtSignal, QSize, QRectF, QTimer
+from PyQt6.QtGui import QIcon, QFont, QColor, QPixmap, QPainter, QAction
+from datetime import datetime, timedelta
 from PyQt6.QtSvg import QSvgRenderer  # For sharp vector rendering
 
 import pyqtgraph as pg
+pg.setConfigOptions(antialias=True)
 
 # --- Constants & Paths ---
 # --- Constants & Paths ---
 # --- Path Setup & Writability Check ---
 import shutil
 import os
+try:
+    from src.rule_descriptions import RULE_DESCRIPTIONS
+except ImportError:
+    from rule_descriptions import RULE_DESCRIPTIONS
+
+try:
+    from default_families import DEFAULT_FAMILIES
+except ImportError:
+    DEFAULT_FAMILIES = []
+
+DEFAULT_LADDER = [
+    "Unassigned Group",
+    "Underworked Team Member (< Threshold)",
+    "Intra-Week Cooldown (Same Week)",
+    "Teaching/Assisting Preference",
+    "Multi-Day Weekdays (e.g. Tue+Wed)",
+    "Teaching/Assisting Equality",
+    "Role Diversity (Assignments in each capable family)",
+    "Inefficient Day (< 2 Tasks)",
+    "Multi-Day General (Weekday+Sunday)",
+    "Cooldown (Adjacent Weeks)",
+    "Preferred Pair",
+    "Effort Equalization (Squared Deviation)"
+]
 
 def is_writable(path):
     if not path.exists():
@@ -128,87 +155,128 @@ SRC_DIR = BASE_DIR / "src"
 # scripts use sys._MEIPASS logic usually.
 
 # --- Styles ---
-DARK_THEME = """
-QMainWindow {
-    background-color: #1e1e1e;
-    color: #ffffff;
+COLORS = {
+    "bg": "#FDFCF8",
+    "surface": "#FFFFFF",
+    "surface_hover": "#FAFAFA",
+    "text_primary": "#2D2A26",
+    "text_secondary": "#6B665E",
+    "border": "#EBE8E0",
+    "accent_primary": "#E2B49A",
+    "accent_secondary": "#A8C6A3",
+    "accent_gold": "#DBCB96",
+    "danger": "#E29A9A",
+    "success": "#A8C6A3",
+    "selection_bg": "#EBF8FF", 
+    "selection_text": "#1565c0",
+    "blue": "#4A90E2",
+    "console_bg": "#FAFAFA",
+    "chart_bg": "#FDFCF8",
+    "axis_text": "#6B665E",
+    "axis_text": "#6B665E",
+    "axis_line": "#EBE8E0",
+    "graph_obj": "#FF9F43", # Nice Orange
+    "graph_pen": "#EE5253"  # Stronger Red
 }
-QWidget {
-    background-color: #1e1e1e;
-    color: #e0e0e0;
+
+LIGHT_THEME = f"""
+QMainWindow {{
+    background-color: {COLORS["bg"]};
+    color: {COLORS["text_primary"]};
+}}
+QWidget {{
+    background-color: {COLORS["bg"]};
+    color: {COLORS["text_primary"]};
     font-family: '.AppleSystemUIFont', 'Helvetica Neue', 'Arial', sans-serif;
     font-size: 14px;
-}
-QGroupBox {
-    border: 1px solid #3e3e3e;
-    border-radius: 6px;
+}}
+QGroupBox {{
+    border: 1px solid {COLORS["border"]};
+    border-radius: 12px;
     margin-top: 10px;
     font-weight: bold;
-}
-QGroupBox::title {
+    background-color: {COLORS["surface"]};
+}}
+QGroupBox::title {{
     subcontrol-origin: margin;
     left: 10px;
     padding: 0 5px;
-}
-QPushButton {
-    background-color: #0d6efd;
-    color: white;
+    color: {COLORS["text_secondary"]};
+}}
+QPushButton {{
+    background-color: {COLORS["accent_primary"]};
+    color: {COLORS["text_primary"]};
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     padding: 8px 16px;
     font-weight: bold;
-}
-QPushButton:hover {
-    background-color: #0b5ed7;
-}
-QPushButton:pressed {
-    background-color: #0a58ca;
-}
-QPushButton:disabled {
-    background-color: #444;
-    color: #888;
-}
-QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox, QListWidget, QTextEdit, QTreeWidget {
-    background-color: #2d2d2d;
-    border: 1px solid #3e3e3e;
-    border-radius: 4px;
+}}
+QPushButton:hover {{
+    background-color: {COLORS["accent_gold"]};
+}}
+QPushButton:pressed {{
+    background-color: {COLORS["accent_secondary"]};
+}}
+QPushButton:disabled {{
+    background-color: {COLORS["border"]};
+    color: {COLORS["text_secondary"]};
+}}
+QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox, QListWidget, QTextEdit, QTreeWidget {{
+    background-color: {COLORS["surface"]};
+    border: 1px solid {COLORS["border"]};
+    border-radius: 8px;
     padding: 4px;
-    color: #ffffff;
-}
-QListWidget::item {
-    padding: 2px;
-    border-bottom: 1px solid #3e3e3e;
-}
-QListWidget::item:selected {
-    background-color: #0d6efd;
-}
-QScrollBar:vertical {
-    background-color: #2d2d2d;
+    color: {COLORS["text_primary"]};
+    selection-background-color: {COLORS["selection_bg"]};
+    selection-color: {COLORS["selection_text"]};
+}}
+QListWidget::item {{
+    padding: 4px;
+    border-bottom: 1px solid {COLORS["border"]};
+}}
+QListWidget::item:selected {{
+    background-color: {COLORS["selection_bg"]};
+    color: {COLORS["selection_text"]};
+}}
+QScrollBar:vertical {{
+    background-color: {COLORS["bg"]};
     width: 12px;
-}
-QScrollBar::handle:vertical {
-    background-color: #555;
+}}
+QScrollBar::handle:vertical {{
+    background-color: {COLORS["border"]};
     border-radius: 6px;
-}
-QTabWidget::pane { 
-    border: 1px solid #3e3e3e; 
-}
-QTabBar::tab {
-    background: #2d2d2d;
-    border: 1px solid #3e3e3e;
-    padding: 8px 12px;
-    color: #aaa;
-}
-QTabBar::tab:selected {
-    background: #3e3e3e;
-    color: white;
+}}
+QTabWidget::pane {{ 
+    border: 1px solid {COLORS["border"]}; 
+    background-color: {COLORS["surface"]};
+}}
+QTabBar::tab {{
+    background: {COLORS["surface"]};
+    border: 1px solid {COLORS["border"]};
+    border-bottom: none;
+    padding: 8px 16px;
+    color: {COLORS["text_secondary"]};
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin-right: 2px;
+}}
+QTabBar::tab:selected {{
+    background: {COLORS["bg"]};
+    color: {COLORS["text_primary"]};
     font-weight: bold;
-}
-QHeaderView::section {
-    background-color: #333;
-    padding: 4px;
-    border: 1px solid #3e3e3e;
-}
+    border-bottom: 2px solid {COLORS["accent_primary"]};
+}}
+QHeaderView::section {{
+    background-color: {COLORS["surface_hover"]};
+    padding: 6px;
+    border: 1px solid {COLORS["border"]};
+    color: {COLORS["text_secondary"]};
+    font-weight: bold;
+}}
+QTreeWidget {{
+    background-color: {COLORS["surface"]};
+    alternate-background-color: {COLORS["surface_hover"]};
+}}
 """
 
 # --- Solver Worker Thread ---
@@ -298,49 +366,645 @@ class ScriptWorker(QThread):
         if self.process:
             self.process.terminate()
 
+        if self.process:
+            self.process.terminate()
+
 class SvgViewer(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.renderer = QSvgRenderer()
 
-    def load(self, filename):
-        self.renderer.load(filename)
-        self.update()
-
     def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        # Scale aspect ratio correctly (contain)
         if not self.renderer.isValid():
             return
             
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        s = self.size()
+        w, h = s.width(), s.height()
         
-        # Calculate aspect-ratio preserved rect
-        s_size = self.renderer.defaultSize()
-        w_ratio = self.width() / s_size.width()
-        h_ratio = self.height() / s_size.height()
-        scale = min(w_ratio, h_ratio)
+        view_box = self.renderer.viewBox()
+        vb_w = view_box.width()
+        vb_h = view_box.height()
         
-        target_w = int(s_size.width() * scale)
-        target_h = int(s_size.height() * scale)
+        if vb_w == 0 or vb_h == 0:
+            return
+            
+        # Aspect Ratio logic
+        scale = min(w / vb_w, h / vb_h)
+        target_w = vb_w * scale
+        target_h = vb_h * scale
         
-        # Center the rect
-        x = (self.width() - target_w) // 2
-        y = (self.height() - target_h) // 2
+        x = (w - target_w) // 2
+        y = (h - target_h) // 2
         
         target_rect = QRectF(float(x), float(y), float(target_w), float(target_h))
         self.renderer.render(painter, target_rect)
         painter.end()
 
+    def load(self, filename):
+        self.renderer.load(filename)
+        self.update()
+
+class PriorityOverlay(QDialog):
+    def __init__(self, current_ladder, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Configure Priorities")
+        
+        # Responsive sizing
+        if parent:
+            w = int(parent.width() * 0.8)
+            h = int(parent.height() * 0.8)
+            self.resize(w, h)
+        else:
+            self.resize(800, 600)
+            
+        self.setModal(True)
+        # Apply parent's stylesheet if possible, or set consistent background
+        self.setStyleSheet(parent.styleSheet() if parent else "")
+        
+        self.ladder = list(current_ladder)
+        self.layout = QVBoxLayout(self)
+        
+        # Instruction
+        self.layout.addWidget(QLabel("Drag and drop rows to reorder priorities (Highest priority at top)."))
+        
+        # Table
+        self.table = QTableWidget()
+        self.table.setColumnCount(4) # [Rank, Name, Description, Actions]
+        self.table.setHorizontalHeaderLabels(["Rank", "Rule Name", "Description", "Move"])
+        
+        # Col 0: Rank (Fixed small width)
+        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
+        self.table.setColumnWidth(0, 50) 
+        
+        # Col 1: Name (Size to content, but allow some flex)
+        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        
+        # Col 2: Desc (Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+
+        # Col 3: Buttons (Fixed small width)
+        self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
+        self.table.setColumnWidth(3, 70)
+        
+        # Enable text wrapping and auto-row height
+        self.table.setWordWrap(True)
+        self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        self.table.verticalHeader().setVisible(False)
+        self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        # Disable internal drag drop since we use buttons now (avoids conflict)
+        self.table.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
+        
+        self.populate_table()
+        self.layout.addWidget(self.table)
+        
+        # Buttons
+        btn_box = QHBoxLayout()
+        restore_btn = QPushButton("Restore Defaults")
+        restore_btn.clicked.connect(self.restore_defaults)
+        save_btn = QPushButton("Save")
+        save_btn.clicked.connect(self.accept)
+        cancel_btn = QPushButton("Cancel")
+        cancel_btn.clicked.connect(self.reject)
+        
+        # Style buttons explicitly if needed, but inheriting theme should work
+        btn_box.addWidget(restore_btn)
+        btn_box.addStretch()
+        btn_box.addWidget(cancel_btn)
+        btn_box.addWidget(save_btn)
+        self.layout.addLayout(btn_box)
+
+    def restore_defaults(self):
+        self.ladder = list(DEFAULT_LADDER)
+        self.populate_table()
+
+    def populate_table(self):
+        self.table.setRowCount(0)
+        for i, rule in enumerate(self.ladder):
+            row = self.table.rowCount()
+            self.table.insertRow(row)
+            
+            # 1. Rank
+            rank_item = QTableWidgetItem(f"{i+1}.")
+            rank_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            rank_item.setFlags(Qt.ItemFlag.ItemIsEnabled) # Read only
+            self.table.setItem(row, 0, rank_item)
+            
+            # 2. Name
+            name_item = QTableWidgetItem(rule)
+            name_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            self.table.setItem(row, 1, name_item)
+            
+            # 3. Description
+            desc = RULE_DESCRIPTIONS.get(rule, "No description available.")
+            desc_item = QTableWidgetItem(desc)
+            desc_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            self.table.setItem(row, 2, desc_item)
+
+            # 4. Action Buttons
+            cell_widget = QWidget()
+            layout = QHBoxLayout(cell_widget)
+            layout.setContentsMargins(0, 0, 0, 0)
+            layout.setSpacing(2)
+            
+            btn_up = QToolButton()
+            btn_up.setText("▲")
+            btn_up.setFixedSize(20, 20)
+            btn_up.setToolTip("Move Up")
+            # Use closure to capture current index
+            btn_up.clicked.connect(lambda checked, idx=i: self.move_up(idx))
+            
+            btn_down = QToolButton()
+            btn_down.setText("▼")
+            btn_down.setFixedSize(20, 20)
+            btn_down.setToolTip("Move Down")
+            btn_down.clicked.connect(lambda checked, idx=i: self.move_down(idx))
+            
+            layout.addStretch()
+            layout.addWidget(btn_up)
+            layout.addWidget(btn_down)
+            layout.addStretch()
+            
+            self.table.setCellWidget(row, 3, cell_widget)
+            
+    def move_up(self, index):
+        if index > 0:
+            item = self.ladder.pop(index)
+            self.ladder.insert(index - 1, item)
+            self.populate_table()
+            self.table.selectRow(index - 1)
+
+    def move_down(self, index):
+        if index < len(self.ladder) - 1:
+            item = self.ladder.pop(index)
+            self.ladder.insert(index + 1, item)
+            self.populate_table()
+            self.table.selectRow(index + 1)
+            
+    def get_ladder(self):
+        return self.ladder
+
 # --- Main Window ---
+class TaskFamiliesOverlay(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Configure Families & Groups")
+        if parent:
+            self.resize(int(parent.width() * 0.9), int(parent.height() * 0.9))
+        else:
+            self.resize(1000, 700)
+            
+        self.families_data = [] 
+        self.all_tasks = set()
+        self.current_group_ref = None # Reference to the dict object being edited
+        
+        # Main Layout (Vertical)
+        self.layout_root = QVBoxLayout(self)
+        
+        # --- Main Splitter (3 Panes) ---
+        self.splitter = QSplitter(Qt.Orientation.Horizontal)
+        
+        # --- Pane 1: Hierarchy Tree ---
+        self.tree = QTreeWidget()
+        self.tree.setHeaderLabel("Hierarchy")
+        self.tree.setWordWrap(True)
+        self.tree.setUniformRowHeights(False) # Allow variable row heights for wrapping
+        self.tree.setTextElideMode(Qt.TextElideMode.ElideNone) # Prefer wrap over ellipsis
+        # Force column 0 to stretch to view width (no horizontal scroll)
+        self.tree.header().setStretchLastSection(False)
+        self.tree.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.tree.itemSelectionChanged.connect(self.on_selection_changed)
+        
+        # Wrapper for Tree to include buttons if needed, or just Tree
+        # Adding '+' and '-' buttons below tree
+        left_widget = QWidget()
+        left_layout = QVBoxLayout(left_widget)
+        left_layout.setContentsMargins(0, 0, 0, 0)
+        left_layout.addWidget(self.tree)
+        
+        tree_btn_box = QHBoxLayout()
+        self.btn_add_grp = QPushButton("+")
+        self.btn_add_grp.setToolTip("Add Family or Group")
+        self.btn_add_grp.clicked.connect(self.show_add_menu)
+        self.btn_del_grp = QPushButton("-")
+        self.btn_del_grp.setToolTip("Delete Item")
+        self.btn_del_grp.clicked.connect(self.delete_item)
+        tree_btn_box.addWidget(self.btn_add_grp)
+        tree_btn_box.addWidget(self.btn_del_grp)
+        left_layout.addLayout(tree_btn_box)
+        
+        self.splitter.addWidget(left_widget)
+        
+        # --- Pane 2: Middle (Assigned + Properties) ---
+        middle_widget = QWidget()
+        middle_layout = QVBoxLayout(middle_widget)
+        middle_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # 1. Assigned Tasks
+        assigned_box = QGroupBox("Group Tasks (Chosen)")
+        assigned_layout = QVBoxLayout(assigned_box)
+        self.list_assigned = QListWidget()
+        self.list_assigned.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.list_assigned.setWordWrap(True)
+        self.list_assigned.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        assigned_layout.addWidget(self.list_assigned)
+        middle_layout.addWidget(assigned_box, stretch=1) # Give it space
+        
+        # 2. Properties (Scroll Area)
+        self.props_widget = QScrollArea()
+        self.props_widget.setWidgetResizable(True)
+        props_inner = QWidget()
+        self.props_layout = QVBoxLayout(props_inner)
+        
+        # ... (Props fields added below) ...
+        
+        # Name
+        name_row = QHBoxLayout()
+        name_row.addWidget(QLabel("Group Name:"))
+        self.edit_name = QLineEdit()
+        self.edit_name.editingFinished.connect(self.save_name)
+        name_row.addWidget(self.edit_name)
+        self.props_layout.addLayout(name_row)
+        
+        # Counts
+        cnt_box = QGroupBox("Role Counts")
+        cnt_row = QHBoxLayout(cnt_box)
+        cnt_row.addWidget(QLabel("Leader:"))
+        self.spin_leader = QSpinBox()
+        self.spin_leader.setRange(0, 10)
+        self.spin_leader.valueChanged.connect(self.save_props)
+        cnt_row.addWidget(self.spin_leader)
+        
+        cnt_row.addWidget(QLabel("Follower:"))
+        self.spin_follower = QSpinBox()
+        self.spin_follower.setRange(0, 10)
+        self.spin_follower.valueChanged.connect(self.save_props)
+        cnt_row.addWidget(self.spin_follower)
+        
+        cnt_row.addWidget(QLabel("Any:"))
+        self.spin_any = QSpinBox()
+        self.spin_any.setRange(0, 10)
+        self.spin_any.valueChanged.connect(self.save_props)
+        cnt_row.addWidget(self.spin_any)
+        self.props_layout.addWidget(cnt_box)
+        
+        # Priority Assignees
+        self.props_layout.addWidget(QLabel("Priority Assignees (one per line):"))
+        self.edit_priority = QTextEdit()
+        self.edit_priority.setMaximumHeight(80)
+        self.edit_priority.textChanged.connect(self.save_priority)
+        self.props_layout.addWidget(self.edit_priority)
+        
+        # Exclusive
+        self.props_layout.addWidget(QLabel("Mutually Exclusive Groups:"))
+        self.list_exclusive = QListWidget()
+        self.list_exclusive.setWordWrap(True)
+        self.list_exclusive.itemChanged.connect(self.save_exclusive)
+        self.props_layout.addWidget(self.list_exclusive)
+        
+        self.props_widget.setWidget(props_inner)
+        middle_layout.addWidget(self.props_widget, stretch=1) # Share vertical space with Assigned
+        
+        self.splitter.addWidget(middle_widget)
+        
+        # --- Pane 3: Right (Buttons + Available) ---
+        right_outer = QWidget()
+        right_layout = QHBoxLayout(right_outer)
+        right_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # Buttons (Vertical strip)
+        btn_widget = QWidget()
+        btn_layout = QVBoxLayout(btn_widget)
+        btn_layout.addStretch()
+        self.btn_add_task = QPushButton("←") # To Assigned
+        self.btn_add_task.setToolTip("Add to Group")
+        self.btn_add_task.clicked.connect(self.add_tasks_to_group)
+        self.btn_remove_task = QPushButton("→") # To Available
+        self.btn_remove_task.setToolTip("Remove from Group")
+        self.btn_remove_task.clicked.connect(self.remove_tasks_from_group)
+        btn_layout.addWidget(self.btn_add_task)
+        btn_layout.addWidget(self.btn_remove_task)
+        btn_layout.addStretch()
+        right_layout.addWidget(btn_widget)
+        
+        # Available List
+        avail_box = QGroupBox("Available Tasks (All known)")
+        avail_layout = QVBoxLayout(avail_box)
+        self.list_avail = QListWidget()
+        self.list_avail.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.list_avail.setWordWrap(True)
+        self.list_avail.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        avail_layout.addWidget(self.list_avail)
+        right_layout.addWidget(avail_box)
+        
+        self.splitter.addWidget(right_outer)
+        
+        # Set Ratios: 1:2:1 (Tree : Middle : Right)
+        self.splitter.setStretchFactor(0, 1)
+        self.splitter.setStretchFactor(1, 2)
+        self.splitter.setStretchFactor(2, 1)
+        
+        self.layout_root.addWidget(self.splitter)
+        
+        # Bottom Buttons
+        btn_box = QHBoxLayout()
+        
+        restore_btn = QPushButton("Restore Defaults")
+        restore_btn.clicked.connect(self.restore_defaults)
+        
+        btn_box.addWidget(restore_btn)
+        btn_box.addStretch()
+        
+        save_btn = QPushButton("Save & Close")
+        save_btn.clicked.connect(self.accept)
+        cancel_btn = QPushButton("Cancel")
+        cancel_btn.clicked.connect(self.reject)
+        
+        btn_box.addWidget(cancel_btn)
+        btn_box.addWidget(save_btn)
+        self.layout_root.addLayout(btn_box)
+        
+        self.load_data()
+        
+    def load_data(self):
+        path = BASE_DIR / "data" / "task_families.json"
+        if path.exists():
+            with open(path, 'r', encoding='utf-8') as f:
+                self.families_data = json.load(f)
+        
+        # Harvest tasks
+        self.all_tasks = set()
+        for fam in self.families_data:
+            for grp in fam.get("groups", []):
+                for t in grp.get("tasks", []):
+                    self.all_tasks.add(t)
+        
+        self.populate_tree()
+        self.enable_editor(False)
+
+    def populate_tree(self):
+        self.tree.clear()
+        for fam in self.families_data:
+            fam_item = QTreeWidgetItem(self.tree)
+            fam_item.setText(0, fam.get("name", "Unnamed Family"))
+            fam_item.setData(0, Qt.ItemDataRole.UserRole, ("FAMILY", fam))
+            
+            for grp in fam.get("groups", []):
+                grp_item = QTreeWidgetItem(fam_item)
+                grp_item.setText(0, grp.get("name", "Unnamed Group"))
+                grp_item.setData(0, Qt.ItemDataRole.UserRole, ("GROUP", grp))
+                
+        self.tree.expandAll()
+
+    def on_selection_changed(self):
+        items = self.tree.selectedItems()
+        if not items:
+            self.enable_editor(False)
+            return
+            
+        role, data = items[0].data(0, Qt.ItemDataRole.UserRole)
+        if role == "GROUP":
+            self.current_group_ref = data
+            self.load_group_to_ui(data)
+            self.enable_editor(True)
+        else:
+            self.enable_editor(False)
+
+    def enable_editor(self, enabled):
+        # Always keep available list enabled so user can browse
+        self.list_avail.setEnabled(True)
+        
+        # Disable assignment actions and properties if no group selected
+        self.list_assigned.setEnabled(enabled)
+        self.btn_add_task.setEnabled(enabled)
+        self.btn_remove_task.setEnabled(enabled)
+        # props_widget is now in middle layout, not right_splitter
+        self.props_widget.setEnabled(enabled)
+        
+        if not enabled:
+            self.list_assigned.clear()
+            self.edit_name.clear()
+            # Reset avail to all tasks when nothing selected
+            self.list_avail.clear()
+            self.list_avail.addItems(sorted(list(self.all_tasks)))
+
+    def load_group_to_ui(self, group_data):
+        self.block_signals(True)
+        
+        # 1. Tasks
+        self.list_avail.clear()
+        self.list_assigned.clear()
+        
+        g_tasks = set(group_data.get("tasks", []))
+        
+        # Assigned
+        for t in group_data.get("tasks", []):
+            self.list_assigned.addItem(t)
+            
+        # Available (All - Assigned)
+        sorted_avail = sorted(list(self.all_tasks - g_tasks))
+        self.list_avail.addItems(sorted_avail)
+        
+        # 2. Props
+        self.edit_name.setText(group_data.get("name", ""))
+        self.spin_leader.setValue(group_data.get("leader-group-count", 0))
+        self.spin_follower.setValue(group_data.get("follower-group-count", 0))
+        self.spin_any.setValue(group_data.get("any-group-count", 0))
+        
+        assignees = group_data.get("PriorityAssignees", [])
+        self.edit_priority.setPlainText("\n".join(assignees))
+        
+        # 3. Exclusive Groups
+        # Populate list of ALL groups except self
+        self.list_exclusive.clear()
+        current_excl = set(group_data.get("exclusive", []))
+        
+        for fam in self.families_data:
+            for grp in fam.get("groups", []):
+                g_name = grp.get("name")
+                if g_name == group_data.get("name"):
+                    continue
+                    
+                item = QListWidgetItem(g_name)
+                item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+                if g_name in current_excl:
+                    item.setCheckState(Qt.CheckState.Checked)
+                else:
+                    item.setCheckState(Qt.CheckState.Unchecked)
+                self.list_exclusive.addItem(item)
+                
+        self.block_signals(False)
+
+    def block_signals(self, block):
+        self.edit_name.blockSignals(block)
+        self.spin_leader.blockSignals(block)
+        self.spin_follower.blockSignals(block)
+        self.spin_any.blockSignals(block)
+        self.edit_priority.blockSignals(block)
+        self.list_exclusive.blockSignals(block)
+
+    def add_tasks_to_group(self):
+        if not self.current_group_ref: return
+        items = self.list_avail.selectedItems()
+        if not items: return
+        
+        current_tasks = self.current_group_ref.setdefault("tasks", [])
+        for item in items:
+            t_name = item.text()
+            current_tasks.append(t_name)
+            
+        self.load_group_to_ui(self.current_group_ref) # Refresh
+
+    def remove_tasks_from_group(self):
+        if not self.current_group_ref: return
+        items = self.list_assigned.selectedItems()
+        if not items: return
+        
+        current_tasks = self.current_group_ref.get("tasks", [])
+        for item in items:
+            t_name = item.text()
+            if t_name in current_tasks:
+                current_tasks.remove(t_name)
+                
+        self.load_group_to_ui(self.current_group_ref)
+
+    def save_name(self):
+        if self.current_group_ref:
+            self.current_group_ref["name"] = self.edit_name.text()
+            # Need to refresh tree node text?
+            self.populate_tree() 
+            # Re-select?
+            # Complexity: Tree rebuild loses selection. Ideally find item and rename.
+            # Simplified: Just keep data ref.
+
+    def save_props(self):
+        if not self.current_group_ref: return
+        self.current_group_ref["leader-group-count"] = self.spin_leader.value()
+        self.current_group_ref["follower-group-count"] = self.spin_follower.value()
+        self.current_group_ref["any-group-count"] = self.spin_any.value()
+
+    def save_priority(self):
+        if not self.current_group_ref: return
+        text = self.edit_priority.toPlainText()
+        lines = [l.strip() for l in text.split('\n') if l.strip()]
+        self.current_group_ref["PriorityAssignees"] = lines
+
+    def save_exclusive(self, item):
+        if not self.current_group_ref: return
+        name = item.text()
+        checked = (item.checkState() == Qt.CheckState.Checked)
+        
+        excl = set(self.current_group_ref.get("exclusive", []))
+        if checked:
+            excl.add(name)
+        else:
+            if name in excl:
+                excl.remove(name)
+        self.current_group_ref["exclusive"] = list(excl)
+
+    def show_add_menu(self):
+        menu = QMenu(self)
+        
+        # Determine context
+        items = self.tree.selectedItems()
+        target_fam = None
+        if items:
+            role, data = items[0].data(0, Qt.ItemDataRole.UserRole)
+            if role == "FAMILY":
+                target_fam = data
+            elif role == "GROUP":
+                 for fam in self.families_data:
+                    if data in fam.get("groups", []):
+                        target_fam = fam
+                        break
+        
+        # Actions
+        action_fam = QAction("Add New Family", self)
+        action_fam.triggered.connect(self.add_family)
+        menu.addAction(action_fam)
+        
+        if target_fam:
+            fam_name = target_fam.get('name', 'Family')
+            action_grp = QAction(f"Add Group to '{fam_name}'", self)
+            action_grp.triggered.connect(lambda: self.add_group_to_family(target_fam))
+            menu.addAction(action_grp)
+            
+        menu.exec(self.btn_add_grp.mapToGlobal(self.btn_add_grp.rect().bottomLeft()))
+
+    def add_family(self):
+        new_fam = {
+            "name": "New Family",
+            "groups": []
+        }
+        self.families_data.append(new_fam)
+        self.populate_tree()
+
+    def add_group_to_family(self, target_fam):
+        new_grp = {
+            "name": "New Group",
+            "tasks": [],
+            "exclusive": [],
+            "PriorityAssignees": [],
+            "leader-group-count": 0,
+            "follower-group-count": 0,
+            "any-group-count": 0
+        }
+        target_fam.setdefault("groups", []).append(new_grp)
+        self.populate_tree()
+
+    def delete_item(self):
+        items = self.tree.selectedItems()
+        if not items: return
+        
+        role, data = items[0].data(0, Qt.ItemDataRole.UserRole)
+        
+        if role == "FAMILY":
+            if data in self.families_data:
+                self.families_data.remove(data)
+        elif role == "GROUP":
+            # Remove from parent
+            for fam in self.families_data:
+                if data in fam.get("groups", []):
+                    fam["groups"].remove(data)
+                    break
+        
+        self.populate_tree()
+        self.enable_editor(False)
+
+    def restore_defaults(self):
+        import copy
+        self.families_data = copy.deepcopy(DEFAULT_FAMILIES)
+        self.populate_tree()
+        self.enable_editor(False)
+
+    def get_data(self):
+        return self.families_data
+
+    def accept(self):
+        # Save to disk
+        path = BASE_DIR / "data" / "task_families.json"
+        try:
+            with open(path, 'w', encoding='utf-8') as f:
+                json.dump(self.families_data, f, indent=4)
+        except Exception as e:
+            print(f"Error saving task families: {e}")
+            
+        super().accept()
+        
 class PartykaSolverApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Partyka Solver Pro")
         self.resize(1200, 800)
-        self.setStyleSheet(DARK_THEME)
+        self.setStyleSheet(LIGHT_THEME)
         
         self.config = self.load_config()
         self.worker = None
+        self.solve_start_time = None
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_live_time)
         
         self.setup_ui()
         
@@ -378,12 +1042,39 @@ class PartykaSolverApp(QMainWindow):
                                    "July", "August", "September", "October", "November", "December"])
         self.year_combo = QComboBox()
         self.year_combo.addItems([str(y) for y in range(2025, 2030)])
-        self.year_combo.setCurrentText("2026") # Default
+        
+        # Calculate next month defaults
+        now = datetime.now()
+        # If we are in Dec (12), next month is 1. Year + 1.
+        # Otherwise Month + 1, Year same.
+        next_month_idx = (now.month % 12) # 0-11 index implies Jan=0? No, now.month is 1-12. 
+        # QComboBox index is 0-based.
+        # If now is Jan (1), we want Feb (index 1).
+        # next_month_idx = now.month (which is the index of the next month since 0=Jan)
+        # BUT if now.month is 12, next_month is 1 (Jan), index 0.
+        
+        # Simple math: (current_month_index + 1) % 12
+        # current_month_index is now.month - 1
+        current_month_index = now.month - 1
+        target_month_index = (current_month_index + 1) % 12
+        
+        self.month_combo.setCurrentIndex(target_month_index)
+        
+        target_year = now.year
+        if now.month == 12:
+            target_year += 1
+            
+        # Dynamic year range: Current Year - 1 to +5
+        # Ensure target_year is covered
+        start_year = now.year - 1
+        end_year = max(target_year + 2, now.year + 5)
+        
+        self.year_combo.clear()
+        self.year_combo.addItems([str(y) for y in range(start_year, end_year)])
+        self.year_combo.setCurrentText(str(target_year))
         
         date_layout.addWidget(self.month_combo)
         date_layout.addWidget(self.year_combo)
-        
-        # Signal connection moved to end of setup_ui to avoid AttributeErrors
         
         config_layout.addLayout(date_layout)
         
@@ -414,33 +1105,26 @@ class PartykaSolverApp(QMainWindow):
 
         # Restore Defaults Button
         self.btn_defaults = QPushButton("Restore Defaults")
-        self.btn_defaults.setStyleSheet("background-color: #6c757d; font-size: 12px; padding: 4px;")
+        self.btn_defaults.setStyleSheet(f"background-color: {COLORS['border']}; color: {COLORS['text_secondary']}; font-size: 12px; padding: 4px;")
         self.btn_defaults.clicked.connect(self.restore_defaults)
         
         config_layout.addWidget(self.btn_defaults)
 
-        # 2. Penalty Ladder (Draggable)
-        ladder_group = QGroupBox("Penalty Ladder (Priority)")
+        config_group.setLayout(config_layout)
+        sidebar_layout.addWidget(config_group)
+
+        # --- Advanced Setup (Ladder + Families) ---
+        ladder_group = QGroupBox("Advanced Setup")
         ladder_layout = QVBoxLayout()
-        self.ladder_list = QListWidget()
-        self.ladder_list.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
-        # Force vertical fit: Wrap text to next line, disable horizontal scroll
-        self.ladder_list.setWordWrap(True)
-        self.ladder_list.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.ladder_list.setResizeMode(QListWidget.ResizeMode.Adjust)
         
-        current_ladder = self.config.get("ladder", [])
-        for rule in current_ladder:
-            item = QListWidgetItem(rule)
-            item.setCheckState(Qt.CheckState.Checked) # Assume all enabled for now
-            self.ladder_list.addItem(item)
-            
-        # Hook up reorder/change events to auto-save config
-        # Connect both rowsMoved (specific) and layoutChanged (general)
-        self.ladder_list.model().rowsMoved.connect(self.update_ladder_config)
-        self.ladder_list.model().layoutChanged.connect(self.update_ladder_config)
+        btn_families = QPushButton("Configure Groups...")
+        btn_families.clicked.connect(self.open_task_families_overlay)
+        ladder_layout.addWidget(btn_families)
+
+        btn_ladder = QPushButton("Configure Priorities...")
+        btn_ladder.clicked.connect(self.open_priority_overlay)
+        ladder_layout.addWidget(btn_ladder)
         
-        ladder_layout.addWidget(self.ladder_list)
         ladder_group.setLayout(ladder_layout)
         sidebar_layout.addWidget(ladder_group)
 
@@ -455,7 +1139,20 @@ class PartykaSolverApp(QMainWindow):
         self.btn_aggregate.clicked.connect(lambda: self.run_aggregate_flow())
         
         self.btn_solve = QPushButton("3. Start Search")
-        self.btn_solve.setStyleSheet("background-color: #198754;") # Green
+        # Use pseudo-states for proper disabled styling
+        self.btn_solve.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {COLORS['success']};
+                color: white;
+                border-radius: 6px;
+                padding: 5px;
+                font-weight: bold;
+            }}
+            QPushButton:disabled {{
+                background-color: {COLORS['border']};
+                color: {COLORS['text_secondary']};
+            }}
+        """)
         self.btn_solve.clicked.connect(self.start_solver)
         
         self.btn_export = QPushButton("4. Export CSV")
@@ -482,30 +1179,34 @@ class PartykaSolverApp(QMainWindow):
         graph_layout = QVBoxLayout(self.tab_graph)
         
         self.plot_widget = pg.PlotWidget()
-        self.plot_widget.setBackground('#1e1e1e')
-        self.plot_widget.setTitle("Objective vs Penalties", color="w", size="12pt")
-        # Style Bottom Axis (White)
-        self.plot_widget.setLabel('bottom', "Time (s)", **{'color': '#ffffff'})
-        self.plot_widget.getAxis('bottom').setPen('#ffffff')
-        self.plot_widget.getAxis('bottom').setTextPen('#ffffff')
+        self.plot_widget.setBackground(COLORS['chart_bg'])
+        self.plot_widget.setTitle("Objective vs Penalties", color=COLORS['text_primary'], size="12pt")
+        # Style Bottom Axis
+        self.plot_widget.setLabel('bottom', "Time (s)", **{'color': COLORS['axis_text']})
+        self.plot_widget.getAxis('bottom').setPen(COLORS['axis_line'])
+        self.plot_widget.getAxis('bottom').setTextPen(COLORS['axis_text'])
         
         self.plot_widget.showGrid(x=True, y=True, alpha=0.3)
-        self.plot_widget.addLegend()
+        self.plot_widget.showGrid(x=True, y=True, alpha=0.3)
+        # Create legend but anchor it to top-right
+        self.legend = self.plot_widget.addLegend()
+        self.legend.anchor((1,0), (1,0), offset=(-30, 30))
         
         # Axis 1: Objective (Left, Log)
         p1 = self.plot_widget.getPlotItem()
         p1.setLogMode(x=False, y=True)
         # Style Left Axis (White)
-        p1.setLabel('left', 'Objective (Log)', **{'color': '#ffffff'})
-        p1.getAxis('left').setPen('#ffffff')
-        p1.getAxis('left').setTextPen('#ffffff')
+        # Style Left Axis
+        p1.setLabel('left', 'Objective (Log)', **{'color': COLORS['axis_text']})
+        p1.getAxis('left').setPen(COLORS['axis_line'])
+        p1.getAxis('left').setTextPen(COLORS['axis_text'])
         # Disable SI prefix
         p1.getAxis('left').enableAutoSIPrefix(False)
         
         # Restrict View: Time > 0, Objective > 1 (Log 0)
         p1.setLimits(xMin=0, yMin=0)
         
-        self.curve_obj = p1.plot(name="Objective", pen=pg.mkPen('c', width=2))
+        self.curve_obj = p1.plot(name="Objective", pen=pg.mkPen(COLORS['graph_obj'], width=3))
         
         # Axis 2: Penalties (Right, Linear)
         self.vb2 = pg.ViewBox()
@@ -517,17 +1218,20 @@ class PartykaSolverApp(QMainWindow):
         # Explicitly disable Log Mode for the Right Axis
         p1.getAxis('right').setLogMode(False)
         # Style Right Axis (Magenta)
-        p1.getAxis('right').setLabel('Penalties (Linear)', color='#ff00ff')
-        p1.getAxis('right').setPen('#ff00ff')
-        p1.getAxis('right').setTextPen('#ff00ff')
+        # Style Right Axis
+        p1.getAxis('right').setLabel('Penalties (Linear)', color=COLORS['danger'])
+        p1.getAxis('right').setPen(COLORS['danger'])
+        p1.getAxis('right').setTextPen(COLORS['danger'])
         
         # Enable Auto-Range for the secondary ViewBox
         self.vb2.enableAutoRange(axis=pg.ViewBox.YAxis)
         # Restrict View: Time > 0, Penalties > 0
         self.vb2.setLimits(xMin=0, yMin=0)
         
-        self.curve_pen = pg.PlotCurveItem(pen=pg.mkPen('m', width=2), name="Penalties")
+        self.curve_pen = pg.PlotCurveItem(pen=pg.mkPen(COLORS['graph_pen'], width=3), name="Penalties")
         self.vb2.addItem(self.curve_pen)
+        # Manually add to legend since it is on a different ViewBox
+        self.legend.addItem(self.curve_pen, "Penalties")
         
         def updateViews():
             self.vb2.setGeometry(p1.vb.sceneBoundingRect())
@@ -594,20 +1298,7 @@ class PartykaSolverApp(QMainWindow):
 
     def restore_defaults(self):
         # 1. Reset Values
-        default_ladder = [
-            "Unassigned Group",
-            "Underworked Team Member (< Threshold)",
-            "Intra-Week Cooldown (Same Week)",
-            "Teaching/Assisting Preference",
-            "Multi-Day Weekdays (e.g. Tue+Wed)",
-            "Teaching/Assisting Equality",
-            "Role Diversity (Assignments in each capable family)",
-            "Inefficient Day (< 2 Tasks)",
-            "Multi-Day General (Weekday+Sunday)",
-            "Cooldown (Adjacent Weeks)",
-            "Preferred Pair Split (Working separately on same group)",
-            "Effort Equalization (Squared Deviation)"
-        ]
+        # default_ladder from global constant
         
         self.time_spin.blockSignals(True)
         self.thresh_spin.blockSignals(True)
@@ -619,11 +1310,11 @@ class PartykaSolverApp(QMainWindow):
         self.thresh_spin.blockSignals(False)
         
         # 2. Reset Ladder UI
-        self.ladder_list.clear() 
-        for rule in default_ladder:
-            item = QListWidgetItem(rule)
-            item.setCheckState(Qt.CheckState.Checked)
-            self.ladder_list.addItem(item)
+        # self.ladder_list.clear() 
+        # for rule in default_ladder:
+        #     item = QListWidgetItem(rule)
+        #     item.setCheckState(Qt.CheckState.Checked)
+        #     self.ladder_list.addItem(item)
             
         # 3. Update Config & Save
         self.config["time_limit_seconds"] = 120
@@ -632,8 +1323,28 @@ class PartykaSolverApp(QMainWindow):
         self.save_config()
         self.log("Configuration restored to defaults.", "orange")
 
+    def open_priority_overlay(self):
+        current = self.config.get("ladder", [])
+        dlg = PriorityOverlay(current, self)
+        if dlg.exec():
+            new_ladder = dlg.get_ladder()
+            if new_ladder != current:
+                self.config["ladder"] = new_ladder
+                self.save_config()
+                self.log("Priority ladder updated via overlay.", COLORS['text_secondary'])
+            else:
+                self.log("No changes to priority ladder.", COLORS['text_secondary'])
+
+    def open_task_families_overlay(self):
+        overlay = TaskFamiliesOverlay(self)
+        if overlay.exec():
+            print("Task Families updated and saved.")
+            # Optionally reload them if the main app needs them (it mostly passes paths to solver)
+
     # --- Logic ---
-    def log(self, text, color="#ffffff"):
+    def log(self, text, color=None):
+        if color is None:
+            color = COLORS['text_primary']
         self.log_output.append(f'<span style="color:{color}">{text}</span>')
         # Auto-scroll
         cursor = self.log_output.textCursor()
@@ -641,16 +1352,8 @@ class PartykaSolverApp(QMainWindow):
         self.log_output.setTextCursor(cursor)
 
     def update_ladder_config(self, *args):
-        new_ladder = []
-        for i in range(self.ladder_list.count()):
-            item = self.ladder_list.item(i)
-            new_ladder.append(item.text())
-        
-        # Only save if changed (layoutChanged fires often)
-        if self.config["ladder"] != new_ladder:
-            self.config["ladder"] = new_ladder
-            self.save_config()
-            self.log("Penalty ladder updated.", "#aaa")
+        # Deprecated: Ladder is now managed via Overlay
+        pass
 
     def update_config_values(self):
         self.config["time_limit_seconds"] = self.time_spin.value()
@@ -701,7 +1404,7 @@ class PartykaSolverApp(QMainWindow):
         self.btn_solve.setEnabled(False)
         self.btn_export.setEnabled(False)
         
-        self.log(f"--- Running {script_name} ---", "#0d6efd")
+        self.log(f"--- Running {script_name} ---", COLORS['blue'])
         
         self.worker = ScriptWorker(script_name, args)
         self.worker.progress_signal.connect(self.log)
@@ -745,11 +1448,15 @@ class PartykaSolverApp(QMainWindow):
         self.curve_pen.setData([], [])
         self.log_output.clear()
         
+        self.solve_start_time = None
+        # Timer will be started in update_graph upon first data
+        # self.timer.start(50) 
+        
         # Switch to Progress Tab
         self.tabs.setCurrentIndex(0)
         
         self.btn_solve.setText("Stop Search")
-        self.btn_solve.setStyleSheet("background-color: #dc3545;") # Red
+        self.btn_solve.setStyleSheet(f"background-color: {COLORS['danger']}; color: white;") # Red
         self.btn_download.setEnabled(False)
         self.btn_aggregate.setEnabled(False)
         self.btn_export.setEnabled(False)
@@ -760,7 +1467,7 @@ class PartykaSolverApp(QMainWindow):
         prefix = f"{month}_{year}"
         script_args = [prefix] 
         
-        self.log("--- Starting Solver ---", "#198754")
+        self.log("--- Starting Solver ---", COLORS['success'])
         self.worker = ScriptWorker("step_04_run_solver.py", script_args, parse_output=True)
         self.worker.progress_signal.connect(self.log)
         self.worker.data_signal.connect(self.update_graph)
@@ -768,17 +1475,44 @@ class PartykaSolverApp(QMainWindow):
         self.worker.start()
 
     def update_graph(self, data):
+        # Initialize timer on first data point
+        if self.solve_start_time is None:
+            # Sync local time to the solver's reported time
+            # So if solver says "Time = 3.0s", we set start_time to 3.0s ago.
+            self.solve_start_time = time.time() - data['time']
+            self.timer.start(50)
+
         self.times.append(data['time'])
         self.objs.append(data['objective'])
         self.pens.append(data['penalties'])
         self.curve_obj.setData(self.times, self.objs)
         self.curve_pen.setData(self.times, self.pens)
 
+    def update_live_time(self):
+        if not self.solve_start_time:
+            return
+            
+        elapsed = time.time() - self.solve_start_time
+        
+        # Extend the X-axis view to accommodate current time
+        p1 = self.plot_widget.getPlotItem()
+        
+        # If we have data, we want to see it, but also seeing the empty space where search is happening
+        current_max = max(elapsed, 1.0)
+        min_x = 0
+        if self.times:
+            current_max = max(current_max, max(self.times))
+            # Start the graph at the first solution time to avoid "mid-air" gap
+            min_x = self.times[0]
+            
+        p1.setXRange(min_x, current_max, padding=0)
+
     def on_step_finished(self):
         script_name = self.worker.script_name if self.worker else None
         
-        self.log("Finished.", "#28a745")
+        self.log("Finished.", COLORS['success'])
         self.worker = None
+        self.timer.stop()
         self.update_button_states()
         
         # Check if we just finished Export
@@ -792,7 +1526,7 @@ class PartykaSolverApp(QMainWindow):
             csv_path = RESULTS_DIR / f"{prefix}_filled.csv"
             
             if csv_path.exists():
-                self.log(f"Opening {csv_path.name}...", "#17a2b8")
+                self.log(f"Opening {csv_path.name}...", COLORS['accent_primary'])
                 try:
                     if platform.system() == "Windows":
                         os.startfile(str(csv_path))
@@ -803,11 +1537,11 @@ class PartykaSolverApp(QMainWindow):
                 except Exception as e:
                     self.log(f"Failed to open file: {e}", "red")
 
-        self.log("--- Finished ---", "#0d6efd")
+        self.log("--- Finished ---", COLORS['blue'])
 
     def on_solver_finished(self):
         self.btn_solve.setText("3. Start Search")
-        self.btn_solve.setStyleSheet("background-color: #198754;")
+        self.btn_solve.setStyleSheet(f"background-color: {COLORS['success']}; color: white;")
         self.on_step_finished()
         
         # Load Result Files
@@ -872,7 +1606,7 @@ class PartykaSolverApp(QMainWindow):
                 
                 # Color code high penalties?
                 if p.get('cost', 0) > 1000:
-                    item.setForeground(2, QColor('#ff4444'))
+                    item.setForeground(2, QColor(COLORS['danger']))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
