@@ -454,12 +454,15 @@ class PriorityOverlay(QDialog):
         self.setWindowTitle("Configure Priorities")
         
         # Responsive sizing
+        # Responsive sizing
         if parent:
-            w = int(parent.width() * 0.8)
-            h = int(parent.height() * 0.8)
+            w = max(1000, int(parent.width() * 0.9)) # Increased base size
+            h = max(700, int(parent.height() * 0.9))
             self.resize(w, h)
         else:
-            self.resize(800, 600)
+            self.resize(1000, 700)
+        
+        self.setMinimumWidth(900)
             
         self.setModal(True)
         self.setStyleSheet(parent.styleSheet() if parent else "")
@@ -649,9 +652,13 @@ class TaskFamiliesOverlay(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Configure Families & Groups")
         if parent:
-            self.resize(int(parent.width() * 0.9), int(parent.height() * 0.9))
+            w = max(1300, int(parent.width() * 0.95)) # Make it wide
+            h = max(800, int(parent.height() * 0.9))
+            self.resize(w, h)
         else:
-            self.resize(1000, 700)
+            self.resize(1300, 800)
+        
+        self.setMinimumWidth(1100)
             
         self.data_path = Path(data_path) if data_path else (BASE_DIR / "data" / "task_families.json")
         self.families_data = [] 
@@ -1123,7 +1130,8 @@ class TeamMemberOverlay(QDialog):
     def __init__(self, config, parent=None, data_path=None):
         super().__init__(parent)
         self.setWindowTitle("Team Config")
-        self.resize(900, 600)
+        self.resize(1100, 700) # Increased from 900, 600
+        self.setMinimumWidth(950)
         self.data_path = Path(data_path)
         
         self.config_ref = config # Main app config (for preferred_pairs)
