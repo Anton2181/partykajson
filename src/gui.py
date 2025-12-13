@@ -1278,6 +1278,7 @@ class TeamMemberOverlay(QDialog):
 class PartykaSolverApp(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.data_dir = DATA_DIR # Set data directory (Move to top)
         self.setWindowTitle("Partyka Assigner Script")
         
         # Windows Taskbar Icon Fix
@@ -1300,7 +1301,7 @@ class PartykaSolverApp(QMainWindow):
         self.setStyleSheet(LIGHT_THEME)
         
         self.config = self.load_config()
-        self.data_dir = DATA_DIR # Set data directory for overlays
+        # self.data_dir = DATA_DIR # Moved to top
         self.worker = None
         self.solve_start_time = None
         self.timer = QTimer()
