@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
     QAbstractItemView, QSpinBox, QCheckBox, QSplitter, QTextEdit, 
     QFrame, QGroupBox, QScrollArea, QSizePolicy, QTabWidget,
     QTreeWidget, QTreeWidgetItem, QDoubleSpinBox, QDialog, QTableWidget, 
-    QTableWidgetItem, QHeaderView, QToolButton, QLineEdit, QMenu
+    QTableWidgetItem, QHeaderView, QToolButton, QLineEdit, QMenu, QRadioButton, QButtonGroup
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QSize, QRectF, QTimer
 from PyQt6.QtGui import QIcon, QFont, QColor, QPixmap, QPainter, QAction
@@ -35,6 +35,11 @@ try:
     from default_families import DEFAULT_FAMILIES
 except ImportError:
     DEFAULT_FAMILIES = []
+
+try:
+    from default_team import DEFAULT_TEAM
+except ImportError:
+    DEFAULT_TEAM = []
 
 DEFAULT_LADDER = [
     "Unassigned Group",
@@ -245,6 +250,20 @@ QScrollBar:vertical {{
 QScrollBar::handle:vertical {{
     background-color: {COLORS["border"]};
     border-radius: 6px;
+}}
+QMenu {{
+    background-color: {COLORS["surface"]};
+    border: 1px solid {COLORS["border"]};
+    border-radius: 8px;
+    padding: 5px;
+}}
+QMenu::item {{
+    padding: 8px 16px;
+    border-radius: 4px;
+}}
+QMenu::item:selected {{
+    background-color: {COLORS["selection_bg"]};
+    color: {COLORS["selection_text"]};
 }}
 QTabWidget::pane {{ 
     border: 1px solid {COLORS["border"]}; 
@@ -548,7 +567,7 @@ class PriorityOverlay(QDialog):
 
 # --- Main Window ---
 class TaskFamiliesOverlay(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, data_path=None):
         super().__init__(parent)
         self.setWindowTitle("Configure Families & Groups")
         if parent:
@@ -556,6 +575,7 @@ class TaskFamiliesOverlay(QDialog):
         else:
             self.resize(1000, 700)
             
+        self.data_path = Path(data_path) if data_path else (BASE_DIR / "data" / "task_families.json")
         self.families_data = [] 
         self.all_tasks = set()
         self.current_group_ref = None # Reference to the dict object being edited
@@ -563,62 +583,68 @@ class TaskFamiliesOverlay(QDialog):
         # Main Layout (Vertical)
         self.layout_root = QVBoxLayout(self)
         
-        # --- Main Splitter (3 Panes) ---
+        # --- Main Splitter (2 Panes: Work Area | Source Area) ---
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
         
-        # --- Pane 1: Hierarchy Tree ---
+        # === Left Pane (Work Area) ===
+        # Vertical Layout:
+        #   [ Hierarchy Tree ]
+        #   [ Config | Assigned Tasks ]
+        
+        left_pane = QWidget()
+        left_layout = QVBoxLayout(left_pane)
+        left_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # 1. Hierarchy Tree (Top)
         self.tree = QTreeWidget()
         self.tree.setHeaderLabel("Hierarchy")
         self.tree.setWordWrap(True)
-        self.tree.setUniformRowHeights(False) # Allow variable row heights for wrapping
-        self.tree.setTextElideMode(Qt.TextElideMode.ElideNone) # Prefer wrap over ellipsis
-        # Force column 0 to stretch to view width (no horizontal scroll)
+        self.tree.setUniformRowHeights(False) 
+        self.tree.setTextElideMode(Qt.TextElideMode.ElideNone)
         self.tree.header().setStretchLastSection(False)
         self.tree.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         self.tree.itemSelectionChanged.connect(self.on_selection_changed)
         
-        # Wrapper for Tree to include buttons if needed, or just Tree
-        # Adding '+' and '-' buttons below tree
-        left_widget = QWidget()
-        left_layout = QVBoxLayout(left_widget)
-        left_layout.setContentsMargins(0, 0, 0, 0)
-        left_layout.addWidget(self.tree)
+        # Tree Toolbar (Vertical on the right of tree)
+        tree_btn_box = QVBoxLayout()
+        tree_btn_box.setContentsMargins(0, 0, 0, 0) # Minimize margins
+        tree_btn_box.addStretch() # Top align? Or center? User said "align right edges".
+        # If we want alignment, typically center is safer or top.
+        # Let's match the Transfer buttons which have stretch on top and bottom (Centered).
         
-        tree_btn_box = QHBoxLayout()
         self.btn_add_grp = QPushButton("+")
         self.btn_add_grp.setToolTip("Add Family or Group")
         self.btn_add_grp.clicked.connect(self.show_add_menu)
+        self.btn_add_grp.setFixedWidth(40)
+        self.btn_add_grp.setStyleSheet("padding: 0px; font-size: 18px; font-weight: bold;")
+        
         self.btn_del_grp = QPushButton("-")
         self.btn_del_grp.setToolTip("Delete Item")
         self.btn_del_grp.clicked.connect(self.delete_item)
+        self.btn_del_grp.setFixedWidth(40)
+        self.btn_del_grp.setStyleSheet("padding: 0px; font-size: 18px; font-weight: bold;")
+        
         tree_btn_box.addWidget(self.btn_add_grp)
         tree_btn_box.addWidget(self.btn_del_grp)
-        left_layout.addLayout(tree_btn_box)
+        tree_btn_box.addStretch()
         
-        self.splitter.addWidget(left_widget)
+        # Combine Tree + Toolbar (Horizontal)
+        tree_container = QWidget()
+        tree_layout = QHBoxLayout(tree_container)
+        tree_layout.setContentsMargins(0, 0, 0, 0)
+        tree_layout.addWidget(self.tree)
+        tree_layout.addLayout(tree_btn_box)
         
-        # --- Pane 2: Middle (Assigned + Properties) ---
-        middle_widget = QWidget()
-        middle_layout = QVBoxLayout(middle_widget)
-        middle_layout.setContentsMargins(0, 0, 0, 0)
+        # 2. Bottom Row (Config | Assigned)
+        bottom_row = QWidget()
+        bottom_layout = QHBoxLayout(bottom_row)
+        bottom_layout.setContentsMargins(0, 0, 0, 0)
         
-        # 1. Assigned Tasks
-        assigned_box = QGroupBox("Group Tasks (Chosen)")
-        assigned_layout = QVBoxLayout(assigned_box)
-        self.list_assigned = QListWidget()
-        self.list_assigned.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
-        self.list_assigned.setWordWrap(True)
-        self.list_assigned.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        assigned_layout.addWidget(self.list_assigned)
-        middle_layout.addWidget(assigned_box, stretch=1) # Give it space
-        
-        # 2. Properties (Scroll Area)
+        # A. Config (Properties)
         self.props_widget = QScrollArea()
         self.props_widget.setWidgetResizable(True)
         props_inner = QWidget()
         self.props_layout = QVBoxLayout(props_inner)
-        
-        # ... (Props fields added below) ...
         
         # Name
         name_row = QHBoxLayout()
@@ -650,44 +676,68 @@ class TaskFamiliesOverlay(QDialog):
         cnt_row.addWidget(self.spin_any)
         self.props_layout.addWidget(cnt_box)
         
-        # Priority Assignees
-        self.props_layout.addWidget(QLabel("Priority Assignees (one per line):"))
+        # Priority
+        self.props_layout.addWidget(QLabel("Priority Assignees:"))
         self.edit_priority = QTextEdit()
-        self.edit_priority.setMaximumHeight(80)
+        self.edit_priority.setMaximumHeight(60)
         self.edit_priority.textChanged.connect(self.save_priority)
         self.props_layout.addWidget(self.edit_priority)
         
         # Exclusive
-        self.props_layout.addWidget(QLabel("Mutually Exclusive Groups:"))
+        self.props_layout.addWidget(QLabel("Mutually Exclusive:"))
         self.list_exclusive = QListWidget()
         self.list_exclusive.setWordWrap(True)
+        self.list_exclusive.setMinimumHeight(200) # Expanded ~4x
         self.list_exclusive.itemChanged.connect(self.save_exclusive)
         self.props_layout.addWidget(self.list_exclusive)
         
         self.props_widget.setWidget(props_inner)
-        middle_layout.addWidget(self.props_widget, stretch=1) # Share vertical space with Assigned
+        bottom_layout.addWidget(self.props_widget, stretch=1)
         
-        self.splitter.addWidget(middle_widget)
+        # B. Assigned Tasks
+        assigned_box = QGroupBox("Group Tasks") # Renamed from "Group Tasks (Chosen)"
+        assigned_layout = QVBoxLayout(assigned_box)
+        self.list_assigned = QListWidget()
+        self.list_assigned.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.list_assigned.setWordWrap(True)
+        self.list_assigned.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        assigned_layout.addWidget(self.list_assigned)
+        bottom_layout.addWidget(assigned_box, stretch=1)
         
-        # --- Pane 3: Right (Buttons + Available) ---
-        right_outer = QWidget()
-        right_layout = QHBoxLayout(right_outer)
-        right_layout.setContentsMargins(0, 0, 0, 0)
-        
-        # Buttons (Vertical strip)
+        # C. Transfer Buttons (Moved here, right of Assigned)
         btn_widget = QWidget()
         btn_layout = QVBoxLayout(btn_widget)
+        btn_layout.setContentsMargins(0, 0, 0, 0) # Zero margins to remove padding
         btn_layout.addStretch()
-        self.btn_add_task = QPushButton("←") # To Assigned
+        self.btn_add_task = QPushButton("←") # To Assigned (Left)
         self.btn_add_task.setToolTip("Add to Group")
         self.btn_add_task.clicked.connect(self.add_tasks_to_group)
-        self.btn_remove_task = QPushButton("→") # To Available
+        self.btn_add_task.setFixedWidth(40)
+        self.btn_add_task.setStyleSheet("padding: 0px; font-size: 16px; font-weight: bold;")
+        
+        self.btn_remove_task = QPushButton("→") # To Available (Right)
         self.btn_remove_task.setToolTip("Remove from Group")
         self.btn_remove_task.clicked.connect(self.remove_tasks_from_group)
+        self.btn_remove_task.setFixedWidth(40)
+        self.btn_remove_task.setStyleSheet("padding: 0px; font-size: 16px; font-weight: bold;")
+        
         btn_layout.addWidget(self.btn_add_task)
         btn_layout.addWidget(self.btn_remove_task)
         btn_layout.addStretch()
-        right_layout.addWidget(btn_widget)
+        bottom_layout.addWidget(btn_widget)
+        
+        # Assemble Left Pane
+        left_layout.addWidget(tree_container, stretch=1)
+        left_layout.addWidget(bottom_row, stretch=1)
+        
+        self.splitter.addWidget(left_pane)
+        
+        # === Right Pane (Source Area) ===
+        # [ Available Tasks ]
+        
+        right_pane = QWidget()
+        right_layout = QHBoxLayout(right_pane)
+        right_layout.setContentsMargins(0, 0, 0, 0)
         
         # Available List
         avail_box = QGroupBox("Available Tasks (All known)")
@@ -699,12 +749,12 @@ class TaskFamiliesOverlay(QDialog):
         avail_layout.addWidget(self.list_avail)
         right_layout.addWidget(avail_box)
         
-        self.splitter.addWidget(right_outer)
+        self.splitter.addWidget(right_pane)
         
-        # Set Ratios: 1:2:1 (Tree : Middle : Right)
-        self.splitter.setStretchFactor(0, 1)
-        self.splitter.setStretchFactor(1, 2)
-        self.splitter.setStretchFactor(2, 1)
+        # Set Ratios (Left Pane vs Right Pane)
+        # Left Pane is wider (contains Tree and Config/Assigned)
+        self.splitter.setStretchFactor(0, 2)
+        self.splitter.setStretchFactor(1, 1)
         
         self.layout_root.addWidget(self.splitter)
         
@@ -717,7 +767,7 @@ class TaskFamiliesOverlay(QDialog):
         btn_box.addWidget(restore_btn)
         btn_box.addStretch()
         
-        save_btn = QPushButton("Save & Close")
+        save_btn = QPushButton("Save")
         save_btn.clicked.connect(self.accept)
         cancel_btn = QPushButton("Cancel")
         cancel_btn.clicked.connect(self.reject)
@@ -729,9 +779,8 @@ class TaskFamiliesOverlay(QDialog):
         self.load_data()
         
     def load_data(self):
-        path = BASE_DIR / "data" / "task_families.json"
-        if path.exists():
-            with open(path, 'r', encoding='utf-8') as f:
+        if self.data_path.exists():
+            with open(self.data_path, 'r', encoding='utf-8') as f:
                 self.families_data = json.load(f)
         
         # Harvest tasks
@@ -984,23 +1033,256 @@ class TaskFamiliesOverlay(QDialog):
 
     def accept(self):
         # Save to disk
-        path = BASE_DIR / "data" / "task_families.json"
         try:
-            with open(path, 'w', encoding='utf-8') as f:
+            with open(self.data_path, 'w', encoding='utf-8') as f:
                 json.dump(self.families_data, f, indent=4)
         except Exception as e:
             print(f"Error saving task families: {e}")
             
         super().accept()
         
+class TeamMemberOverlay(QDialog):
+    def __init__(self, parent=None, data_path=None):
+        super().__init__(parent)
+        self.setWindowTitle("Team Config")
+        self.resize(800, 600)
+        self.data_path = Path(data_path)
+        self.team_data = []
+        self.current_member = None
+        
+        self.setup_ui()
+        self.load_data()
+        
+    def setup_ui(self):
+        layout = QVBoxLayout(self)
+        
+        # Splitter: List | Form
+        splitter = QSplitter(Qt.Orientation.Horizontal)
+        
+        # Left: List (No buttons)
+        left_widget = QWidget()
+        left_layout = QVBoxLayout(left_widget)
+        left_layout.setContentsMargins(0,0,0,0)
+        
+        self.list_members = QListWidget()
+        self.list_members.itemSelectionChanged.connect(self.on_selection_changed)
+        left_layout.addWidget(self.list_members)
+        
+        splitter.addWidget(left_widget)
+        
+        # Right: Form
+        self.right_widget = QWidget()
+        right_layout = QVBoxLayout(self.right_widget)
+        right_layout.setContentsMargins(10, 0, 0, 0)
+        
+        # Name
+        form_layout = QVBoxLayout()
+        form_layout.addWidget(QLabel("Name:"))
+        self.edit_name = QLineEdit()
+        self.edit_name.setReadOnly(True) # Name is immutable
+        # self.edit_name.editingFinished.connect(self.save_current) # No editing
+        form_layout.addWidget(self.edit_name)
+        
+        # Role
+        group_role = QGroupBox("Primary Role")
+        vbox_role = QVBoxLayout(group_role)
+        self.rb_leader = QRadioButton("Leader")
+        self.rb_follower = QRadioButton("Follower")
+        self.rb_group = QButtonGroup(self)
+        self.rb_group.addButton(self.rb_leader)
+        self.rb_group.addButton(self.rb_follower)
+        
+        # Connect toggled to save
+        self.rb_leader.toggled.connect(self.save_current)
+        self.rb_follower.toggled.connect(self.save_current) # Redundant if exclusive, but safe
+        
+        vbox_role.addWidget(self.rb_leader)
+        vbox_role.addWidget(self.rb_follower)
+        form_layout.addWidget(group_role)
+        
+        # Flags
+        # Flags
+        self.cb_both = QCheckBox("Can do Both")
+        self.cb_both.toggled.connect(self.save_current)
+        form_layout.addWidget(self.cb_both)
+        
+        form_layout.addStretch()
+        right_layout.addLayout(form_layout)
+        
+        # Initially disabled
+        self.right_widget.setEnabled(False)
+        
+        splitter.addWidget(self.right_widget)
+        
+        splitter.setStretchFactor(0, 1)
+        splitter.setStretchFactor(1, 2)
+        
+        layout.addWidget(splitter)
+        
+        # Bottom Buttons
+        bottom_box = QHBoxLayout()
+        self.btn_restore = QPushButton("Restore Defaults")
+        self.btn_restore.clicked.connect(self.restore_defaults)
+        bottom_box.addWidget(self.btn_restore)
+        bottom_box.addStretch()
+        
+        btn_save = QPushButton("Save")
+        btn_save.clicked.connect(self.accept)
+        bottom_box.addWidget(btn_save)
+        
+        layout.addLayout(bottom_box)
+        
+    def load_data(self):
+        # 1. Load Available Names from processed/tasks.json (Source of Truth)
+        # We need to access PROCESSED_DIR. Since this class is in gui.py, we might have access to globals?
+        # Yes, BASE_DIR and DATA_DIR are global.
+        processed_tasks_path = DATA_DIR / "processed" / "tasks.json"
+        
+        self.available_names = set()
+        
+        if processed_tasks_path.exists():
+            try:
+                with open(processed_tasks_path, 'r', encoding='utf-8') as f:
+                    tasks_data = json.load(f)
+                    # Extract all candidates
+                    for t in tasks_data:
+                         if "candidates" in t:
+                             self.available_names.update(t["candidates"])
+            except Exception as e:
+                print(f"Error loading tasks.json: {e}")
+        else:
+             print("processed/tasks.json not found. Run download/convert step first.")
+             # Fallback? Maybe empty list.
+        
+        # 2. Load Config from team_members.json
+        self.team_config = {} # Map name -> {role, both}
+        if self.data_path.exists():
+            try:
+                with open(self.data_path, 'r', encoding='utf-8') as f:
+                    raw_list = json.load(f)
+                    for item in raw_list:
+                        name = item.get("name")
+                        if name:
+                            self.team_config[name] = item
+            except Exception as e:
+                print(f"Error loading team: {e}")
+        else:
+            self.restore_defaults() # This populates self.team_data, we need to convert to config
+            # But restore_defaults logic is different now.
+            # Let's just init empty if not found.
+            pass
+
+        self.populate_list()
+        
+    def populate_list(self):
+        self.list_members.clear()
+        
+        # Sort names
+        sorted_names = sorted(list(self.available_names))
+        
+        for name in sorted_names:
+            # Get config or default
+            config = self.team_config.get(name, {"name": name, "role": "follower", "both": False})
+            
+            item = QListWidgetItem(name)
+            item.setData(Qt.ItemDataRole.UserRole, config)
+            self.list_members.addItem(item)
+            
+    def on_selection_changed(self):
+        items = self.list_members.selectedItems()
+        if not items:
+            self.right_widget.setEnabled(False)
+            self.current_member = None
+            return
+            
+        self.right_widget.setEnabled(True)
+        member = items[0].data(Qt.ItemDataRole.UserRole)
+        self.current_member = member
+        
+        # Populate Form (block signals to prevent auto-save loop)
+        self.block_signals(True)
+        self.edit_name.setText(member.get("name", ""))
+        
+        # Role
+        role = member.get("role", "follower").lower()
+        if role == "leader":
+            self.rb_leader.setChecked(True)
+        else:
+            self.rb_follower.setChecked(True)
+            
+        # Both
+        self.cb_both.setChecked(member.get("both", False))
+        self.block_signals(False)
+        
+    def block_signals(self, block):
+        self.edit_name.blockSignals(block)
+        self.rb_leader.blockSignals(block)
+        self.rb_follower.blockSignals(block)
+        self.cb_both.blockSignals(block)
+
+    def save_current(self):
+        if not self.current_member: return
+        
+        # Update Dictionary Object (which is shared/mutable)
+        # Note: current_member is the dict stored in ItemData. 
+        # We need to make sure we update self.team_config too if it wasn't there.
+        name = self.current_member["name"]
+        
+        if self.rb_leader.isChecked():
+            self.current_member["role"] = "leader"
+        else:
+            self.current_member["role"] = "follower"
+            
+        self.current_member["both"] = self.cb_both.isChecked()
+        
+        # Ensure it's in the master config
+        self.team_config[name] = self.current_member
+        
+    # Remove add_member / remove_member methods as they are no longer used
+    def add_member(self): pass
+    def remove_member(self): pass
+
+    def restore_defaults(self):
+        # Restore logic: Reset config for EVERYONE in available_names to Default?
+        # Or just reload the default file into team_config?
+        # User said "The list itself... should be taken from...".
+        # "Restore Defaults" usually matches the provided defaults.
+        # But we must respect the available list.
+        # So we load DEFAULT_TEAM and use it as the config source.
+        import copy
+        self.team_config = {}
+        for item in DEFAULT_TEAM:
+            name = item.get("name")
+            if name:
+                self.team_config[name] = copy.deepcopy(item)
+        
+        self.populate_list()
+        
+    def accept(self):
+        # Save to disk
+        # Convert self.team_config map back to list
+        # We should save ALL config entries, even those not currently in availability list?
+        # Or only those? User said "json adds extra info".
+        # Safe to save all known configs so settings persist if someone comes back.
+        
+        export_list = list(self.team_config.values())
+        
+        try:
+            with open(self.data_path, 'w', encoding='utf-8') as f:
+                json.dump(export_list, f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            print(f"Error saving team: {e}")
+        super().accept()
+
 class PartykaSolverApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Partyka Solver Pro")
-        self.resize(1200, 800)
+        self.resize(1200, 500) # Minimized height
         self.setStyleSheet(LIGHT_THEME)
         
         self.config = self.load_config()
+        self.data_dir = DATA_DIR # Set data directory for overlays
         self.worker = None
         self.solve_start_time = None
         self.timer = QTimer()
@@ -1021,10 +1303,11 @@ class PartykaSolverApp(QMainWindow):
     def setup_ui(self):
         main_widget = QWidget()
         self.setCentralWidget(main_widget)
-        layout = QHBoxLayout(main_widget)
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(10)
-
+        # Root Layout: Horizontal (Sidebar | Right Column)
+        root_layout = QHBoxLayout(main_widget)
+        root_layout.setContentsMargins(10, 10, 10, 10)
+        root_layout.setSpacing(10)
+        
         # --- LEFT SIDEBAR (Controls) ---
         sidebar_frame = QFrame()
         sidebar_frame.setFixedWidth(300)
@@ -1047,11 +1330,7 @@ class PartykaSolverApp(QMainWindow):
         now = datetime.now()
         # If we are in Dec (12), next month is 1. Year + 1.
         # Otherwise Month + 1, Year same.
-        next_month_idx = (now.month % 12) # 0-11 index implies Jan=0? No, now.month is 1-12. 
         # QComboBox index is 0-based.
-        # If now is Jan (1), we want Feb (index 1).
-        # next_month_idx = now.month (which is the index of the next month since 0=Jan)
-        # BUT if now.month is 12, next_month is 1 (Jan), index 0.
         
         # Simple math: (current_month_index + 1) % 12
         # current_month_index is now.month - 1
@@ -1121,6 +1400,10 @@ class PartykaSolverApp(QMainWindow):
         btn_families.clicked.connect(self.open_task_families_overlay)
         ladder_layout.addWidget(btn_families)
 
+        btn_team = QPushButton("Configure Team...")
+        btn_team.clicked.connect(self.open_team_overlay)
+        ladder_layout.addWidget(btn_team)
+
         btn_ladder = QPushButton("Configure Priorities...")
         btn_ladder.clicked.connect(self.open_priority_overlay)
         ladder_layout.addWidget(btn_ladder)
@@ -1145,7 +1428,7 @@ class PartykaSolverApp(QMainWindow):
                 background-color: {COLORS['success']};
                 color: white;
                 border-radius: 6px;
-                padding: 5px;
+                padding: 8px 16px;
                 font-weight: bold;
             }}
             QPushButton:disabled {{
@@ -1166,11 +1449,14 @@ class PartykaSolverApp(QMainWindow):
         actions_group.setLayout(actions_layout)
         sidebar_layout.addWidget(actions_group)
         
-        layout.addWidget(sidebar_frame)
+        root_layout.addWidget(sidebar_frame) # Sidebar first
 
         # --- RIGHT SIDE (Tabs & Viz) ---
-        viz_splitter = QSplitter(Qt.Orientation.Vertical)
-
+        right_container = QWidget()
+        right_layout = QVBoxLayout(right_container)
+        right_layout.setContentsMargins(0, 0, 0, 0)
+        right_layout.setSpacing(10)
+        
         # Tabs for Results
         self.tabs = QTabWidget()
         
@@ -1191,6 +1477,9 @@ class PartykaSolverApp(QMainWindow):
         # Create legend but anchor it to top-right
         self.legend = self.plot_widget.addLegend()
         self.legend.anchor((1,0), (1,0), offset=(-30, 30))
+        
+        self.plot_widget.setMouseEnabled(x=False, y=False) # Disable zoom/pan
+        self.plot_widget.setMenuEnabled(False) # Disable right-click menu
         
         # Axis 1: Objective (Left, Log)
         p1 = self.plot_widget.getPlotItem()
@@ -1228,12 +1517,14 @@ class PartykaSolverApp(QMainWindow):
         # Restrict View: Time > 0, Penalties > 0
         self.vb2.setLimits(xMin=0, yMin=0)
         
-        self.curve_pen = pg.PlotCurveItem(pen=pg.mkPen(COLORS['graph_pen'], width=3), name="Penalties")
+        self.curve_pen = pg.PlotCurveItem(pen=pg.mkPen(COLORS['danger'], width=2, style=Qt.PenStyle.DashLine), name="Penalties")
         self.vb2.addItem(self.curve_pen)
-        # Manually add to legend since it is on a different ViewBox
-        self.legend.addItem(self.curve_pen, "Penalties")
         
+        # Manually add to legend
+        self.legend.addItem(self.curve_pen, "Penalties")
+
         def updateViews():
+            # p1.getAxis('right').linkedViewChanged(p1.vb, self.vb2.XAxis) # INCORRECT: Caused TypeError
             self.vb2.setGeometry(p1.vb.sceneBoundingRect())
             self.vb2.linkedViewChanged(p1.vb, self.vb2.XAxis)
 
@@ -1269,25 +1560,45 @@ class PartykaSolverApp(QMainWindow):
         pen_layout.addWidget(self.tree_pen)
         self.tabs.addTab(self.tab_penalties, "Penalties")
 
-        viz_splitter.addWidget(self.tabs)
+        right_layout.addWidget(self.tabs)
         
-        # 2. Log Output
-        log_group = QGroupBox("Console Output")
-        log_layout = QVBoxLayout()
+        # --- Bottom Area: Collapsible Console ---
+        self.console_container = QWidget()
+        console_layout = QVBoxLayout(self.console_container)
+        console_layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.btn_toggle_console = QPushButton("Show Console ▲") # Points UP to indicate expansion
+        self.btn_toggle_console.setCheckable(True)
+        self.btn_toggle_console.setStyleSheet(f"""
+            QPushButton {{
+                text-align: left;
+                padding: 5px;
+                background-color: {COLORS['surface']};
+                color: {COLORS['text_secondary']};
+                border: 1px solid {COLORS['border']};
+            }}
+            QPushButton:hover {{
+                background-color: {COLORS['surface_hover']};
+            }}
+        """)
+        self.btn_toggle_console.clicked.connect(self.toggle_console)
+        console_layout.addWidget(self.btn_toggle_console)
+        
         self.log_output = QTextEdit()
         self.log_output.setReadOnly(True)
         self.log_output.setFont(QFont("Courier New", 12))
-        log_layout.addWidget(self.log_output)
-        log_group.setLayout(log_layout)
-        viz_splitter.addWidget(log_group)
-
-        layout.addWidget(viz_splitter)
+        self.log_output.setVisible(False) # Hidden by default
+        console_layout.addWidget(self.log_output)
         
-        # Initial sizing of splitter
-        viz_splitter.setSizes([500, 300])
+        # Add Console to Right Column (below tabs)
+        right_layout.addWidget(self.console_container)
         
-        # Initial sizing of splitter
-        viz_splitter.setSizes([500, 300])
+        # Set stretch: Tabs get 1 (expand), Console gets 0 (fixed/content)
+        right_layout.setStretchFactor(self.tabs, 1)
+        right_layout.setStretchFactor(self.console_container, 0)
+        
+        # Add Right Column to Root
+        root_layout.addWidget(right_container)
         
         # Connect Signals (Now that all widgets exist)
         self.month_combo.currentIndexChanged.connect(self.update_button_states)
@@ -1298,7 +1609,6 @@ class PartykaSolverApp(QMainWindow):
 
     def restore_defaults(self):
         # 1. Reset Values
-        # default_ladder from global constant
         
         self.time_spin.blockSignals(True)
         self.thresh_spin.blockSignals(True)
@@ -1319,7 +1629,7 @@ class PartykaSolverApp(QMainWindow):
         # 3. Update Config & Save
         self.config["time_limit_seconds"] = 120
         self.config["effort_threshold"] = 8.0
-        self.config["ladder"] = default_ladder
+        self.config["ladder"] = DEFAULT_LADDER
         self.save_config()
         self.log("Configuration restored to defaults.", "orange")
 
@@ -1336,10 +1646,18 @@ class PartykaSolverApp(QMainWindow):
                 self.log("No changes to priority ladder.", COLORS['text_secondary'])
 
     def open_task_families_overlay(self):
-        overlay = TaskFamiliesOverlay(self)
-        if overlay.exec():
-            print("Task Families updated and saved.")
-            # Optionally reload them if the main app needs them (it mostly passes paths to solver)
+        # Path to data
+        data_path = self.data_dir / "task_families.json"
+        
+        dlg = TaskFamiliesOverlay(self, str(data_path))
+        dlg.exec()
+
+    def open_team_overlay(self):
+        data_path = self.data_dir / "team_members.json"
+        dlg = TeamMemberOverlay(self, str(data_path))
+        dlg.exec()
+
+
 
     # --- Logic ---
     def log(self, text, color=None):
@@ -1350,6 +1668,15 @@ class PartykaSolverApp(QMainWindow):
         cursor = self.log_output.textCursor()
         cursor.movePosition(cursor.MoveOperation.End)
         self.log_output.setTextCursor(cursor)
+        
+    def toggle_console(self):
+        visible = self.log_output.isVisible()
+        if visible:
+            self.log_output.setVisible(False)
+            self.btn_toggle_console.setText("Show Console ▲")
+        else:
+            self.log_output.setVisible(True)
+            self.btn_toggle_console.setText("Hide Console ▼")
 
     def update_ladder_config(self, *args):
         # Deprecated: Ladder is now managed via Overlay
@@ -1456,7 +1783,16 @@ class PartykaSolverApp(QMainWindow):
         self.tabs.setCurrentIndex(0)
         
         self.btn_solve.setText("Stop Search")
-        self.btn_solve.setStyleSheet(f"background-color: {COLORS['danger']}; color: white;") # Red
+        # Preserve styling (padding, bold, rounded) but change color to Red
+        self.btn_solve.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {COLORS['danger']};
+                color: white;
+                border-radius: 6px;
+                padding: 8px 16px;
+                font-weight: bold;
+            }}
+        """)
         self.btn_download.setEnabled(False)
         self.btn_aggregate.setEnabled(False)
         self.btn_export.setEnabled(False)
