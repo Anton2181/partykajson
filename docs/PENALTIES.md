@@ -85,8 +85,8 @@ This document describes the penalties used by the schedule solver to optimize as
 **Description:** Penalizes coming in on a day to perform fewer than 2 tasks (if configured).
 **Logic:** Active if `TasksOnDay < 2`.
 
-## 11. Effort Equalization (Squared Deviation)
-**Rule Name:** `"Effort Equalization (Squared Deviation)"`
+## 11. Effort Equalization
+**Rule Name:** `"Effort Equalization"`
 **Description:** Soft penalty to encourage all team members to be close to the target effort (Configured Threshold, default 8.0).
 **Logic:** Quadratic.
 - **Formula:** $Cost = P \cdot \lfloor(Effort - Threshold)^2\rfloor$.

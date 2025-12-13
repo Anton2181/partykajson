@@ -260,16 +260,16 @@ class SATSolver:
         config_path = Path('data') / 'penalty_config.json'
         with open(config_path, 'r') as f:
             t = json.load(f)
-            self.rule_definitions = t['ladder'] # User said ladder is the sorted subsection
+            ladder_raw = t['ladder']
+            self.disabled_rules = set(t.get('disabled_rules', []))
+            
+            # Filter out disabled rules from the active ladder
+            self.rule_definitions = [r for r in ladder_raw if r not in self.disabled_rules]
+            
             self.time_limit = t.get('time_limit_seconds', 30.0)
             self.penalty_ratio = t.get('penalty_ratio', 10)
             self.effort_threshold = t.get('effort_threshold', 8.0)
             self.preferred_pairs = t.get('preferred_pairs', [])
-            
-            # Or should I pass the full implemented_rules? 
-            # SolverPenalties usually takes the ladder (the rules that determine cost).
-            # The "implemented_rules" is likely for UI or validation.
-            # I will use 'ladder' as the active rules list.
             
         self.penalties = SolverPenalties(self.rule_definitions, self.penalty_ratio)
         
@@ -995,8 +995,8 @@ class SATSolver:
         
                      self.debug_vars[person]['multi_general'] = multi_general
         
-        # Term 10: Effort Equalization (Squared Deviation)
-        P_EQUALIZATION = self.penalties.get_penalty_by_name("Effort Equalization (Squared Deviation)")
+        # Term 10: Effort Equalization
+        P_EQUALIZATION = self.penalties.get_penalty_by_name("Effort Equalization")
         
         if P_EQUALIZATION > 0:
             TARGET_EFFORT_SCALED = int(self.effort_threshold * 10)

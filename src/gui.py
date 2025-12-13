@@ -12,7 +12,8 @@ from PyQt6.QtWidgets import (
     QAbstractItemView, QSpinBox, QCheckBox, QSplitter, QTextEdit, 
     QFrame, QGroupBox, QScrollArea, QSizePolicy, QTabWidget,
     QTreeWidget, QTreeWidgetItem, QDoubleSpinBox, QDialog, QTableWidget, 
-    QTableWidgetItem, QHeaderView, QToolButton, QLineEdit, QMenu, QRadioButton, QButtonGroup
+    QTableWidgetItem, QHeaderView, QToolButton, QLineEdit, QMenu, QRadioButton, QButtonGroup,
+    QCompleter
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QSize, QRectF, QTimer
 from PyQt6.QtGui import QIcon, QFont, QColor, QPixmap, QPainter, QAction
@@ -54,7 +55,7 @@ DEFAULT_LADDER = [
     "Multi-Day General (Weekday+Sunday)",
     "Cooldown (Adjacent Weeks)",
     "Preferred Pair",
-    "Effort Equalization (Squared Deviation)"
+    "Effort Equalization"
 ]
 
 def is_writable(path):
@@ -446,8 +447,9 @@ class SvgViewer(QWidget):
         self.renderer.load(filename)
         self.update()
 
+# --- Priority Overlay ---
 class PriorityOverlay(QDialog):
-    def __init__(self, current_ladder, parent=None):
+    def __init__(self, config, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Configure Priorities")
         
@@ -460,40 +462,43 @@ class PriorityOverlay(QDialog):
             self.resize(800, 600)
             
         self.setModal(True)
-        # Apply parent's stylesheet if possible, or set consistent background
         self.setStyleSheet(parent.styleSheet() if parent else "")
         
-        self.ladder = list(current_ladder)
+        self.ladder = list(config.get("ladder", []))
+        self.disabled_rules = set(config.get("disabled_rules", []))
+        
         self.layout = QVBoxLayout(self)
         
         # Instruction
-        self.layout.addWidget(QLabel("Drag and drop rows to reorder priorities (Highest priority at top)."))
+        self.layout.addWidget(QLabel("Drag and drop rows to reorder. Use checkbox to enable/disable rules."))
         
         # Table
         self.table = QTableWidget()
-        self.table.setColumnCount(4) # [Rank, Name, Description, Actions]
-        self.table.setHorizontalHeaderLabels(["Rank", "Rule Name", "Description", "Move"])
+        self.table.setColumnCount(5) # [Rank, Name, Description, Active, Move]
+        self.table.setHorizontalHeaderLabels(["Rank", "Rule Name", "Description", "Active", "Move"])
         
-        # Col 0: Rank (Fixed small width)
+        # Col 0: Rank
         self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
         self.table.setColumnWidth(0, 50) 
         
-        # Col 1: Name (Size to content, but allow some flex)
+        # Col 1: Name
         self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         
-        # Col 2: Desc (Stretch)
+        # Col 2: Desc
         self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
 
-        # Col 3: Buttons (Fixed small width)
+        # Col 3: Active (Checkbox)
         self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.Fixed)
-        self.table.setColumnWidth(3, 70)
+        self.table.setColumnWidth(3, 60)
+
+        # Col 4: Move Buttons
+        self.table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.Fixed)
+        self.table.setColumnWidth(4, 70)
         
-        # Enable text wrapping and auto-row height
         self.table.setWordWrap(True)
         self.table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.table.verticalHeader().setVisible(False)
         self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-        # Disable internal drag drop since we use buttons now (avoids conflict)
         self.table.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
         
         self.populate_table()
@@ -508,7 +513,6 @@ class PriorityOverlay(QDialog):
         cancel_btn = QPushButton("Cancel")
         cancel_btn.clicked.connect(self.reject)
         
-        # Style buttons explicitly if needed, but inheriting theme should work
         btn_box.addWidget(restore_btn)
         btn_box.addStretch()
         btn_box.addWidget(cancel_btn)
@@ -517,30 +521,67 @@ class PriorityOverlay(QDialog):
 
     def restore_defaults(self):
         self.ladder = list(DEFAULT_LADDER)
+        self.disabled_rules = set()
         self.populate_table()
 
     def populate_table(self):
         self.table.setRowCount(0)
+        
+        # Calculate ranks (only for enabled rules)
+        current_rank = 1
+        
         for i, rule in enumerate(self.ladder):
             row = self.table.rowCount()
             self.table.insertRow(row)
             
-            # 1. Rank
-            rank_item = QTableWidgetItem(f"{i+1}.")
+            is_disabled = rule in self.disabled_rules
+            
+            # Style for disabled rows
+            text_color = COLORS["text_secondary"] if is_disabled else COLORS["text_primary"]
+            font = QFont()
+            if is_disabled:
+                font.setItalic(True)
+            
+            # 0. Rank
+            rank_str = "-" if is_disabled else str(current_rank)
+            rank_item = QTableWidgetItem(rank_str)
             rank_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            rank_item.setFlags(Qt.ItemFlag.ItemIsEnabled) # Read only
+            rank_item.setFlags(Qt.ItemFlag.ItemIsEnabled)
+            rank_item.setForeground(QColor(text_color))
+            rank_item.setFont(font)
             self.table.setItem(row, 0, rank_item)
             
-            # 2. Name
+            if not is_disabled:
+                current_rank += 1
+            
+            # 1. Name
             name_item = QTableWidgetItem(rule)
             name_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            name_item.setForeground(QColor(text_color))
+            name_item.setFont(font)
             self.table.setItem(row, 1, name_item)
             
-            # 3. Description
+            # 2. Description
             desc = RULE_DESCRIPTIONS.get(rule, "No description available.")
             desc_item = QTableWidgetItem(desc)
             desc_item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
+            desc_item.setForeground(QColor(text_color))
+            desc_item.setFont(font)
             self.table.setItem(row, 2, desc_item)
+
+            # 3. Active Toggle
+            # Using a centered checkbox widget
+            chk_widget = QWidget()
+            chk_layout = QHBoxLayout(chk_widget)
+            chk_layout.setContentsMargins(0,0,0,0)
+            chk_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            
+            chk = QCheckBox()
+            chk.setChecked(not is_disabled)
+            chk.toggled.connect(lambda checked, r=rule: self.toggle_rule(r, checked))
+            
+            chk_layout.addWidget(chk)
+            self.table.setCellWidget(row, 3, chk_widget)
 
             # 4. Action Buttons
             cell_widget = QWidget()
@@ -552,22 +593,36 @@ class PriorityOverlay(QDialog):
             btn_up.setText("▲")
             btn_up.setFixedSize(20, 20)
             btn_up.setToolTip("Move Up")
-            # Use closure to capture current index
             btn_up.clicked.connect(lambda checked, idx=i: self.move_up(idx))
+            if is_disabled: btn_up.setEnabled(False)
             
             btn_down = QToolButton()
             btn_down.setText("▼")
             btn_down.setFixedSize(20, 20)
             btn_down.setToolTip("Move Down")
             btn_down.clicked.connect(lambda checked, idx=i: self.move_down(idx))
+            if is_disabled: btn_down.setEnabled(False)
             
             layout.addStretch()
             layout.addWidget(btn_up)
             layout.addWidget(btn_down)
             layout.addStretch()
             
-            self.table.setCellWidget(row, 3, cell_widget)
+            self.table.setCellWidget(row, 4, cell_widget)
             
+    def toggle_rule(self, rule, checked):
+        if checked:
+            if rule in self.disabled_rules:
+                self.disabled_rules.remove(rule)
+        else:
+            self.disabled_rules.add(rule)
+        
+        # Refresh to update ranks and styles
+        # Save scroll position?
+        scroll_val = self.table.verticalScrollBar().value()
+        self.populate_table()
+        self.table.verticalScrollBar().setValue(scroll_val)
+
     def move_up(self, index):
         if index > 0:
             item = self.ladder.pop(index)
@@ -584,6 +639,9 @@ class PriorityOverlay(QDialog):
             
     def get_ladder(self):
         return self.ladder
+
+    def get_disabled_rules(self):
+        return list(self.disabled_rules)
 
 # --- Main Window ---
 class TaskFamiliesOverlay(QDialog):
@@ -1062,24 +1120,60 @@ class TaskFamiliesOverlay(QDialog):
         super().accept()
         
 class TeamMemberOverlay(QDialog):
-    def __init__(self, parent=None, data_path=None):
+    def __init__(self, config, parent=None, data_path=None):
         super().__init__(parent)
         self.setWindowTitle("Team Config")
-        self.resize(800, 600)
+        self.resize(900, 600)
         self.data_path = Path(data_path)
+        
+        self.config_ref = config # Main app config (for preferred_pairs)
         self.team_data = []
         self.current_member = None
+        
+        # Load local copy of preferred pairs to edit (list of lists)
+        self.preferred_pairs = list(self.config_ref.get("preferred_pairs", []))
         
         self.setup_ui()
         self.load_data()
         
     def setup_ui(self):
-        layout = QVBoxLayout(self)
+        self.main_layout = QVBoxLayout(self)
+        
+        self.tabs = QTabWidget()
+        self.tabs.tabBar().setDocumentMode(True)
+        self.tabs.tabBar().setExpanding(True)
+        self.main_layout.addWidget(self.tabs)
+        
+        # --- TAB 1: Roles & Details ---
+        self.tab_roles = QWidget()
+        self.setup_roles_tab()
+        self.tabs.addTab(self.tab_roles, "Roles & Attributes")
+        
+        # --- TAB 2: Preferred Pairs ---
+        self.tab_pairs = QWidget()
+        self.setup_pairs_tab()
+        self.tabs.addTab(self.tab_pairs, "Preferred Pairs")
+        
+        # Buttons
+        bottom_box = QHBoxLayout()
+        self.btn_restore = QPushButton("Restore Defaults")
+        self.btn_restore.clicked.connect(self.restore_defaults)
+        bottom_box.addWidget(self.btn_restore)
+        bottom_box.addStretch()
+        
+        btn_save = QPushButton("Save")
+        btn_save.clicked.connect(self.accept)
+        bottom_box.addWidget(btn_save)
+        
+        self.main_layout.addLayout(bottom_box)
+        
+    def setup_roles_tab(self):
+        layout = QVBoxLayout(self.tab_roles)
         
         # Splitter: List | Form
         splitter = QSplitter(Qt.Orientation.Horizontal)
         
-        # Left: List (No buttons)
+        # Left: List
         left_widget = QWidget()
         left_layout = QVBoxLayout(left_widget)
         left_layout.setContentsMargins(0,0,0,0)
@@ -1138,19 +1232,97 @@ class TeamMemberOverlay(QDialog):
         splitter.setStretchFactor(1, 2)
         
         layout.addWidget(splitter)
+
+    def setup_pairs_tab(self):
+        layout = QVBoxLayout(self.tab_pairs)
+        layout.setSpacing(10)
         
-        # Bottom Buttons
-        bottom_box = QHBoxLayout()
-        self.btn_restore = QPushButton("Restore Defaults")
-        self.btn_restore.clicked.connect(self.restore_defaults)
-        bottom_box.addWidget(self.btn_restore)
-        bottom_box.addStretch()
+        # List of Pairs
+        layout.addWidget(QLabel("Existing Preferred Pairs:"))
+        self.list_pairs = QListWidget()
+        layout.addWidget(self.list_pairs)
         
-        btn_save = QPushButton("Save")
-        btn_save.clicked.connect(self.accept)
-        bottom_box.addWidget(btn_save)
+        # Delete Button
+        btn_del_pair = QPushButton("Remove Selected Pair")
+        btn_del_pair.clicked.connect(self.remove_pair)
+        layout.addWidget(btn_del_pair)
         
-        layout.addLayout(bottom_box)
+        layout.addWidget(QLabel("Add New Pair:"))
+        
+        # Add Form
+        add_box = QGroupBox()
+        add_layout = QHBoxLayout(add_box)
+        
+        self.edit_p1 = QLineEdit()
+        self.edit_p1.setPlaceholderText("Person A")
+        self.edit_p2 = QLineEdit()
+        self.edit_p2.setPlaceholderText("Person B")
+        
+        btn_add = QPushButton("Add")
+        btn_add.clicked.connect(self.add_pair)
+        
+        add_layout.addWidget(self.edit_p1)
+        add_layout.addWidget(QLabel("&"))
+        add_layout.addWidget(self.edit_p2)
+        add_layout.addWidget(btn_add)
+        
+        layout.addWidget(add_box)
+        layout.addStretch()
+
+    def update_completers(self):
+        # Called after loading data
+        names = sorted(list(self.available_names))
+        completer = QCompleter(names)
+        completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        completer.setFilterMode(Qt.MatchFlag.MatchContains)
+        
+        self.edit_p1.setCompleter(completer)
+        self.edit_p2.setCompleter(completer)
+
+    def populate_pairs_list(self):
+        self.list_pairs.clear()
+        for pair in self.preferred_pairs:
+            if len(pair) >= 2:
+                item = QListWidgetItem(f"{pair[0]} & {pair[1]}")
+                item.setData(Qt.ItemDataRole.UserRole, pair) # Store actual list
+                self.list_pairs.addItem(item)
+
+    def add_pair(self):
+        p1 = self.edit_p1.text().strip()
+        p2 = self.edit_p2.text().strip()
+        
+        if not p1 or not p2:
+            return
+            
+        if p1 == p2:
+            return 
+            
+        # Basic validation (optional: enforce known names)
+        # We allow custom names but warn? Solver might fail if names don't match.
+        # Ideally we only allow from available_names if populated.
+        
+        new_pair = [p1, p2]
+        
+        # Check duplicate
+        # Order insensitive check?
+        new_set = set(new_pair)
+        for existing in self.preferred_pairs:
+            if set(existing) == new_set:
+                return # Already exists
+        
+        self.preferred_pairs.append(new_pair)
+        self.populate_pairs_list()
+        self.edit_p1.clear()
+        self.edit_p2.clear()
+
+    def remove_pair(self):
+        items = self.list_pairs.selectedItems()
+        if not items: return
+        
+        pair_data = items[0].data(Qt.ItemDataRole.UserRole)
+        if pair_data in self.preferred_pairs:
+            self.preferred_pairs.remove(pair_data)
+            self.populate_pairs_list()
         
     def load_data(self):
         # 1. Load Available Names from processed/tasks.json (Source of Truth)
@@ -1174,6 +1346,9 @@ class TeamMemberOverlay(QDialog):
              print("processed/tasks.json not found. Run download/convert step first.")
              # Fallback? Maybe empty list.
         
+        # Update completers now that we have names
+        self.update_completers()
+
         # 2. Load Config from team_members.json
         self.team_config = {} # Map name -> {role, both}
         if self.data_path.exists():
@@ -1193,6 +1368,7 @@ class TeamMemberOverlay(QDialog):
             pass
 
         self.populate_list()
+        self.populate_pairs_list()
         
     def populate_list(self):
         self.list_members.clear()
@@ -1207,6 +1383,10 @@ class TeamMemberOverlay(QDialog):
             item = QListWidgetItem(name)
             item.setData(Qt.ItemDataRole.UserRole, config)
             self.list_members.addItem(item)
+            
+        if self.list_members.count() > 0:
+            self.list_members.setCurrentRow(0)
+
             
     def on_selection_changed(self):
         items = self.list_members.selectedItems()
@@ -1279,12 +1459,8 @@ class TeamMemberOverlay(QDialog):
         self.populate_list()
         
     def accept(self):
-        # Save to disk
+        # 1. Save Team Members to disk
         # Convert self.team_config map back to list
-        # We should save ALL config entries, even those not currently in availability list?
-        # Or only those? User said "json adds extra info".
-        # Safe to save all known configs so settings persist if someone comes back.
-        
         export_list = list(self.team_config.values())
         
         try:
@@ -1292,6 +1468,11 @@ class TeamMemberOverlay(QDialog):
                 json.dump(export_list, f, indent=4, ensure_ascii=False)
         except Exception as e:
             print(f"Error saving team: {e}")
+
+        # 2. Save Preferred Pairs to Main Config
+        # self.config_ref is a reference to the main app's config dictionary
+        self.config_ref["preferred_pairs"] = self.preferred_pairs
+            
         super().accept()
 
 class PartykaSolverApp(QMainWindow):
@@ -1673,16 +1854,32 @@ class PartykaSolverApp(QMainWindow):
         self.log("Configuration restored to defaults.", "orange")
 
     def open_priority_overlay(self):
-        current = self.config.get("ladder", [])
-        dlg = PriorityOverlay(current, self)
+        # Pass full config to handle ladder and disabled_rules
+        dlg = PriorityOverlay(self.config, self)
         if dlg.exec():
+            # Dialog updates config in place or returns updated values
+            # But PriorityOverlay.accept() doesn't update self.config automatically unless we returned it
+            # The original code did: new_ladder = dlg.get_ladder(); self.config["ladder"] = new_ladder
+            
+            # Since PriorityOverlay works on a copy, we need to retrieve results.
             new_ladder = dlg.get_ladder()
-            if new_ladder != current:
+            new_disabled = dlg.get_disabled_rules()
+            
+            updated = False
+            if new_ladder != self.config.get("ladder", []):
                 self.config["ladder"] = new_ladder
+                updated = True
+                
+            current_disabled = set(self.config.get("disabled_rules", []))
+            if set(new_disabled) != current_disabled:
+                self.config["disabled_rules"] = list(new_disabled)
+                updated = True
+
+            if updated:
                 self.save_config()
-                self.log("Priority ladder updated via overlay.", COLORS['text_secondary'])
+                self.log("Priority configuration updated.", COLORS['text_secondary'])
             else:
-                self.log("No changes to priority ladder.", COLORS['text_secondary'])
+                self.log("No changes to priorities.", COLORS['text_secondary'])
 
     def open_task_families_overlay(self):
         # Path to data
@@ -1693,8 +1890,17 @@ class PartykaSolverApp(QMainWindow):
 
     def open_team_overlay(self):
         data_path = self.data_dir / "team_members.json"
-        dlg = TeamMemberOverlay(self, str(data_path))
-        dlg.exec()
+        # Pass self.config to handle preferred_pairs
+        dlg = TeamMemberOverlay(self.config, self, str(data_path))
+        if dlg.exec():
+            # Config is updated in place if we pass mutable dict, 
+            # OR we retrieve it. 
+            # TeamMemberOverlay currently saves team_members.json internally.
+            # We need to ensure preferred_pairs are saved to self.config and persist.
+            
+            # The dialog updates self.config["preferred_pairs"] directly if passed.
+            self.save_config()
+            self.log("Team configuration updated.", COLORS['text_secondary'])
 
 
 

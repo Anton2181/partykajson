@@ -34,6 +34,7 @@
         "Preferred Pair",
         "Effort Equalization (Squared Deviation)"
     ],
+    "disabled_rules": [],
     "preferred_pairs": [
         [
             "Antoni Domanowski",

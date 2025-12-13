@@ -170,6 +170,17 @@ def export_csv_for_month(source_prefix=None):
             # Use regex to replace newlines/carriage returns
             jan_df[col] = jan_df[col].replace(r'[\r\n]+', ' ', regex=True)
 
+    # Format Week column to remove decimals (18.0 -> 18)
+    if 'Week' in jan_df.columns:
+        def fmt_week(x):
+            try:
+                if pd.isna(x) or str(x).strip() == "":
+                    return ""
+                return str(int(float(x)))
+            except:
+                return str(x)
+        jan_df['Week'] = jan_df['Week'].apply(fmt_week)
+
     # 6. Save Output
     output_path = results_dir / f"{source_prefix}_filled.csv"
     
