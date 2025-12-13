@@ -72,7 +72,10 @@ def build_app():
         "matplotlib.backends.backend_svg",
         "pyqtgraph",
         "PyQt6.QtSvgWidgets",
-        "PyQt6.QtSvg"
+        "PyQt6.QtSvg",
+        "src.default_families",
+        "src.default_team",
+        "src.rule_descriptions"
     ]
     
     # Collect OR-Tools dependencies automatically (fixes DLL load errors)
