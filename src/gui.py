@@ -4,6 +4,7 @@ import subprocess
 import time
 import platform
 from pathlib import Path
+import ctypes # For Windows Taskbar Icon
 
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
@@ -1278,8 +1279,21 @@ class PartykaSolverApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Partyka Assigner Script")
-        # Set Window Icon
-        icon_path = BASE_DIR / "PartykaIcon.jpg"
+        
+        # Windows Taskbar Icon Fix
+        if platform.system() == "Windows":
+            myappid = 'partyka.assigner.script.1.0' # Arbitrary ID
+            try:
+                ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+            except Exception:
+                pass
+
+        # Set Window Icon (Check Data Dir first, then Base)
+        icon_name = "PartykaIcon.png"
+        icon_path = self.data_dir / icon_name
+        if not icon_path.exists():
+            icon_path = BASE_DIR / icon_name
+            
         if icon_path.exists():
             self.setWindowIcon(QIcon(str(icon_path)))
         self.resize(1200, 500) # Minimized height

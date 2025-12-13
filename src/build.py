@@ -162,11 +162,12 @@ def build_app():
             shutil.copy2(src, dst)
             print(f"Copied {f} to {target_data_dir}")
 
-    # Copy Icon to root dist (for gui.py to find, if needed at runtime externally)
+    # Copy Icon to Data Directory (Organized)
     icon_src = base_dir / "PartykaIcon.png"
     if icon_src.exists():
-        shutil.copy2(icon_src, dist_dir / "PartykaIcon.png")
-        print(f"Copied icon to {dist_dir}")
+        # Place it in target_data_dir (which is dist/data or dist/App/data)
+        shutil.copy2(icon_src, target_data_dir / "PartykaIcon.png")
+        print(f"Copied icon to {target_data_dir}")
             
     print("Build Complete. Check 'dist' folder.")
 
