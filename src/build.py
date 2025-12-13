@@ -47,7 +47,7 @@ def build_app():
     script = str(src_dir / "gui.py")
     
     # Define Name
-    app_name = "PartykaSolverPro"
+    app_name = "Partyka Assigner Script"
     
     # Separator for data files (Windows uses ;, Unix uses :)
     sep = ';' if platform.system() == "Windows" else ':'
@@ -98,6 +98,7 @@ def build_app():
 
     dist_dir = base_dir / "dist"
     build_dir = base_dir / "build"
+    icon_path = base_dir / "PartykaIcon.png"
     
     args = [
         script,
@@ -108,6 +109,10 @@ def build_app():
         f"--distpath={dist_dir}",
         f"--workpath={build_dir}",
     ]
+    
+    # Add Icon if exists
+    if icon_path.exists():
+        args.append(f"--icon={icon_path}")
     
     # Add Data
     for d in add_data:
@@ -148,7 +153,7 @@ def build_app():
         
     target_data_dir.mkdir(parents=True, exist_ok=True)
     
-    # Copy Static Config
+    # Copy Static Config & Icon
     files_to_copy = ["penalty_config.json", "team_members.json", "task_families.json"]
     for f in files_to_copy:
         src = data_path / f
@@ -156,6 +161,12 @@ def build_app():
         if src.exists():
             shutil.copy2(src, dst)
             print(f"Copied {f} to {target_data_dir}")
+
+    # Copy Icon to root dist (for gui.py to find, if needed at runtime externally)
+    icon_src = base_dir / "PartykaIcon.png"
+    if icon_src.exists():
+        shutil.copy2(icon_src, dist_dir / "PartykaIcon.png")
+        print(f"Copied icon to {dist_dir}")
             
     print("Build Complete. Check 'dist' folder.")
 

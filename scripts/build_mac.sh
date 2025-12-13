@@ -7,7 +7,7 @@ VENV_INTEL="$PROJECT_ROOT/.venv_intel"
 BUILD_SCRIPT="$PROJECT_ROOT/src/build.py"
 
 echo "=========================================="
-echo "   Building PartykaSolverPro for Intel    "
+echo "   Building Partyka Assigner Script for Intel    "
 echo "   (Compatible with ALL Macs via Rosetta) "
 echo "=========================================="
 

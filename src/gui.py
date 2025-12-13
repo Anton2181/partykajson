@@ -1277,7 +1277,11 @@ class TeamMemberOverlay(QDialog):
 class PartykaSolverApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Partyka Solver Pro")
+        self.setWindowTitle("Partyka Assigner Script")
+        # Set Window Icon
+        icon_path = BASE_DIR / "PartykaIcon.jpg"
+        if icon_path.exists():
+            self.setWindowIcon(QIcon(str(icon_path)))
         self.resize(1200, 500) # Minimized height
         self.setStyleSheet(LIGHT_THEME)
         
@@ -1499,6 +1503,7 @@ class PartykaSolverApp(QMainWindow):
         
         # Axis 2: Penalties (Right, Linear)
         self.vb2 = pg.ViewBox()
+        self.vb2.setMouseEnabled(x=False, y=False) # Disable interaction on secondary axis
         p1.showAxis('right')
         p1.scene().addItem(self.vb2)
         p1.getAxis('right').linkToView(self.vb2)
