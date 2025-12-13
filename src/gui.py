@@ -297,6 +297,25 @@ QTreeWidget {{
     background-color: {COLORS["surface"]};
     alternate-background-color: {COLORS["surface_hover"]};
 }}
+QRadioButton {{
+    color: {COLORS["text_primary"]};
+    spacing: 8px;
+    padding: 2px;
+}}
+QRadioButton::indicator {{
+    width: 14px;
+    height: 14px;
+    border: 1px solid {COLORS["border"]};
+    border-radius: 8px;
+    background-color: {COLORS["surface"]};
+}}
+QRadioButton::indicator:checked {{
+    background-color: {COLORS["accent_primary"]};
+    border: 1px solid {COLORS["accent_primary"]};
+}}
+QRadioButton::indicator:unchecked:hover {{
+    border: 1px solid {COLORS["accent_gold"]};
+}}
 """
 
 # --- Solver Worker Thread ---
