@@ -82,23 +82,4 @@ def download_data(target_month_str=None):
         print(f"Error running Step 2: {e}")
 
 if __name__ == "__main__":
-    # --- Optional: Pre-build Matplotlib Font Cache ---
-    # User requested to build this concurrently during download to avoid delay later.
-    try:
-        import threading
-        def build_cache():
-             # Importing pyplot triggers font cache build if missing
-            try:
-                import matplotlib.pyplot as plt
-                print("Matplotlib cache check completed.")
-            except Exception:
-                pass
-        
-        t = threading.Thread(target=build_cache)
-        t.daemon = True
-        t.start()
-        print("Started background Matplotlib cache check...")
-    except ImportError:
-        pass
-
     download_data()

@@ -1558,8 +1558,8 @@ class PartykaSolverApp(QMainWindow):
         self.setStyleSheet(LIGHT_THEME)
         
         self.config = self.load_config()
+        # self.data_dir = DATA_DIR # Moved to top
         self.worker = None
-        self.search_in_progress = False
         self.solve_start_time = None
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_live_time)
@@ -1694,7 +1694,13 @@ class PartykaSolverApp(QMainWindow):
         self.btn_download = QPushButton("1. Download Data")
         self.btn_download.clicked.connect(self.run_download_flow)
         
-        self.btn_solve = QPushButton("2. Search")
+        
+        # 3. Solve Button
+        self.btn_solve = QPushButton("3. Start Search")
+        self.btn_solve.setToolTip("Auto-runs aggregation then starts solver")
+        
+        # State
+        self.pending_solve = False
         # Use pseudo-states for proper disabled styling
         self.btn_solve.setStyleSheet(f"""
             QPushButton {{
@@ -1715,7 +1721,7 @@ class PartykaSolverApp(QMainWindow):
         self.btn_export.clicked.connect(self.run_export_flow)
 
         actions_layout.addWidget(self.btn_download)
-
+        actions_layout.addWidget(self.btn_aggregate)
         actions_layout.addWidget(self.btn_solve)
         actions_layout.addWidget(self.btn_export)
         
@@ -1997,15 +2003,13 @@ class PartykaSolverApp(QMainWindow):
         
         # Note: Step 1 (Download) automatically chains Step 2 (Convert).
         # So we don't have a separate Convert button.
-        # But we DO check Step 2 outputs to enable Step 3 (Aggregate).
+        # But we DO check Step 2 outputs to enable Step 3 (Search/Aggregate).
         
-        # 3. Aggregate + Solve (Merged "Search")
-        # Requires Processed Tasks (from Step 2)
+        # 3. Solve (Search): Requires Processed Tasks (because it chains Aggregate)
         processed_tasks = PROCESSED_DIR / f"{month}_{year}_tasks.json"
-        can_search = processed_tasks.exists()
-        
-        self.btn_solve.setEnabled(can_search)
-        self.btn_solve.setToolTip("Requires processed tasks" if not can_search else "")
+        can_solve = processed_tasks.exists()
+        self.btn_solve.setEnabled(can_solve)
+        self.btn_solve.setToolTip("Requires processed data (run Step 1)" if not can_solve else "")
 
         # 5. Export: Requires Results
         assignments_file = RESULTS_DIR / f"{month}_{year}_assignments_by_person.json"
@@ -2053,12 +2057,15 @@ class PartykaSolverApp(QMainWindow):
         self.run_step("step_05_export_csv.py", args=[prefix])
 
     def start_solver(self):
-        # This is now the entry point for the "Search" flow: Aggregate -> Solve
-        
+        # Chained Flow: Aggregate -> Solve
+        self.pending_solve = True
+        self.log("--- Auto-Chain: Running Aggregation First ---", COLORS['accent_secondary'])
+        self.run_aggregate_flow()
+
+    def _start_solver_internal(self):
         if self.worker and self.worker.isRunning():
-            self.log("Stopping process...")
+            self.log("Stopping solver...")
             self.worker.stop()
-            self.search_in_progress = False
             return
 
         # Explicitly save any pending config changes from spinboxes
@@ -2073,6 +2080,8 @@ class PartykaSolverApp(QMainWindow):
         self.log_output.clear()
         
         self.solve_start_time = None
+        # Timer will be started in update_graph upon first data
+        # self.timer.start(50) 
         
         # Switch to Progress Tab
         self.tabs.setCurrentIndex(0)
@@ -2091,23 +2100,17 @@ class PartykaSolverApp(QMainWindow):
         self.btn_download.setEnabled(False)
         self.btn_export.setEnabled(False)
         
-        self.search_in_progress = True
-        
-        # START STEP 3: Aggregate
-        self.run_aggregate_flow()
-
-    def run_solver_inner(self):
-        # Actual Step 4 execution
+        # Pass "january_2026"
         month = self.month_combo.currentText().lower()
         year = self.year_combo.currentText()
         prefix = f"{month}_{year}"
-        script_args = [prefix]
+        script_args = [prefix] 
         
         self.log("--- Starting Solver ---", COLORS['success'])
         self.worker = ScriptWorker("step_04_run_solver.py", script_args, parse_output=True)
         self.worker.progress_signal.connect(self.log)
         self.worker.data_signal.connect(self.update_graph)
-        self.worker.finished.connect(self.on_step_finished)
+        self.worker.finished.connect(self.on_solver_finished)
         self.worker.start()
 
     def update_graph(self, data):
@@ -2146,30 +2149,46 @@ class PartykaSolverApp(QMainWindow):
     def on_step_finished(self):
         script_name = self.worker.script_name if self.worker else None
         
-        # Handle Chaining for Search Flow
-        if self.search_in_progress:
-            if script_name == "step_03_aggregate_groups.py":
-                # Aggregate finished. Check success by verifying Groups file exists?
-                # Actually, let's just assume if it finished without error (process exit code 0?), we proceed.
-                # But ScriptWorker doesn't easily expose exit code here if we don't save it.
-                # We can check if file exists.
-                month = self.month_combo.currentText().lower()
-                year = self.year_combo.currentText()
-                groups_file = PROCESSED_DIR / f"{month}_{year}_groups.json"
+        # Check success via return code (if accessible)
+        success = False
+        if self.worker and self.worker.process:
+             # Just in case process hasn't been polled recently
+             if self.worker.process.returncode is None:
+                 self.worker.process.poll()
+             if self.worker.process.returncode == 0:
+                 success = True
+        
+        self.log("Finished.", COLORS['success'] if success else COLORS['danger'])
+        
+        # Clean up worker
+        self.worker = None
+        self.timer.stop()
+        self.update_button_states()
+        
+        # --- Chained Execution Logic ---
+        if self.pending_solve:
+            if script_name == "step_03_aggregate_groups.py" and success:
+                self.log("Aggregation Successful. Proceeding to Solver...", COLORS['accent_primary'])
+                # Small delay or immediate? Immediate is fine.
+                # Must reset pending_solve BEFORE calling internal start to avoid loop if it fails immediately? 
+                # Actually _start_solver_internal launches a thread, so it returns immediately.
+                # But _start_solver_internal sets worker to step_04. 
+                # pending_solve should be reset once the solver STARTS (or if aggregation fails).
                 
-                if groups_file.exists():
-                    # Proceed to Solve
-                    self.run_solver_inner()
-                    return # Do not finish yet
-                else:
-                    self.log("Aggregation failed or no groups file created. Stopping.", COLORS['danger'])
-                    self.search_in_progress = False
+                # We need to call _start_solver_internal.
+                # But wait, self.pending_solve should only be consumed if we were waiting for aggregation.
+                self.pending_solve = False 
+                self._start_solver_internal()
+                return # Don't process other finished logic for aggregation
+            else:
+                # If aggregation failed or was wrong script
+                if script_name == "step_03_aggregate_groups.py" and not success:
+                    self.log("Aggregation Failed. Aborting Solver.", COLORS['danger'])
+                
+                self.pending_solve = False
 
-            elif script_name == "step_04_run_solver.py":
-                self.log("Solver Finished.", COLORS['success'])
-                self.search_in_progress = False
-                self.on_solver_finished() # Call cleanup specific to solver
-
+        # Check if we just finished Export
+        
         self.log("Finished.", COLORS['success'])
         self.worker = None
         self.timer.stop()
@@ -2200,22 +2219,9 @@ class PartykaSolverApp(QMainWindow):
         self.log("--- Finished ---", COLORS['blue'])
 
     def on_solver_finished(self):
-        self.btn_solve.setText("2. Search")
-        # Reset style (Green)
-        self.btn_solve.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {COLORS['success']};
-                color: white;
-                border-radius: 6px;
-                padding: 8px 16px;
-                font-weight: bold;
-            }}
-            QPushButton:disabled {{
-                background-color: {COLORS['border']};
-                color: {COLORS['text_secondary']};
-            }}
-        """)
-        # self.on_step_finished() # REMOVED to avoid recursion
+        self.btn_solve.setText("3. Start Search")
+        self.btn_solve.setStyleSheet(f"background-color: {COLORS['success']}; color: white;")
+        self.on_step_finished()
         
         # Load Result Files
         self.load_results()

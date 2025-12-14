@@ -10,6 +10,12 @@ if str(pathlib.Path.cwd()) not in sys.path:
 
 from src.solver.solver import SATSolver
 
+# Pre-load Matplotlib to avoid font cache building delay during solve
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+
 def load_json(path):
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
@@ -152,11 +158,6 @@ def save_person_report(assignments, penalties, groups, output_path):
         json.dump(person_data, f, indent=4, ensure_ascii=False)
 
 def generate_effort_chart(assignments, groups, output_path, effort_threshold=8.0, args=None):
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    import numpy as np
-
     # 1. Map Group ID -> Effort and Original Assignee
     # groups contains the INPUT state
     group_map = {g['id']: g for g in groups}
