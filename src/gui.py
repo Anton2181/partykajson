@@ -58,6 +58,10 @@ DEFAULT_LADDER = [
     "Effort Equalization"
 ]
 
+DEFAULT_PREFERRED_PAIRS = [
+    ["Antoni Domanowski", "Nina Andrzejczyk"]
+]
+
 def is_writable(path):
     if not path.exists():
         return False # Or try to create it?
@@ -457,10 +461,10 @@ class PriorityOverlay(QDialog):
         # Responsive sizing
         if parent:
             w = max(1000, int(parent.width() * 0.9)) # Increased base size
-            h = max(700, int(parent.height() * 0.9))
+            h = max(500, int(parent.height() * 0.7)) # Reduced height
             self.resize(w, h)
         else:
-            self.resize(1000, 700)
+            self.resize(1000, 500)
         
         self.setMinimumWidth(900)
             
@@ -689,6 +693,7 @@ class TaskFamiliesOverlay(QDialog):
         self.tree.header().setStretchLastSection(False)
         self.tree.header().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         self.tree.itemSelectionChanged.connect(self.on_selection_changed)
+        self.tree.itemChanged.connect(self.on_item_changed)
         
         # Tree Toolbar (Vertical on the right of tree)
         tree_btn_box = QVBoxLayout()
@@ -879,18 +884,54 @@ class TaskFamiliesOverlay(QDialog):
         self.enable_editor(False)
 
     def populate_tree(self):
+        self.block_signals_tree(True)
         self.tree.clear()
+        
+        first_group_item = None
+        
         for fam in self.families_data:
             fam_item = QTreeWidgetItem(self.tree)
             fam_item.setText(0, fam.get("name", "Unnamed Family"))
             fam_item.setData(0, Qt.ItemDataRole.UserRole, ("FAMILY", fam))
+            fam_item.setFlags(fam_item.flags() | Qt.ItemFlag.ItemIsEditable)
+            
+            # Styling for Family
+            font = QFont()
+            font.setBold(True)
+            fam_item.setFont(0, font)
+            fam_item.setBackground(0, QColor(COLORS['surface_hover']))
             
             for grp in fam.get("groups", []):
                 grp_item = QTreeWidgetItem(fam_item)
                 grp_item.setText(0, grp.get("name", "Unnamed Group"))
                 grp_item.setData(0, Qt.ItemDataRole.UserRole, ("GROUP", grp))
+                grp_item.setFlags(grp_item.flags() | Qt.ItemFlag.ItemIsEditable)
                 
+                if not first_group_item:
+                    first_group_item = grp_item
+            
         self.tree.expandAll()
+        self.block_signals_tree(False)
+        
+        # Auto-select first group if available
+        if first_group_item:
+            self.tree.setCurrentItem(first_group_item)
+
+    def on_item_changed(self, item, column):
+        role, data = item.data(0, Qt.ItemDataRole.UserRole)
+        new_name = item.text(0)
+        
+        if role == "FAMILY":
+            data["name"] = new_name
+        elif role == "GROUP":
+            data["name"] = new_name
+            # If this is the currently edited group, update the form too
+            if self.current_group_ref == data:
+                self.edit_name.show() # Ensure visible
+                self.edit_name.setText(new_name)
+
+    def block_signals_tree(self, block):
+        self.tree.blockSignals(block)
 
     def on_selection_changed(self):
         items = self.tree.selectedItems()
@@ -1074,6 +1115,12 @@ class TaskFamiliesOverlay(QDialog):
         }
         self.families_data.append(new_fam)
         self.populate_tree()
+        
+        # Find the new item (last one) and start editing
+        last_item = self.tree.topLevelItem(self.tree.topLevelItemCount() - 1)
+        if last_item:
+            self.tree.setCurrentItem(last_item)
+            self.tree.editItem(last_item, 0)
 
     def add_group_to_family(self, target_fam):
         new_grp = {
@@ -1451,20 +1498,22 @@ class TeamMemberOverlay(QDialog):
     def remove_member(self): pass
 
     def restore_defaults(self):
-        # Restore logic: Reset config for EVERYONE in available_names to Default?
-        # Or just reload the default file into team_config?
-        # User said "The list itself... should be taken from...".
-        # "Restore Defaults" usually matches the provided defaults.
-        # But we must respect the available list.
-        # So we load DEFAULT_TEAM and use it as the config source.
+        current_tab_idx = self.tabs.currentIndex()
         import copy
-        self.team_config = {}
-        for item in DEFAULT_TEAM:
-            name = item.get("name")
-            if name:
-                self.team_config[name] = copy.deepcopy(item)
         
-        self.populate_list()
+        if current_tab_idx == 0:
+            # Tab 0: Roles & Attributes
+            self.team_config = {}
+            for item in DEFAULT_TEAM:
+                name = item.get("name")
+                if name:
+                    self.team_config[name] = copy.deepcopy(item)
+            self.populate_list()
+            
+        elif current_tab_idx == 1:
+            # Tab 1: Preferred Pairs
+            self.preferred_pairs = list(DEFAULT_PREFERRED_PAIRS)
+            self.populate_pairs_list()
         
     def accept(self):
         # 1. Save Team Members to disk
@@ -1713,7 +1762,7 @@ class PartykaSolverApp(QMainWindow):
         p1.setLogMode(x=False, y=True)
         # Style Left Axis (White)
         # Style Left Axis
-        p1.setLabel('left', 'Objective (Log)', **{'color': COLORS['axis_text']})
+        p1.setLabel('left', 'Objective', **{'color': COLORS['axis_text']})
         p1.getAxis('left').setPen(COLORS['axis_line'])
         p1.getAxis('left').setTextPen(COLORS['axis_text'])
         # Disable SI prefix
@@ -1736,7 +1785,7 @@ class PartykaSolverApp(QMainWindow):
         p1.getAxis('right').setLogMode(False)
         # Style Right Axis (Magenta)
         # Style Right Axis
-        p1.getAxis('right').setLabel('Penalties (Linear)', color=COLORS['danger'])
+        p1.getAxis('right').setLabel('Penalties', color=COLORS['danger'])
         p1.getAxis('right').setPen(COLORS['danger'])
         p1.getAxis('right').setTextPen(COLORS['danger'])
         
