@@ -2218,7 +2218,7 @@ class PartykaSolverApp(QMainWindow):
         self.log("--- Finished ---", COLORS['blue'])
 
     def on_solver_finished(self):
-        self.btn_solve.setText("3. Start Search")
+        self.btn_solve.setText("2. Start Search")
         self.btn_solve.setStyleSheet(f"background-color: {COLORS['success']}; color: white;")
         self.on_step_finished()
         
