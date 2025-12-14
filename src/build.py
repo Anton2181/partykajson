@@ -20,9 +20,9 @@ def clean_build():
                 try:
                     shutil.rmtree(d)
                     break # Success
-                except PermissionError:
+                except OSError:
                     if attempt < 4:
-                        print(f"  [Attempt {attempt+1}] File locked. Retrying in 1s...")
+                        print(f"  [Attempt {attempt+1}] File locked or directory busy. Retrying in 1s...")
                         time.sleep(1)
                     else:
                         print(f"  [ERROR] Could not delete '{d}'. Please close any open folders or running instances of the app.")
