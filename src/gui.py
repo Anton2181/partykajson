@@ -1744,7 +1744,7 @@ class PartykaSolverApp(QMainWindow):
         
         self.plot_widget = pg.PlotWidget()
         self.plot_widget.setBackground(COLORS['chart_bg'])
-        self.plot_widget.setTitle("Objective vs Penalties", color=COLORS['text_primary'], size="12pt")
+        self.plot_widget.setTitle("Search Progress", color=COLORS['text_primary'], size="12pt")
         # Style Bottom Axis
         self.plot_widget.setLabel('bottom', "Time (s)", **{'color': COLORS['axis_text']})
         self.plot_widget.getAxis('bottom').setPen(COLORS['axis_line'])
@@ -1764,16 +1764,16 @@ class PartykaSolverApp(QMainWindow):
         p1.setLogMode(x=False, y=True)
         # Style Left Axis (White)
         # Style Left Axis
-        p1.setLabel('left', 'Objective', **{'color': COLORS['axis_text']})
+        p1.setLabel('left', 'Penalty Sum', **{'color': COLORS['axis_text']})
         p1.getAxis('left').setPen(COLORS['axis_line'])
         p1.getAxis('left').setTextPen(COLORS['axis_text'])
         # Disable SI prefix
         p1.getAxis('left').enableAutoSIPrefix(False)
         
-        # Restrict View: Time > 0, Objective > 1 (Log 0)
+        # Restrict View: Time > 0, Penalty Sum > 1 (Log 0)
         p1.setLimits(xMin=0, yMin=0)
         
-        self.curve_obj = p1.plot(name="Objective", pen=pg.mkPen(COLORS['graph_obj'], width=3))
+        self.curve_obj = p1.plot(name="Penalty Sum", pen=pg.mkPen(COLORS['graph_obj'], width=3))
         
         # Axis 2: Penalties (Right, Linear)
         self.vb2 = pg.ViewBox()
