@@ -1721,7 +1721,6 @@ class PartykaSolverApp(QMainWindow):
         self.btn_export.clicked.connect(self.run_export_flow)
 
         actions_layout.addWidget(self.btn_download)
-        actions_layout.addWidget(self.btn_aggregate)
         actions_layout.addWidget(self.btn_solve)
         actions_layout.addWidget(self.btn_export)
         
