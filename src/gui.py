@@ -1717,7 +1717,7 @@ class PartykaSolverApp(QMainWindow):
         """)
         self.btn_solve.clicked.connect(self.start_solver)
         
-        self.btn_export = QPushButton("4. Export CSV")
+        self.btn_export = QPushButton("3. Export Assignments")
         self.btn_export.clicked.connect(self.run_export_flow)
 
         actions_layout.addWidget(self.btn_download)
