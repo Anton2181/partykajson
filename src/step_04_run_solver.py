@@ -262,7 +262,6 @@ def generate_effort_chart(assignments, groups, output_path, effort_threshold=8.0
     plt.axhline(y=effort_threshold, color='black', linestyle='--')
     
     plt.tight_layout()
-    plt.tight_layout()
     # Save as SVG for infinite scalability/sharpness in GUI
     svg_path = output_path.with_suffix('.svg')
     # Atomic write: save to tmp, then rename

@@ -134,7 +134,6 @@ def build_app():
         
     print(f"Building {app_name}...")
     # Clean previous build artifacts again to be safe
-    # PyInstaller.__main__.run(args)
     # Actually run process to handle arch switching if needed? 
     # Calling run() directly runs in-process. 
     # If python is universal, this *should* work.

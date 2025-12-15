@@ -3,6 +3,8 @@ import json
 import subprocess
 import time
 import platform
+import shutil
+import os
 from pathlib import Path
 import ctypes # For Windows Taskbar Icon
 
@@ -24,10 +26,7 @@ import pyqtgraph as pg
 pg.setConfigOptions(antialias=True)
 
 # --- Constants & Paths ---
-# --- Constants & Paths ---
 # --- Path Setup & Writability Check ---
-import shutil
-import os
 try:
     from src.rule_descriptions import RULE_DESCRIPTIONS
 except ImportError:
