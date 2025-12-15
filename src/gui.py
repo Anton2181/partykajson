@@ -2056,6 +2056,13 @@ class PartykaSolverApp(QMainWindow):
         self.run_step("step_05_export_csv.py", args=[prefix])
 
     def start_solver(self):
+        # 0. Check if running
+        if self.worker and self.worker.isRunning():
+            self.log("Stopping solver...", COLORS['danger'])
+            self.worker.stop()
+            self.pending_solve = False # Cancel chain
+            return
+
         # Chained Flow: Aggregate -> Solve
         self.pending_solve = True
         self.log("--- Auto-Chain: Running Aggregation First ---", COLORS['accent_secondary'])
