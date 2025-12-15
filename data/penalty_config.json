@@ -11,7 +11,7 @@
         "Teaching/Assisting Preference",
         "Teaching/Assisting Equality",
         "Preferred Pair",
-        "Effort Equalization (Squared Deviation)"
+        "Effort Equalization"
     ],
     "time_limit_seconds": 120,
     "scope": {
@@ -32,7 +32,7 @@
         "Multi-Day General (Weekday+Sunday)",
         "Cooldown (Adjacent Weeks)",
         "Preferred Pair",
-        "Effort Equalization (Squared Deviation)"
+        "Effort Equalization"
     ],
     "disabled_rules": [],
     "preferred_pairs": [

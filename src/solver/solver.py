@@ -220,7 +220,7 @@ class SATSolver:
                         
                         incurred_penalties.append({
                             "person_name": person,
-                            "rule": "Effort Equalization (Squared Deviation)",
+                            "rule": "Effort Equalization",
                             "cost": total_penalty,
                             "details": f"Deviation {actual_diff:.1f} from {self.effort_threshold} (SqDiff {sq_diff}, Norm {norm_cost})" 
                         })
