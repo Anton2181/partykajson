@@ -2292,6 +2292,19 @@ class PartykaSolverApp(QMainWindow):
                 if p.get('cost', 0) > 1000:
                     item.setForeground(2, QColor(COLORS['danger']))
 
+    def closeEvent(self, event):
+        """Ensure all background processes are killed on exit."""
+        if self.worker and self.worker.isRunning():
+            self.log("Force quitting active process...", COLORS['danger'])
+            self.worker.stop()
+            self.worker.wait(1000) # Give it a second to die nicely
+            if self.worker.isRunning():
+                # Force kill if needed (though terminate usually works)
+                if self.worker.process:
+                    self.worker.process.kill()
+        
+        event.accept()
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = PartykaSolverApp()
