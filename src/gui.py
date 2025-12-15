@@ -251,10 +251,40 @@ QListWidget::item:selected {{
 QScrollBar:vertical {{
     background-color: {COLORS["bg"]};
     width: 12px;
+    margin: 0px;
 }}
 QScrollBar::handle:vertical {{
     background-color: {COLORS["border"]};
+    min-height: 20px;
     border-radius: 6px;
+}}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
+    height: 0px;
+    background: none;
+}}
+QScrollBar:horizontal {{
+    background-color: {COLORS["bg"]};
+    height: 12px;
+    margin: 0px;
+}}
+QScrollBar::handle:horizontal {{
+    background-color: {COLORS["border"]};
+    min-width: 20px;
+    border-radius: 6px;
+}}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {{
+    width: 0px;
+    background: none;
+}}
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {{
+    background: none;
+}}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
+    background: none;
+}}
+QAbstractScrollArea::corner {{
+    background: {COLORS["bg"]};
+    border: none;
 }}
 QMenu {{
     background-color: {COLORS["surface"]};
