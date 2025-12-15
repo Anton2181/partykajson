@@ -1695,7 +1695,7 @@ class PartykaSolverApp(QMainWindow):
         
         
         # 3. Solve Button
-        self.btn_solve = QPushButton("3. Start Search")
+        self.btn_solve = QPushButton("2. Start Search")
         self.btn_solve.setToolTip("Auto-runs aggregation then starts solver")
         
         # State
