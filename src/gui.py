@@ -1856,6 +1856,7 @@ class PartykaSolverApp(QMainWindow):
         assign_layout = QVBoxLayout(self.tab_assign)
         self.tree_assign = QTreeWidget()
         self.tree_assign.setHeaderLabels(["Person / Task", "Detail"])
+        self.tree_assign.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.tree_assign.setColumnWidth(0, 300)
         assign_layout.addWidget(self.tree_assign)
         self.tabs.addTab(self.tab_assign, "Assignments")
@@ -1865,6 +1866,7 @@ class PartykaSolverApp(QMainWindow):
         pen_layout = QVBoxLayout(self.tab_penalties)
         self.tree_pen = QTreeWidget()
         self.tree_pen.setHeaderLabels(["Rule", "Person", "Cost", "Details"])
+        self.tree_pen.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         pen_layout.addWidget(self.tree_pen)
         self.tabs.addTab(self.tab_penalties, "Penalties")
 
