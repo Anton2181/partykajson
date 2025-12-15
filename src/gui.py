@@ -33,7 +33,15 @@ except ImportError:
     from rule_descriptions import RULE_DESCRIPTIONS
 
 try:
-    from default_families import DEFAULT_FAMILIES
+    from src.numeric_sort_item import NumericSortItem
+except ImportError:
+    try:
+        from numeric_sort_item import NumericSortItem
+    except ImportError:
+         NumericSortItem = QTreeWidgetItem # Fallback
+
+try:
+    from src.default_families import DEFAULT_FAMILIES
 except ImportError:
     DEFAULT_FAMILIES = []
 
@@ -1857,6 +1865,7 @@ class PartykaSolverApp(QMainWindow):
         self.tree_assign = QTreeWidget()
         self.tree_assign.setHeaderLabels(["Person / Task", "Detail"])
         self.tree_assign.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.tree_assign.setSortingEnabled(True)
         self.tree_assign.setColumnWidth(0, 300)
         assign_layout.addWidget(self.tree_assign)
         self.tabs.addTab(self.tab_assign, "Assignments")
@@ -1867,6 +1876,7 @@ class PartykaSolverApp(QMainWindow):
         self.tree_pen = QTreeWidget()
         self.tree_pen.setHeaderLabels(["Rule", "Person", "Cost", "Details"])
         self.tree_pen.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.tree_pen.setSortingEnabled(True)
         pen_layout.addWidget(self.tree_pen)
         self.tabs.addTab(self.tab_penalties, "Penalties")
 
@@ -2304,6 +2314,11 @@ class PartykaSolverApp(QMainWindow):
                     t_item.setText(1, detail)
             
             self.tree_assign.expandAll()
+            
+            # Default Sort: Detail (Col 1) Descending
+            # Note: For top items, this sorts by "N Tasks" (String). 
+            # For children, it sorts by "W{week} {day}" descending (W4 > W1).
+            self.tree_assign.sortItems(1, Qt.SortOrder.DescendingOrder)
         
         # 3. Load Penalties
         pen_path = RESULTS_DIR / f"{prefix}_penalties.json"
@@ -2313,16 +2328,40 @@ class PartykaSolverApp(QMainWindow):
             with open(pen_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             
+            # Determine top 3 tiers threshold
+            # Solver uses ratio=10. Costs are 10^(N-1), 10^(N-2), ...
+            # We want to highlight the top 3 absolute tiers defined by the ladder structure.
+            ladder = self.config.get("ladder", getattr(self, "DEFAULT_LADDER", []))
+            # Fallback if DEFAULT_LADDER isn't on self but global
+            if not ladder:
+                ladder = DEFAULT_LADDER
+                
+            n = len(ladder)
+            # Threshold is the 3rd highest cost.
+            # 1st: 10^(n-1)
+            # 2nd: 10^(n-2)
+            # 3rd: 10^(n-3)
+            # So if cost >= 10^(n-3), it's in the top 3.
+            # Handle short ladders (n < 3)
+            exponent = max(0, n - 3)
+            threshold = 10 ** exponent
+            
             for p in data:
-                item = QTreeWidgetItem(self.tree_pen)
+                item = NumericSortItem(self.tree_pen)
                 item.setText(0, p.get('rule', ''))
                 item.setText(1, p.get('person_name') or 'Group')
-                item.setText(2, str(p.get('cost', 0)))
+                cost = p.get('cost', 0)
+                item.setText(2, str(cost))
                 item.setText(3, str(p.get('details', '')))
                 
-                # Color code high penalties?
-                if p.get('cost', 0) > 1000:
+                # Color code top 3 tiers
+                if cost >= threshold:
                     item.setForeground(2, QColor(COLORS['danger']))
+                    # Also color the rule name for visibility?
+                    item.setForeground(0, QColor(COLORS['danger']))
+            
+            # Default Sort: Cost (Col 2) Descending
+            self.tree_pen.sortItems(2, Qt.SortOrder.DescendingOrder)
 
     def closeEvent(self, event):
         """Ensure all background processes are killed on exit."""
