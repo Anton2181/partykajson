@@ -1,6 +1,7 @@
 from ortools.sat.python import cp_model
 from src.solver.penalties import SolverPenalties
 import math
+from collections import defaultdict
 
 class SolutionPrinter(cp_model.CpSolverSolutionCallback):
     def __init__(self, penalty_vars=None, callback=None):
@@ -70,7 +71,7 @@ class SATSolver:
                             assigned_person = p
                             break
                 
-                if group.get('assignee') == assigned_person:
+                if self._is_forced(g_id, assigned_person):
                     method = "manual"
                 else:
                     method = "automatic"
@@ -227,6 +228,95 @@ class SATSolver:
 
         return results, incurred_penalties
 
+    def _precalculate_forced_assignments(self):
+        """
+        Identify assignments that are effectively manual/forced:
+        1. Explicit 'assignee' in data.
+        2. Priority candidates (if person is in priority list).
+        3. Single candidate available.
+        4. N-for-N grouped dependency (e.g. 2 slots, 2 people available total).
+        """
+        self.forced_assignment_map = {}
+        
+        # N-for-N Logic
+        context_groups = defaultdict(list)
+        for g in self.groups:
+            # Group by Context: Name, Week
+            # Note: We need to handle potential missing keys safely
+            w = g.get('week')
+            n = g.get('name')
+            
+            if w is None or n is None:
+                continue
+                
+            # Relaxed Key: Ignore Day to catch cross-day constraints in the same week
+            key = (n, w)
+            context_groups[key].append(g)
+            
+        forced_n_for_n_ids = set()
+        for key, grps in context_groups.items():
+            n_groups = len(grps)
+            if n_groups == 0: continue
+            
+            all_candidates = set()
+            for g in grps:
+                # Prefer filtered list if present (solver usually gets this)
+                cands = g.get('filtered_candidates_list')
+                if not cands: 
+                    cands = g.get('candidates_list', [])
+                all_candidates.update(cands)
+                
+            # Logic: If N slots need filling and distinct candidates == N, they are locked.
+            if len(all_candidates) == n_groups:
+                for g in grps:
+                    forced_n_for_n_ids.add(g['id'])
+
+        # Build Map
+        for group in self.groups:
+            g_id = group['id']
+            
+            # Candidates to check
+            p_list = group.get('filtered_priority_candidates_list')
+            if not p_list: p_list = group.get('priority_candidates_list', [])
+            
+            cands = group.get('filtered_candidates_list')
+            if not cands: cands = group.get('candidates_list', [])
+            
+            # Use intersection of candidates and team_members logic effectively
+            # Iterate potential people who might be assigned
+            
+            possible_assignees = set(cands)
+            if p_list: possible_assignees.update(p_list)
+            if group.get('assignee'): possible_assignees.add(group['assignee'])
+            
+            for person in possible_assignees:
+                is_forced = False
+                
+                # 1. Explicit
+                if group.get('assignee') == person:
+                    is_forced = True
+                
+                # 2. Priority
+                # If person is a priority candidate, we deem it 'Manual/Prepass' intent
+                elif p_list and person in p_list:
+                    is_forced = True
+                    
+                # 3. Single Option
+                elif len(cands) == 1 and person in cands:
+                     is_forced = True
+                    
+                # 4. N-for-N
+                elif g_id in forced_n_for_n_ids:
+                    # If N-for-N is active, any valid candidate is forced
+                    if person in cands:
+                        is_forced = True
+                
+                if is_forced:
+                    self.forced_assignment_map[(g_id, person)] = True
+
+    def _is_forced(self, group_id, person_name):
+        return self.forced_assignment_map.get((group_id, person_name), False)
+
     def solve(self, solution_callback=None):
         self.model = cp_model.CpModel()
         
@@ -245,6 +335,10 @@ class SATSolver:
         self.team_members = team_members
         self.member_map = {m['name']: m for m in team_members}
         self.group_map = {g['id']: g for g in groups}
+        
+        # Pre-calculate Forced Assignments for N-for-N detection and Priority
+        self.forced_assignment_map = {}
+        self._precalculate_forced_assignments()
         
         # Define Rules for Ladder
         # 1. Unassigned (Highest)
@@ -547,21 +641,7 @@ class SATSolver:
 
                          for gid in person_gids:
                              var = self.assignments[(gid, person)]
-                             is_manual = False
-                             group_obj = self.group_map.get(gid)
-                             
-                             if group_obj:
-                                 # 1. Explicit Manual
-                                 if group_obj.get('assignee') == person:
-                                     is_manual = True
-                                 
-                                 # 2. Unavoidable
-                                 if not is_manual:
-                                     p_list = group_obj.get('filtered_priority_candidates_list')
-                                     curr_candidates = p_list if p_list else group_obj.get('filtered_candidates_list', [])
-                                     
-                                     if len(curr_candidates) == 1 and curr_candidates[0] == person:
-                                         is_manual = True
+                             is_manual = self._is_forced(gid, person)
                              
                              if is_manual:
                                  manual_vars.append(var)

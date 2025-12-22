@@ -32,13 +32,19 @@ try:
 except ImportError:
     from rule_descriptions import RULE_DESCRIPTIONS
 
-try:
-    from src.numeric_sort_item import NumericSortItem
-except ImportError:
-    try:
-        from numeric_sort_item import NumericSortItem
-    except ImportError:
-         NumericSortItem = QTreeWidgetItem # Fallback
+
+# Inline definition to avoid import issues
+class NumericSortItem(QTreeWidgetItem):
+    def __lt__(self, other):
+        column = self.treeWidget().sortColumn()
+        key1 = self.text(column)
+        key2 = other.text(column)
+        
+        # Attempt numeric conversion for sorting
+        try:
+            return float(key1) < float(key2)
+        except ValueError:
+            return key1 < key2
 
 try:
     from src.default_families import DEFAULT_FAMILIES
