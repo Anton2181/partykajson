@@ -330,7 +330,7 @@ class SATSolver:
         # The instruction was "Update solve to use extract_solution".
         # I need to see exactly where to splice.
         pass
-    def __init__(self, groups, team_members):
+    def __init__(self, groups, team_members, config=None):
         self.groups = groups
         self.team_members = team_members
         self.member_map = {m['name']: m for m in team_members}
@@ -341,30 +341,33 @@ class SATSolver:
         self._precalculate_forced_assignments()
         
         # Define Rules for Ladder
-        # 1. Unassigned (Highest)
-        # 2. Underworked (Effort < 8)
-        # 3. Multi-Day Weekdays (First Rule)
-        # 4. Min Tasks/Day
-        # 5. Multi-Day General (Third Rule - Mixed)
-        # Define Rules for Ladder
-        # Loaded from data/penalty_config.json
-        import json
-        from pathlib import Path
+        self.disabled_rules = set()
+
+        if config:
+            ladder_raw = config.get('ladder', [])
+            self.disabled_rules = set(config.get('disabled_rules', []))
+            self.preferred_pairs = config.get('preferred_pairs', [])
+            self.time_limit = config.get('time_limit_seconds', 30.0)
+            self.effort_threshold = config.get('effort_threshold', 8.0)
+            self.penalty_ratio = config.get('penalty_ratio', 10)
+        else:
+            # Loaded from data/penalty_config.json
+            import json
+            from pathlib import Path
+            
+            config_path = Path('data') / 'penalty_config.json'
+            with open(config_path, 'r') as f:
+                t = json.load(f)
+                ladder_raw = t['ladder']
+                self.disabled_rules = set(t.get('disabled_rules', []))
+                self.preferred_pairs = t.get('preferred_pairs', [])
+                self.time_limit = t.get('time_limit_seconds', 30.0)
+                self.effort_threshold = t.get('effort_threshold', 8.0)
+                self.penalty_ratio = t.get('penalty_ratio', 10)
         
-        config_path = Path('data') / 'penalty_config.json'
-        with open(config_path, 'r') as f:
-            t = json.load(f)
-            ladder_raw = t['ladder']
-            self.disabled_rules = set(t.get('disabled_rules', []))
-            
-            # Filter out disabled rules from the active ladder
-            self.rule_definitions = [r for r in ladder_raw if r not in self.disabled_rules]
-            
-            self.time_limit = t.get('time_limit_seconds', 30.0)
-            self.penalty_ratio = t.get('penalty_ratio', 10)
-            self.effort_threshold = t.get('effort_threshold', 8.0)
-            self.preferred_pairs = t.get('preferred_pairs', [])
-            
+        # Filter out disabled rules from the active ladder
+        self.rule_definitions = [r for r in ladder_raw if r not in self.disabled_rules]
+        
         self.penalties = SolverPenalties(self.rule_definitions, self.penalty_ratio)
         
         # Initialize model and variables here, as they are used across methods
@@ -753,7 +756,7 @@ class SATSolver:
                     # Formula: Cost = P * 2^(N-1) for N >= 1, else 0
                     costs = [0]
                     for i in range(1, len(missed_vars) + 1):
-                         val = P_DIVERSITY * (2**(i-1))
+                         val = P_DIVERSITY * (3**(i-1))
                          if val > 9000000000000000000: val = 9000000000000000000
                          costs.append(val)
                     

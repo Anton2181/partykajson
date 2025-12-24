@@ -36,3 +36,11 @@ Several rules have logic to "Ignore" manual or unavoidable assignments.
 The input data can specify strict subsets of candidates via `filtered_priority_candidates_list`.
 - **Logic**: If a `priority_list` exists and is not empty, the solver **ONLY** considers candidates in this list. All other "techincally capable" candidates in the broader list are ignored.
 - **Use Case**: This allows the UI/User to narrow down the search space ("Only consider these 3 people for this specific Shift").
+
+## 5. Split Roles & Dual Capability ("Both")
+Some team members are marked as **"Both"** (Leader + Follower).
+- **Standard Logic**: Users marked as "Both" appear in candidate lists for *Role: Leader* AND *Role: Follower* tasks.
+- **Priority Handling**:
+    - If a task requires a "Leader" and has a Starred Priority list, a "Both" user is **only** considered a priority candidate if they are manually starred *for that specific task*.
+    - **Exception**: If a "Both" user is the **ONLY** starred candidate available for a Split Group (one Leader slot, one Follower slot), the system may infer priority contextually, but generally, explicit starring is preferred to avoid ambiguity.
+

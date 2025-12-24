@@ -88,6 +88,7 @@ This document describes the penalties used by the schedule solver to optimize as
 ## 11. Effort Equalization
 **Rule Name:** `"Effort Equalization"`
 **Description:** Soft penalty to encourage all team members to be close to the target effort (Configured Threshold, default 8.0).
+> **Important:** This metric counts **ALL** assignments (Manual, Priority, and Auto). There are no exemptions. If a person is manually assigned 10 units of work, they are "Overworked" and the solver will avoid giving them more, ensuring global fairness.
 **Logic:** Quadratic.
 - **Formula:** $Cost = P \cdot \lfloor(Effort - Threshold)^2\rfloor$.
 - Note: Effort is scaled by 10 internally, so we calculate $SqDiff = (ScaledEffort - ScaledThreshold)^2$ and then normalize by dividing by 100 to get the deviation squared in range.

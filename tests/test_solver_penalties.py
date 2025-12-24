@@ -49,7 +49,7 @@ def test_cascading_role_diversity_penalty(sample_team_members):
     # Alice capable of all.
     # Alice assigned ONLY to A.
     # Missed: B, C, D (3 families).
-    # Expected Cost: Base * 2^(3-1) = Base * 4.
+    # Expected Cost: Base * 3^(3-1) = Base * 9.
     
     groups = [
         {"id": "G01_1_0_1", "name": "Task A", "family": "FamA", "filtered_candidates_list": ["Alice"], "task_count": 1},
