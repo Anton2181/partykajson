@@ -3,7 +3,7 @@ import pytest
 from src.solver.solver import SATSolver
 
 def test_cascading_multi_day_penalty(sample_team_members):
-    # Setup: Alice works on 3 days in Week 1 -> Penalty should be (3-1)*P = 2P
+    # Setup: Alice works on 3 days in Week 1 -> Penalty should be 3^(3-2)*P = 3P
     
     # Define simplified groups
     # We need Monday, Tuesday, Wednesday

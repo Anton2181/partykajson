@@ -665,7 +665,7 @@ class SATSolver:
                                  if i < 2:
                                      costs.append(0)
                                  else:
-                                     multiplier = 2 ** (i - 2)
+                                     multiplier = 3 ** (i - 2)
                                      val = P_TEACH_EQUALITY * multiplier
                                      if val > 9000000000000000000: val = 9000000000000000000
                                      costs.append(val)
@@ -878,12 +878,15 @@ class SATSolver:
                     
                     # If length >= 3, add geometric penalty
                     if length >= 3:
-                        # Determine penalty multiplier
-                        # L=3 (A-B-C) -> +1*P (Total 2P for last link)
-                        # L=4 -> +2*P (Total 4P for last link)
-                        # L=5 -> +4*P (Total 8P for last link)
+                        # Multipliers derived to match geometric totals (100, 300, 900, 2700):
+                        # L=3: Tot=300 (2 Pairs + 1 Streak). S3=100 (1x).
+                        # L=4: Tot=900 (3 Pairs + 2 S3 + 1 Streak). S4=400 (4x).
+                        # L=5: Tot=2700 (4 Pairs + 3 S3 + 2 S4 + 1 Streak). S5=1200 (12x).
                         
-                        multiplier = 3**(length - 3) 
+                        multiplier = 1
+                        if length == 4: multiplier = 4
+                        elif length == 5: multiplier = 12
+                        
                         extra_cost = P_COOLDOWN * multiplier
                         
                         # Apply constraint for this specific person on this chain
@@ -1019,9 +1022,9 @@ class SATSolver:
                          if len(vars_list) >= 2: 
                              # Geometric Cascading Penalty: 
                              # 2 days -> 1x
-                             # 3 days -> 2x
-                             # 4 days -> 4x
-                             # Formula: P * 2^(count - 2) for count >= 2
+                             # 3 days -> 3x
+                             # 4 days -> 9x
+                             # Formula: P * 3^(count - 2) for count >= 2
                              
                              # 1. Count Total Weekdays Assigned
                              count_var = self.model.NewIntVar(0, len(vars_list), f"multi_weekday_count_{person}_{w_str}")
@@ -1034,9 +1037,9 @@ class SATSolver:
                                  if i < 2:
                                      costs.append(0)
                                  else:
-                                     # i=2 -> 2^(0) = 1
-                                     # i=3 -> 2^(1) = 2
-                                     multiplier = 2 ** (i - 2)
+                                     # i=2 -> 3^(0) = 1
+                                     # i=3 -> 3^(1) = 3
+                                     multiplier = 3 ** (i - 2)
                                      val = P_MULTI_WEEKDAY * multiplier
                                      if val > 9000000000000000000: val = 9000000000000000000
                                      costs.append(val)
