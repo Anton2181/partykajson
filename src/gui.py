@@ -70,8 +70,6 @@ DEFAULT_LADDER = [   'Unassigned Group',
     'Effort Equalization']
 
 DEFAULT_PREFERRED_PAIRS = [['Antoni Domanowski', 'Nina Andrzejczyk']]
-]
-]
 
 def is_writable(path):
     if not path.exists():

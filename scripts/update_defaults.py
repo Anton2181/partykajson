@@ -39,7 +39,9 @@ def update_gui_file(ladder, preferred_pairs):
 
     # Update DEFAULT_PREFERRED_PAIRS
     pairs_str = pprint.pformat(preferred_pairs, indent=4)
-    pattern_pairs = re.compile(r'DEFAULT_PREFERRED_PAIRS = \[.*?\]', re.DOTALL)
+    # Regex to handle list of lists: matches outer brackets and content that includes inner brackets
+    # Matches: DEFAULT_PREFERRED_PAIRS = [ (non-brackets OR inner [...])* ]
+    pattern_pairs = re.compile(r'DEFAULT_PREFERRED_PAIRS\s*=\s*\[(?:[^\]]|\[.*?\])*\]', re.DOTALL)
     new_pairs_def = f"DEFAULT_PREFERRED_PAIRS = {pairs_str}"
     
     if pattern_pairs.search(content):

@@ -60,9 +60,7 @@ def build_app():
     
     add_data = [
         # Only bundle source code. Data is external.
-        f"{src_path}{sep}src", 
-        # Bundle defaults for fallback (User Docs mode)
-        f"{data_path}{sep}data_defaults"
+        f"{src_path}{sep}src"
     ]
     
     # Hidden Imports (OR-Tools, Pandas often need help)
