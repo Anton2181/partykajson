@@ -56,23 +56,21 @@ try:
 except ImportError:
     DEFAULT_TEAM = []
 
-DEFAULT_LADDER = [
-    "Unassigned Group",
-    "Underworked Team Member (< Threshold)",
-    "Intra-Week Cooldown (Same Week)",
-    "Teaching/Assisting Preference",
-    "Multi-Day Weekdays (e.g. Tue+Wed)",
-    "Teaching/Assisting Equality",
-    "Role Diversity (Assignments in each capable family)",
-    "Inefficient Day (< 2 Tasks)",
-    "Multi-Day General (Weekday+Sunday)",
-    "Cooldown (Adjacent Weeks)",
-    "Preferred Pair",
-    "Effort Equalization"
-]
+DEFAULT_LADDER = [   'Unassigned Group',
+    'Underworked Team Member (< Threshold)',
+    'Intra-Week Cooldown (Same Week)',
+    'Teaching/Assisting Preference',
+    'Multi-Day Weekdays (e.g. Tue+Wed)',
+    'Teaching/Assisting Equality',
+    'Role Diversity (Assignments in each capable family)',
+    'Inefficient Day (< 2 Tasks)',
+    'Multi-Day General (Weekday+Sunday)',
+    'Cooldown (Adjacent Weeks)',
+    'Preferred Pair',
+    'Effort Equalization']
 
-DEFAULT_PREFERRED_PAIRS = [
-    ["Antoni Domanowski", "Nina Andrzejczyk"]
+DEFAULT_PREFERRED_PAIRS = [['Antoni Domanowski', 'Nina Andrzejczyk']]
+]
 ]
 
 def is_writable(path):

@@ -1,182 +1,36 @@
-DEFAULT_TEAM = [
-    {
-        "name": "Alicja Nowak",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Anna Brzoza",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Antoni Domanowski",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Aleksander Nowak",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Andras Retlaki",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Damian Bartosiewicz",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Damian Bagnowski",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Diana Siwicka",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Krzysztof Budny",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Karolina Zak",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Michał Dziedziniewicz",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Maria Merchel",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Nina Andrzejczyk",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Maciek Oficialski",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Anna Kolomenkina",
-        "role": "follower",
-        "both": True
-    },
-    {
-        "name": "Agnieszka Lech",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Anna Sidorowicz",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Daniele Donzello",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Damian Karas",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Ephraim Eshak",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Jan Mężyński",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Martyna Gosz",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Marius Latinis",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Michal Zagrodzki",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Natalia Khotsianovska",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Piotr Kucharski",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Patrycja Niemczuk",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Pawel Wypijewski",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Sylwia Woźniak",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Tomasz Wilk",
-        "role": "leader",
-        "both": False
-    },
-    {
-        "name": "Yuliana Szewczuk",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Yulia Talybova",
-        "role": "follower",
-        "both": True
-    },
-    {
-        "name": "Ludmiła Januszewska",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Iana Kain",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Julia Borychowska",
-        "role": "follower",
-        "both": False
-    },
-    {
-        "name": "Krzysiek Rećko",
-        "role": "leader",
-        "both": False
-    }
-]
+DEFAULT_TEAM = [   {'both': False, 'name': 'Alicja Nowak', 'role': 'follower'},
+    {'both': False, 'name': 'Anna Brzoza', 'role': 'follower'},
+    {'both': False, 'name': 'Antoni Domanowski', 'role': 'leader'},
+    {'both': False, 'name': 'Aleksander Nowak', 'role': 'leader'},
+    {'both': False, 'name': 'Andras Retlaki', 'role': 'leader'},
+    {'both': False, 'name': 'Damian Bartosiewicz', 'role': 'leader'},
+    {'both': False, 'name': 'Damian Bagnowski', 'role': 'leader'},
+    {'both': False, 'name': 'Diana Siwicka', 'role': 'follower'},
+    {'both': False, 'name': 'Krzysztof Budny', 'role': 'leader'},
+    {'both': False, 'name': 'Karolina Zak', 'role': 'follower'},
+    {'both': False, 'name': 'Michał Dziedziniewicz', 'role': 'leader'},
+    {'both': False, 'name': 'Maria Merchel', 'role': 'follower'},
+    {'both': False, 'name': 'Nina Andrzejczyk', 'role': 'follower'},
+    {'both': False, 'name': 'Maciek Oficialski', 'role': 'leader'},
+    {'both': True, 'name': 'Anna Kolomenkina', 'role': 'follower'},
+    {'both': False, 'name': 'Agnieszka Lech', 'role': 'follower'},
+    {'both': False, 'name': 'Anna Sidorowicz', 'role': 'follower'},
+    {'both': False, 'name': 'Daniele Donzello', 'role': 'leader'},
+    {'both': False, 'name': 'Damian Karas', 'role': 'leader'},
+    {'both': False, 'name': 'Ephraim Eshak', 'role': 'leader'},
+    {'both': False, 'name': 'Jan Mężyński', 'role': 'leader'},
+    {'both': False, 'name': 'Martyna Gosz', 'role': 'follower'},
+    {'both': False, 'name': 'Marius Latinis', 'role': 'leader'},
+    {'both': False, 'name': 'Michal Zagrodzki', 'role': 'leader'},
+    {'both': False, 'name': 'Natalia Khotsianovska', 'role': 'follower'},
+    {'both': False, 'name': 'Piotr Kucharski', 'role': 'leader'},
+    {'both': False, 'name': 'Patrycja Niemczuk', 'role': 'follower'},
+    {'both': False, 'name': 'Pawel Wypijewski', 'role': 'leader'},
+    {'both': False, 'name': 'Sylwia Woźniak', 'role': 'follower'},
+    {'both': False, 'name': 'Tomasz Wilk', 'role': 'leader'},
+    {'both': False, 'name': 'Yuliana Szewczuk', 'role': 'follower'},
+    {'both': True, 'name': 'Yulia Talybova', 'role': 'follower'},
+    {'both': False, 'name': 'Ludmiła Januszewska', 'role': 'follower'},
+    {'both': False, 'name': 'Iana Kain', 'role': 'follower'},
+    {'both': False, 'name': 'Julia Borychowska', 'role': 'follower'},
+    {'both': False, 'name': 'Krzysiek Rećko', 'role': 'leader'}]

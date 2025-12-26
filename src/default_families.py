@@ -1,441 +1,252 @@
-DEFAULT_FAMILIES = [
-    {
-        "name": "Teaching",
-        "groups": [
-            {
-                "name": "Teaching Advanced Tuesday",
-                "tasks": [
-                    "Preparation for the Lesson / Advanced - Tuesday",
-                    "Conducting the lesson / Advanced - Tuesday"
-                ],
-                "exclusive": [
-                    "Teaching Beginners Tuesday",
-                    "Assisting Beginners Tuesday",
-                    "Take Care of Newcomers - Tuesday",
-                    "Tuesday Milonga Installation",
-                    "Photographer Tuesday"
-                ],
-                "PriorityAssignees": [
-                    "Daniele Donzello",
-                    "Yulia Talybova"
-                ],
-                "leader-group-count": 1,
-                "follower-group-count": 1,
-                "any-group-count": 0
-            },
-            {
-                "name": "Teaching Beginners Tuesday",
-                "tasks": [
-                    "Preparation for the Lesson / Teachers - Tuesday",
-                    "Conducting the lesson / Teacher - Tuesday"
-                ],
-                "exclusive": [
-                    "Teaching Advanced Tuesday",
-                    "Assisting Beginners Tuesday",
-                    "Take Care of Newcomers - Tuesday",
-                    "Tuesday Milonga Installation",
-                    "Photographer Tuesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 1,
-                "follower-group-count": 1,
-                "any-group-count": 0
-            },
-            {
-                "name": "Teaching Intermediate Wednesday",
-                "tasks": [
-                    "Preparation for the Lesson / Intermediate - Wednesday",
-                    "Conducting the lesson / Intermediate - Wednesday"
-                ],
-                "exclusive": [
-                    "Wednesday Milonga Installation",
-                    "Teaching Beginners Wednesday",
-                    "Assisting Beginners Wednesday",
-                    "Take Care of Newcomers - Wednesday",
-                    "Third Registrator Wednesday",
-                    "Photographer Wednesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 1,
-                "follower-group-count": 1,
-                "any-group-count": 0
-            },
-            {
-                "name": "Teaching Beginners Wednesday",
-                "tasks": [
-                    "Preparation for the Lesson / Teachers - Wednesday",
-                    "Conducting the lesson - Wednesday"
-                ],
-                "exclusive": [
-                    "Teaching Intermediate Wednesday",
-                    "Wednesday Milonga Installation",
-                    "Assisting Beginners Wednesday",
-                    "Take Care of Newcomers - Wednesday",
-                    "Third Registrator Wednesday",
-                    "Photographer Wednesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 1,
-                "follower-group-count": 1,
-                "any-group-count": 0
-            }
-        ]
-    },
-    {
-        "name": "Assisting",
-        "groups": [
-            {
-                "name": "Assisting Beginners Tuesday",
-                "tasks": [
-                    "Preparation for the Lesson / Assistant - Tuesday",
-                    "Assisting the lesson - Tuesday",
-                    "Registrations / Beginners - Tuesday"
-                ],
-                "exclusive": [
-                    "Teaching Advanced Tuesday",
-                    "Teaching Beginners Tuesday",
-                    "Take Care of Newcomers - Tuesday",
-                    "Tuesday Milonga Installation",
-                    "Photographer Tuesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 1,
-                "follower-group-count": 1,
-                "any-group-count": 0
-            },
-            {
-                "name": "Take Care of Newcomers - Tuesday",
-                "tasks": [
-                    "Take Care of Newcomers - Tuesday"
-                ],
-                "exclusive": [
-                    "Teaching Advanced Tuesday",
-                    "Teaching Beginners Tuesday",
-                    "Assisting Beginners Tuesday",
-                    "Tuesday Milonga Installation",
-                    "Photographer Tuesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            },
-            {
-                "name": "Assisting Beginners Wednesday",
-                "tasks": [
-                    "Preparation for the Lesson / Assistant - Wednesday",
-                    "Assisting the lesson - Wednesday",
-                    "Registrations / Beginners - Wednesday"
-                ],
-                "exclusive": [
-                    "Teaching Intermediate Wednesday",
-                    "Teaching Beginners Wednesday",
-                    "Take Care of Newcomers - Wednesday",
-                    "Third Registrator Wednesday",
-                    "Wednesday Milonga Installation",
-                    "Photographer Wednesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 1,
-                "follower-group-count": 1,
-                "any-group-count": 0
-            },
-            {
-                "name": "Take Care of Newcomers - Wednesday",
-                "tasks": [
-                    "Take Care of Newcomers - Wednesday"
-                ],
-                "exclusive": [
-                    "Teaching Intermediate Wednesday",
-                    "Teaching Beginners Wednesday",
-                    "Assisting Beginners Wednesday",
-                    "Third Registrator Wednesday",
-                    "Wednesday Milonga Installation",
-                    "Photographer Wednesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            }
-        ]
-    },
-    {
-        "name": "Third Registrator Wednesday",
-        "groups": [
-            {
-                "name": "Third Registrator Wednesday",
-                "tasks": [
-                    "Registrations / Beginners - Wednesday",
-                    "Registrations / Intermediate - Wednesday"
-                ],
-                "exclusive": [
-                    "Teaching Intermediate Wednesday",
-                    "Teaching Beginners Wednesday",
-                    "Assisting Beginners Wednesday",
-                    "Take Care of Newcomers - Wednesday",
-                    "Photographer Wednesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            }
-        ]
-    },
-    {
-        "name": "Mentorship",
-        "groups": [
-            {
-                "name": "Mentorship",
-                "tasks": [
-                    "Mentorship / Class - Tuesday",
-                    "Mentorship / Class - Wednesday"
-                ],
-                "exclusive": [],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 0
-            }
-        ]
-    },
-    {
-        "name": "Food Supply",
-        "groups": [
-            {
-                "name": "Tuesday Milonga Installation",
-                "tasks": [
-                    "Food Supply - Tuesday",
-                    "Installing the Venue - Tuesday"
-                ],
-                "exclusive": [
-                    "DJ Tuesday",
-                    "MC Tuesday",
-                    "Teaching Advanced Tuesday",
-                    "Teaching Beginners Tuesday",
-                    "Assisting Beginners Tuesday",
-                    "Take Care of Newcomers - Tuesday",
-                    "Deistalling the Venue + Cleaning - Tuesday",
-                    "Photographer Tuesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            },
-            {
-                "name": "Wednesday Milonga Installation",
-                "tasks": [
-                    "Food Supply - Wednesday",
-                    "Installing the Venue - Wednesday"
-                ],
-                "exclusive": [
-                    "DJ Wednesday",
-                    "MC Wednesday",
-                    "Teaching Intermediate Wednesday",
-                    "Teaching Beginners Wednesday",
-                    "Assisting Beginners Wednesday",
-                    "Take Care of Newcomers - Wednesday",
-                    "Deistalling the Venue + Cleaning - Wednesday",
-                    "Photographer Wednesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            }
-        ]
-    },
-    {
-        "name": "Sunday Milonga",
-        "groups": [
-            {
-                "name": "MC Sunday",
-                "tasks": [
-                    "Food Supply - Sunday",
-                    "Master of Cerimony - Sunday"
-                ],
-                "exclusive": [
-                    "Sunday Milonga Installation",
-                    "Sunday Milonga Deinstallation"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            },
-            {
-                "name": "Sunday Milonga Installation",
-                "tasks": [
-                    "Registrations / Sunday 21:30 - 23:00",
-                    "Installing the Venue - Sunday"
-                ],
-                "exclusive": [
-                    "MC Sunday",
-                    "Sunday Milonga Deinstallation"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            },
-            {
-                "name": "Sunday Milonga Deinstallation",
-                "tasks": [
-                    "Registrations / Sunday 23:00 - 00:30",
-                    "Deinstalling the Venue + Cleaning - Sunday"
-                ],
-                "exclusive": [
-                    "MC Sunday",
-                    "Sunday Milonga Installation"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            }
-        ]
-    },
-    {
-        "name": "MCing",
-        "groups": [
-            {
-                "name": "MC Tuesday",
-                "tasks": [
-                    "Master of Cerimony - Tuesday"
-                ],
-                "exclusive": [
-                    "Tuesday Milonga Installation",
-                    "DJ Tuesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            },
-            {
-                "name": "MC Wednesday",
-                "tasks": [
-                    "Master of Cerimony - Wednesday"
-                ],
-                "exclusive": [
-                    "Wednesday Milonga Installation",
-                    "DJ Wednesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            }
-        ]
-    },
-    {
-        "name": "DJing",
-        "groups": [
-            {
-                "name": "DJ Tuesday",
-                "tasks": [
-                    "DJ - Tuesday"
-                ],
-                "exclusive": [
-                    "Tuesday Milonga Installation",
-                    "MC Tuesday",
-                    "Deistalling the Venue + Cleaning - Tuesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            },
-            {
-                "name": "DJ Wednesday",
-                "tasks": [
-                    "DJ - Wednesday"
-                ],
-                "exclusive": [
-                    "Wednesday Milonga Installation",
-                    "MC Wednesday",
-                    "Deistalling the Venue + Cleaning - Wednesday"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            }
-        ]
-    },
-    {
-        "name": "Deinstalling Milonga",
-        "groups": [
-            {
-                "name": "Deistalling the Venue + Cleaning - Tuesday",
-                "tasks": [
-                    "Deistalling the Venue + Cleaning - Tuesday"
-                ],
-                "exclusive": [
-                    "DJ Tuesday",
-                    "Tuesday Milonga Installation"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            },
-            {
-                "name": "Deistalling the Venue + Cleaning - Wednesday",
-                "tasks": [
-                    "Deistalling the Venue + Cleaning - Wednesday"
-                ],
-                "exclusive": [
-                    "DJ Wednesday",
-                    "Wednesday Milonga Installation"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            }
-        ]
-    },
-    {
-        "name": "Media",
-        "groups": [
-            {
-                "name": "Photographer Tuesday",
-                "tasks": [
-                    "Photographer / Videomaker - Tuesday"
-                ],
-                "exclusive": [
-                    "Teaching Advanced Tuesday",
-                    "Teaching Beginners Tuesday",
-                    "Assisting Beginners Tuesday",
-                    "Take Care of Newcomers - Tuesday",
-                    "Tuesday Milonga Installation"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            },
-            {
-                "name": "Photographer Wednesday",
-                "tasks": [
-                    "Photographer / Videomaker - Wednesday"
-                ],
-                "exclusive": [
-                    "Teaching Intermediate Wednesday",
-                    "Teaching Beginners Wednesday",
-                    "Assisting Beginners Wednesday",
-                    "Take Care of Newcomers - Wednesday",
-                    "Third Registrator Wednesday",
-                    "Wednesday Milonga Installation"
-                ],
-                "PriorityAssignees": [],
-                "leader-group-count": 0,
-                "follower-group-count": 0,
-                "any-group-count": 1
-            }
-        ]
-    }
-]
+DEFAULT_FAMILIES = [   {   'groups': [   {   'PriorityAssignees': ['Daniele Donzello', 'Yulia Talybova'],
+                          'any-group-count': 0,
+                          'exclusive': [   'Teaching Beginners Tuesday',
+                                           'Assisting Beginners Tuesday',
+                                           'Take Care of Newcomers - Tuesday',
+                                           'Tuesday Milonga Installation',
+                                           'Photographer Tuesday'],
+                          'follower-group-count': 1,
+                          'leader-group-count': 1,
+                          'name': 'Teaching Advanced Tuesday',
+                          'tasks': [   'Preparation for the Lesson / Advanced - Tuesday',
+                                       'Conducting the lesson / Advanced - Tuesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 0,
+                          'exclusive': [   'Teaching Advanced Tuesday',
+                                           'Assisting Beginners Tuesday',
+                                           'Take Care of Newcomers - Tuesday',
+                                           'Tuesday Milonga Installation',
+                                           'Photographer Tuesday'],
+                          'follower-group-count': 1,
+                          'leader-group-count': 1,
+                          'name': 'Teaching Beginners Tuesday',
+                          'tasks': [   'Preparation for the Lesson / Teachers - Tuesday',
+                                       'Conducting the lesson / Teacher - Tuesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 0,
+                          'exclusive': [   'Wednesday Milonga Installation',
+                                           'Teaching Beginners Wednesday',
+                                           'Assisting Beginners Wednesday',
+                                           'Take Care of Newcomers - Wednesday',
+                                           'Third Registrator Wednesday',
+                                           'Photographer Wednesday'],
+                          'follower-group-count': 1,
+                          'leader-group-count': 1,
+                          'name': 'Teaching Intermediate Wednesday',
+                          'tasks': [   'Preparation for the Lesson / Intermediate - Wednesday',
+                                       'Conducting the lesson / Intermediate - Wednesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 0,
+                          'exclusive': [   'Teaching Intermediate Wednesday',
+                                           'Wednesday Milonga Installation',
+                                           'Assisting Beginners Wednesday',
+                                           'Take Care of Newcomers - Wednesday',
+                                           'Third Registrator Wednesday',
+                                           'Photographer Wednesday'],
+                          'follower-group-count': 1,
+                          'leader-group-count': 1,
+                          'name': 'Teaching Beginners Wednesday',
+                          'tasks': [   'Preparation for the Lesson / Teachers - Wednesday',
+                                       'Conducting the lesson - Wednesday']}],
+        'name': 'Teaching'},
+    {   'groups': [   {   'PriorityAssignees': [],
+                          'any-group-count': 0,
+                          'exclusive': [   'Teaching Advanced Tuesday',
+                                           'Teaching Beginners Tuesday',
+                                           'Take Care of Newcomers - Tuesday',
+                                           'Tuesday Milonga Installation',
+                                           'Photographer Tuesday'],
+                          'follower-group-count': 1,
+                          'leader-group-count': 1,
+                          'name': 'Assisting Beginners Tuesday',
+                          'tasks': [   'Preparation for the Lesson / Assistant - Tuesday',
+                                       'Assisting the lesson - Tuesday',
+                                       'Registrations / Beginners - Tuesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'Teaching Advanced Tuesday',
+                                           'Teaching Beginners Tuesday',
+                                           'Assisting Beginners Tuesday',
+                                           'Tuesday Milonga Installation',
+                                           'Photographer Tuesday'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Take Care of Newcomers - Tuesday',
+                          'tasks': ['Take Care of Newcomers - Tuesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 0,
+                          'exclusive': [   'Teaching Intermediate Wednesday',
+                                           'Teaching Beginners Wednesday',
+                                           'Take Care of Newcomers - Wednesday',
+                                           'Third Registrator Wednesday',
+                                           'Wednesday Milonga Installation',
+                                           'Photographer Wednesday'],
+                          'follower-group-count': 1,
+                          'leader-group-count': 1,
+                          'name': 'Assisting Beginners Wednesday',
+                          'tasks': [   'Preparation for the Lesson / Assistant - Wednesday',
+                                       'Assisting the lesson - Wednesday',
+                                       'Registrations / Beginners - Wednesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'Teaching Intermediate Wednesday',
+                                           'Teaching Beginners Wednesday',
+                                           'Assisting Beginners Wednesday',
+                                           'Third Registrator Wednesday',
+                                           'Wednesday Milonga Installation',
+                                           'Photographer Wednesday'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Take Care of Newcomers - Wednesday',
+                          'tasks': ['Take Care of Newcomers - Wednesday']}],
+        'name': 'Assisting'},
+    {   'groups': [   {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'Teaching Intermediate Wednesday',
+                                           'Teaching Beginners Wednesday',
+                                           'Assisting Beginners Wednesday',
+                                           'Take Care of Newcomers - Wednesday',
+                                           'Photographer Wednesday'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Third Registrator Wednesday',
+                          'tasks': [   'Registrations / Beginners - Wednesday',
+                                       'Registrations / Intermediate - Wednesday']}],
+        'name': 'Third Registrator Wednesday'},
+    {   'groups': [   {   'PriorityAssignees': [],
+                          'any-group-count': 0,
+                          'exclusive': [],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Mentorship',
+                          'tasks': [   'Mentorship / Class - Tuesday',
+                                       'Mentorship / Class - Wednesday']}],
+        'name': 'Mentorship'},
+    {   'groups': [   {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'DJ Tuesday',
+                                           'MC Tuesday',
+                                           'Teaching Advanced Tuesday',
+                                           'Teaching Beginners Tuesday',
+                                           'Assisting Beginners Tuesday',
+                                           'Take Care of Newcomers - Tuesday',
+                                           'Deistalling the Venue + Cleaning - Tuesday',
+                                           'Photographer Tuesday'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Tuesday Milonga Installation',
+                          'tasks': ['Food Supply - Tuesday', 'Installing the Venue - Tuesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'DJ Wednesday',
+                                           'MC Wednesday',
+                                           'Teaching Intermediate Wednesday',
+                                           'Teaching Beginners Wednesday',
+                                           'Assisting Beginners Wednesday',
+                                           'Take Care of Newcomers - Wednesday',
+                                           'Deistalling the Venue + Cleaning - Wednesday',
+                                           'Photographer Wednesday'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Wednesday Milonga Installation',
+                          'tasks': [   'Food Supply - Wednesday',
+                                       'Installing the Venue - Wednesday']}],
+        'name': 'Food Supply'},
+    {   'groups': [   {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'Sunday Milonga Installation',
+                                           'Sunday Milonga Deinstallation'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'MC Sunday',
+                          'tasks': ['Food Supply - Sunday', 'Master of Cerimony - Sunday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': ['MC Sunday', 'Sunday Milonga Deinstallation'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Sunday Milonga Installation',
+                          'tasks': [   'Registrations / Sunday 21:30 - 23:00',
+                                       'Installing the Venue - Sunday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': ['MC Sunday', 'Sunday Milonga Installation'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Sunday Milonga Deinstallation',
+                          'tasks': [   'Registrations / Sunday 23:00 - 00:30',
+                                       'Deinstalling the Venue + Cleaning - Sunday']}],
+        'name': 'Sunday Milonga'},
+    {   'groups': [   {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': ['Tuesday Milonga Installation', 'DJ Tuesday'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'MC Tuesday',
+                          'tasks': ['Master of Cerimony - Tuesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': ['Wednesday Milonga Installation', 'DJ Wednesday'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'MC Wednesday',
+                          'tasks': ['Master of Cerimony - Wednesday']}],
+        'name': 'MCing'},
+    {   'groups': [   {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'Tuesday Milonga Installation',
+                                           'MC Tuesday',
+                                           'Deistalling the Venue + Cleaning - Tuesday'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'DJ Tuesday',
+                          'tasks': ['DJ - Tuesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'Wednesday Milonga Installation',
+                                           'MC Wednesday',
+                                           'Deistalling the Venue + Cleaning - Wednesday'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'DJ Wednesday',
+                          'tasks': ['DJ - Wednesday']}],
+        'name': 'DJing'},
+    {   'groups': [   {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': ['DJ Tuesday', 'Tuesday Milonga Installation'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Deistalling the Venue + Cleaning - Tuesday',
+                          'tasks': ['Deistalling the Venue + Cleaning - Tuesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': ['DJ Wednesday', 'Wednesday Milonga Installation'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Deistalling the Venue + Cleaning - Wednesday',
+                          'tasks': ['Deistalling the Venue + Cleaning - Wednesday']}],
+        'name': 'Deinstalling Milonga'},
+    {   'groups': [   {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'Teaching Advanced Tuesday',
+                                           'Teaching Beginners Tuesday',
+                                           'Assisting Beginners Tuesday',
+                                           'Take Care of Newcomers - Tuesday',
+                                           'Tuesday Milonga Installation'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Photographer Tuesday',
+                          'tasks': ['Photographer / Videomaker - Tuesday']},
+                      {   'PriorityAssignees': [],
+                          'any-group-count': 1,
+                          'exclusive': [   'Teaching Intermediate Wednesday',
+                                           'Teaching Beginners Wednesday',
+                                           'Assisting Beginners Wednesday',
+                                           'Take Care of Newcomers - Wednesday',
+                                           'Third Registrator Wednesday',
+                                           'Wednesday Milonga Installation'],
+                          'follower-group-count': 0,
+                          'leader-group-count': 0,
+                          'name': 'Photographer Wednesday',
+                          'tasks': ['Photographer / Videomaker - Wednesday']}],
+        'name': 'Media'}]
