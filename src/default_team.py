@@ -33,4 +33,5 @@ DEFAULT_TEAM = [   {'both': False, 'name': 'Alicja Nowak', 'role': 'follower'},
     {'both': False, 'name': 'Ludmiła Januszewska', 'role': 'follower'},
     {'both': False, 'name': 'Iana Kain', 'role': 'follower'},
     {'both': False, 'name': 'Julia Borychowska', 'role': 'follower'},
-    {'both': False, 'name': 'Krzysiek Rećko', 'role': 'leader'}]
+    {'both': False, 'name': 'Krzysiek Rećko', 'role': 'leader'},
+    {'both': False, 'name': 'Paweł Woźnicki', 'role': 'leader'}]

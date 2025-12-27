@@ -75,16 +75,6 @@
         "both": true
     },
     {
-        "name": "Agnieszka Lech",
-        "role": "follower",
-        "both": false
-    },
-    {
-        "name": "Anna Sidorowicz",
-        "role": "follower",
-        "both": false
-    },
-    {
         "name": "Daniele Donzello",
         "role": "leader",
         "both": false
@@ -176,6 +166,11 @@
     },
     {
         "name": "Krzysiek Rećko",
+        "role": "leader",
+        "both": false
+    },
+    {
+        "name": "Paweł Woźnicki",
         "role": "leader",
         "both": false
     }

@@ -22,7 +22,7 @@ DEFAULT_FAMILIES = [   {   'groups': [   {   'PriorityAssignees': ['Daniele Donz
                           'name': 'Teaching Beginners Tuesday',
                           'tasks': [   'Preparation for the Lesson / Teachers - Tuesday',
                                        'Conducting the lesson / Teacher - Tuesday']},
-                      {   'PriorityAssignees': [],
+                      {   'PriorityAssignees': ['Martyna Gosz', 'Paweł Woźnicki'],
                           'any-group-count': 0,
                           'exclusive': [   'Wednesday Milonga Installation',
                                            'Teaching Beginners Wednesday',
