@@ -91,7 +91,7 @@ class SATSolver:
                 actual_effort = provider.Value(self.effort_vars[person]) / 10.0
                 incurred_penalties.append({
                     "person_name": person,
-                    "rule": self.penalties.get_rule_name(1),
+                    "rule": "Underworked Team Member (< Threshold)",
                     "cost": P_UNDERWORKED,
                     "details": f"Total Effort: {actual_effort} < {self.effort_threshold}"
                 })
@@ -396,13 +396,9 @@ class SATSolver:
 
         self.debug_vars = {'unassigned': {}} # Initialize debugging structure
 
-        # Filter persons: Only include those who are candidates in at least one group
-        # This excludes members with 0 task availability from "Underworked" and other checks.
-        active_candidates = set()
-        for group in self.groups:
-            active_candidates.update(self.get_group_candidates(group))
-            
-        all_persons = {m['name'] for m in self.team_members if m['name'] in active_candidates}
+        # Filter persons: Include ALL team members to ensure penalties (like Min Effort) 
+        # apply even if they have 0 availability.
+        all_persons = {m['name'] for m in self.team_members}
         
         # Assignment Variables
         for group in self.groups:
@@ -440,6 +436,26 @@ class SATSolver:
 
         # Mutual Exclusion
         group_map = {g['id']: g for g in self.groups}
+        
+        # Build assignments_by_day for penalty logic
+        self.assignments_by_day = {}
+        for group in self.groups:
+             # Construct day_key consistent with penalty logic: G{Week}_{DayOfWeek}
+             # Use ID splitting to be safe and consistent with loop below
+             parts = group['id'].split('_')
+             if len(parts) >= 2:
+                 # parts[0] is G{Week}, parts[1] is {Day}
+                 d_key = f"{parts[0]}_{parts[1]}"
+                 if d_key not in self.assignments_by_day:
+                     self.assignments_by_day[d_key] = []
+                 self.assignments_by_day[d_key].append(group['id'])
+
+        # Build preassignments map for penalty logic
+        self.preassignments = set()
+        for group in self.groups:
+            if group.get('assignee'):
+                self.preassignments.add((group['id'], group['assignee']))
+                
         for group in self.groups:
             g_id = group['id']
             manual_assignee = group.get('assignee')
@@ -1011,19 +1027,20 @@ class SATSolver:
                              week_str = day_key.split('_')[0].replace('G', '')
                              if week_str not in weekdays_by_week:
                                  weekdays_by_week[week_str] = []
-                             weekdays_by_week[week_str].append(worked_var)
+                             # Store (day_key, worked_var) to check for forced assignments later
+                             weekdays_by_week[week_str].append((day_key, worked_var))
                      except:
                          pass
 
                  if P_MULTI_WEEKDAY > 0:
                      self.debug_vars[person]['multi_weekday'] = []
                      
-                     for w_str, vars_list in weekdays_by_week.items():
+                     for w_str, days_list in weekdays_by_week.items():
+                         # days_list is list of (day_key, worked_var)
+                         vars_list = [v for k, v in days_list]
+                         
                          if len(vars_list) >= 2: 
                              # Geometric Cascading Penalty: 
-                             # 2 days -> 1x
-                             # 3 days -> 3x
-                             # 4 days -> 9x
                              # Formula: P * 3^(count - 2) for count >= 2
                              
                              # 1. Count Total Weekdays Assigned
@@ -1031,29 +1048,93 @@ class SATSolver:
                              self.model.Add(count_var == sum(vars_list))
                              
                              # 2. Build Cost Table
-                             # Index i corresponds to count=i
                              costs = []
                              for i in range(len(vars_list) + 1):
                                  if i < 2:
                                      costs.append(0)
                                  else:
-                                     # i=2 -> 3^(0) = 1
-                                     # i=3 -> 3^(1) = 3
                                      multiplier = 3 ** (i - 2)
                                      val = P_MULTI_WEEKDAY * multiplier
                                      if val > 9000000000000000000: val = 9000000000000000000
                                      costs.append(val)
                              
-                             cost_var = self.model.NewIntVar(0, max(costs), f"multi_weekday_cost_{person}_{w_str}")
-                             self.model.AddElement(count_var, costs, cost_var)
+                             raw_cost_var = self.model.NewIntVar(0, max(costs), f"multi_weekday_raw_cost_{person}_{w_str}")
+                             self.model.AddElement(count_var, costs, raw_cost_var)
+
+                             # 3. Determine if Penalty is Triggered (At least one "Pure Auto" day)
+                             # Pure Auto Day = Active Day AND NOT Forced Day
+                             # 3. Determine if Penalty is Triggered (At least one "Pure Auto" day)
+                             # Pure Auto Day = Active Day AND NOT Forced Day
+                             trigger_vars = []
                              
-                             objective_terms.append(cost_var)
-                             all_cost_vars.append(cost_var)
+                             for d_key, w_var in days_list:
+                                 # Identify "Manual-Like" assignments on this day
+                                 # "Manual-Like" = Explicit OR Priority OR Single-Candidate
+                                 manual_assignment_vars = []
+                                 
+                                 if d_key in self.assignments_by_day:
+                                     for g_id in self.assignments_by_day[d_key]:
+                                         grp = self.group_map[g_id]
+                                         candidates = self.get_group_candidates(grp)
+                                         
+                                         if person in candidates:
+                                             is_manual_intent = False
+                                             
+                                             # A. Explicit
+                                             if (g_id, person) in self.preassignments:
+                                                 is_manual_intent = True
+                                             
+                                             # B. Priority (Filtered)
+                                             p_list = grp.get('filtered_priority_candidates_list')
+                                             if not p_list:
+                                                 p_list = grp.get('priority_candidates_list', [])
+                                             
+                                             if p_list and person in p_list:
+                                                 is_manual_intent = True
+                                                 
+                                             # C. Single Option
+                                             if len(candidates) == 1 and candidates[0] == person:
+                                                 is_manual_intent = True
+                                             
+                                             if is_manual_intent:
+                                                 # If assigned, this counts as a forced day
+                                                 if (g_id, person) in self.assignments:
+                                                     manual_assignment_vars.append(self.assignments[(g_id, person)])
+                                 
+                                 # Define "Is Forced Day" variable (True if any manual-like assignment is active)
+                                 is_forced_day_var = self.model.NewBoolVar(f"is_forced_{person}_{d_key}")
+                                 if manual_assignment_vars:
+                                     self.model.AddMaxEquality(is_forced_day_var, manual_assignment_vars)
+                                 else:
+                                     self.model.Add(is_forced_day_var == 0)
+
+                                 # Pure Auto Day = Day is Active (w_var) AND Not Forced
+                                 # trigger_var for this day is True if it's a Pure Auto Day
+                                 is_pure_auto = self.model.NewBoolVar(f"is_pure_auto_{person}_{d_key}")
+                                 
+                                 self.model.AddBoolAnd([w_var, is_forced_day_var.Not()]).OnlyEnforceIf(is_pure_auto)
+                                 self.model.AddBoolOr([w_var.Not(), is_forced_day_var]).OnlyEnforceIf(is_pure_auto.Not())
+                                 
+                                 trigger_vars.append(is_pure_auto)
+
+                             final_cost_var = self.model.NewIntVar(0, max(costs), f"multi_weekday_final_{person}_{w_str}")
+                             
+                             if not trigger_vars:
+                                  self.model.Add(final_cost_var == 0)
+                             else:
+                                 trigger = self.model.NewBoolVar(f"multi_weekday_trigger_{person}_{w_str}")
+                                 self.model.AddBoolOr(trigger_vars).OnlyEnforceIf(trigger)
+                                 self.model.Add(sum(trigger_vars) == 0).OnlyEnforceIf(trigger.Not())
+                                 
+                                 self.model.AddMultiplicationEquality(final_cost_var, [raw_cost_var, trigger])
+
+                             objective_terms.append(final_cost_var)
+                             all_cost_vars.append(final_cost_var)
                              
                              self.debug_vars[person]['multi_weekday'].append({
                                  'week': w_str,
                                  'count_var': count_var,
-                                 'cost_var': cost_var
+                                 'cost_var': final_cost_var
                              })
                      
                      # If no weeks had potential (len < 2), list remains empty.

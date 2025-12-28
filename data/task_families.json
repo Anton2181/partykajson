@@ -83,7 +83,10 @@
                     "Registration Intermediate Technique Wednesday",
                     "Registration Intermediate Bridge Course Wednesday"
                 ],
-                "PriorityAssignees": [],
+                "PriorityAssignees": [
+                    "Daniele Donzello",
+                    "Yulia Talybova"
+                ],
                 "leader-group-count": 1,
                 "follower-group-count": 1,
                 "any-group-count": 0

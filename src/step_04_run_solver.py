@@ -125,7 +125,8 @@ def save_person_report(assignments, penalties, groups, output_path):
             "group_name": group.get('name'),
             "family": group.get('family'),
             "role": group.get('role'),
-            "group_id": g_id
+            "group_id": g_id,
+            "method": res.get('method', 'automatic')
         })
         
     # 2. Map Penalties to People

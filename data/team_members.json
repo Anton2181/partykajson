@@ -20,11 +20,6 @@
         "both": false
     },
     {
-        "name": "Andras Retlaki",
-        "role": "leader",
-        "both": false
-    },
-    {
         "name": "Damian Bartosiewicz",
         "role": "leader",
         "both": false
@@ -36,16 +31,6 @@
     },
     {
         "name": "Diana Siwicka",
-        "role": "follower",
-        "both": false
-    },
-    {
-        "name": "Krzysztof Budny",
-        "role": "leader",
-        "both": false
-    },
-    {
-        "name": "Karolina Zak",
         "role": "follower",
         "both": false
     },
@@ -105,18 +90,8 @@
         "both": false
     },
     {
-        "name": "Michal Zagrodzki",
-        "role": "leader",
-        "both": false
-    },
-    {
         "name": "Natalia Khotsianovska",
         "role": "follower",
-        "both": false
-    },
-    {
-        "name": "Piotr Kucharski",
-        "role": "leader",
         "both": false
     },
     {
@@ -137,11 +112,6 @@
     {
         "name": "Tomasz Wilk",
         "role": "leader",
-        "both": false
-    },
-    {
-        "name": "Yuliana Szewczuk",
-        "role": "follower",
         "both": false
     },
     {

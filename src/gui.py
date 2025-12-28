@@ -1729,10 +1729,10 @@ class PartykaSolverApp(QMainWindow):
         # 3. Action Buttons
         actions_group = QGroupBox("Actions")
         actions_layout = QVBoxLayout()
-        
+        # 1. Download / Update Data
         self.btn_download = QPushButton("1. Download Data")
         self.btn_download.clicked.connect(self.run_download_flow)
-        
+        actions_layout.addWidget(self.btn_download)
         
         # 3. Solve Button
         self.btn_solve = QPushButton("2. Start Search")
@@ -1759,7 +1759,6 @@ class PartykaSolverApp(QMainWindow):
         self.btn_export = QPushButton("3. Export Assignments")
         self.btn_export.clicked.connect(self.run_export_flow)
 
-        actions_layout.addWidget(self.btn_download)
         actions_layout.addWidget(self.btn_solve)
         actions_layout.addWidget(self.btn_export)
         
@@ -1865,10 +1864,11 @@ class PartykaSolverApp(QMainWindow):
         self.tab_assign = QWidget()
         assign_layout = QVBoxLayout(self.tab_assign)
         self.tree_assign = QTreeWidget()
-        self.tree_assign.setHeaderLabels(["Person / Task", "Detail"])
+        self.tree_assign.setHeaderLabels(["Person / Task", "Method", "Detail"])
         self.tree_assign.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.tree_assign.setSortingEnabled(True)
         self.tree_assign.setColumnWidth(0, 300)
+        self.tree_assign.setColumnWidth(1, 100)
         assign_layout.addWidget(self.tree_assign)
         self.tabs.addTab(self.tab_assign, "Assignments")
         
@@ -2306,21 +2306,23 @@ class PartykaSolverApp(QMainWindow):
                 p_item.setText(0, person)
                 # Calculate total tasks helper
                 tasks = info.get("assignments", [])
-                p_item.setText(1, f"{len(tasks)} Tasks")
+                p_item.setText(2, f"{len(tasks)} Tasks")
                 
                 for task in tasks:
                     t_item = QTreeWidgetItem(p_item)
                     txt = f"[{task.get('role', '?')}] {task.get('group_name','')}"
+                    method = task.get('method', 'automatic') # default to automatic if missing
                     detail = f"W{task.get('week')} {task.get('day')}"
                     t_item.setText(0, txt)
-                    t_item.setText(1, detail)
+                    t_item.setText(1, method)
+                    t_item.setText(2, detail)
             
             self.tree_assign.expandAll()
             
-            # Default Sort: Detail (Col 1) Descending
+            # Default Sort: Detail (Col 2) Descending
             # Note: For top items, this sorts by "N Tasks" (String). 
             # For children, it sorts by "W{week} {day}" descending (W4 > W1).
-            self.tree_assign.sortItems(1, Qt.SortOrder.DescendingOrder)
+            self.tree_assign.sortItems(2, Qt.SortOrder.DescendingOrder)
         
         # 3. Load Penalties
         pen_path = RESULTS_DIR / f"{prefix}_penalties.json"

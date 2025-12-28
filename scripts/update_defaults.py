@@ -39,14 +39,23 @@ def update_gui_file(ladder, preferred_pairs):
 
     # Update DEFAULT_PREFERRED_PAIRS
     pairs_str = pprint.pformat(preferred_pairs, indent=4)
-    # Regex to handle list of lists: matches outer brackets and content that includes inner brackets
-    # Matches: DEFAULT_PREFERRED_PAIRS = [ (non-brackets OR inner [...])* ]
-    pattern_pairs = re.compile(r'DEFAULT_PREFERRED_PAIRS\s*=\s*\[(?:[^\]]|\[.*?\])*\]', re.DOTALL)
+    # Robust Regex: Match from DEFAULT_PREFERRED_PAIRS = [ until the start of the next known function "def is_writable"
+    # This ensures we consume any trailing garbage brackets left from previous bad replacement attempts.
+    pattern_pairs = re.compile(
+        r'DEFAULT_PREFERRED_PAIRS\s*=\s*\[.*?(?=\n\n|\n\s*def\s+is_writable)', 
+        re.DOTALL
+    )
     new_pairs_def = f"DEFAULT_PREFERRED_PAIRS = {pairs_str}"
     
     if pattern_pairs.search(content):
         content = pattern_pairs.sub(new_pairs_def, content)
         print("Updated DEFAULT_PREFERRED_PAIRS in gui.py")
+    elif "DEFAULT_PREFERRED_PAIRS" in content:
+        # Fallback if the specific boundary isn't found exactly as expected but variable exists
+        # Try stricter standard match but likely the file is malformed if above failed.
+        print("Warning: Found variable but failed robust match. Using fallback.")
+        pattern_fallback = re.compile(r'DEFAULT_PREFERRED_PAIRS\s*=\s*\[.*?\]', re.DOTALL)
+        content = pattern_fallback.sub(new_pairs_def, content)
     else:
         print("Warning: DEFAULT_PREFERRED_PAIRS definition not found in gui.py")
 

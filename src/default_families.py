@@ -40,7 +40,7 @@ DEFAULT_FAMILIES = [   {   'groups': [   {   'PriorityAssignees': ['Daniele Donz
                                        'Wednesday',
                                        'Conducting the lesson / Intermediate Technique - '
                                        'Wednesday']},
-                      {   'PriorityAssignees': [],
+                      {   'PriorityAssignees': ['Daniele Donzello', 'Yulia Talybova'],
                           'any-group-count': 0,
                           'exclusive': [   'Wednesday Milonga Installation',
                                            'Teaching Beginners Wednesday',
