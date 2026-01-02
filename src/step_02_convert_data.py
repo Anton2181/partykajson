@@ -7,6 +7,12 @@ import numpy as np
 
 def process_task_availability(task_df):
     tasks_data = []
+    
+    # Fix missing "Name" column if it was read as "Unnamed: 0" or similar
+    if "Name" not in task_df.columns:
+        # Assuming the first column is the Name column
+        task_df.rename(columns={task_df.columns[0]: "Name"}, inplace=True)
+
     # Columns 0 (Name) and 1 (Role) are metadata. The rest are tasks.
     name_col = "Name"
     
