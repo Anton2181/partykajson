@@ -237,6 +237,12 @@ def process_groups(tasks_list, task_families, team_members):
                 # End of group generation for this family definition
                 group_repeat_counter = 0
                 
+                # Reserve a base ID for this Group Definition (Family Group)
+                # This ensures Leader (Repeat 1) and Follower (Repeat 2) share the same ID Number
+                # e.g., G15_3_3_1 and G15_3_3_2
+                group_id_counters[(week, day)] += 1
+                base_gid_num = group_id_counters[(week, day)]
+                
                 # Storage for "TBD Role" groups to assign roles later
                 tbd_groups = [] # List of group dicts
                 
@@ -336,9 +342,14 @@ def process_groups(tasks_list, task_families, team_members):
                                 })
 
                     # 3. Process Created Groups
-                    for grp_data in final_groups_for_instance:
-                        group_id_counters[(week, day)] += 1
-                        gid_num = group_id_counters[(week, day)]
+                    for idx, grp_data in enumerate(final_groups_for_instance):
+                        if idx == 0:
+                             gid_num = base_gid_num
+                        else:
+                             # Split groups get a new, unique ID
+                             group_id_counters[(week, day)] += 1
+                             gid_num = group_id_counters[(week, day)]
+                        
                         
                         DAY_NUM_MAP = {
                             "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4,
