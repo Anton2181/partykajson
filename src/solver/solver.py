@@ -983,6 +983,7 @@ class SATSolver:
                  # Gather days worked
                  days_worked_vars = []
                  weekdays_worked_vars = []
+                 sunday_worked_vars = []
                  weekdays_by_week = {} # week_str -> list of vars
                  
                  # Optimization: Use Shared Map
@@ -1029,6 +1030,8 @@ class SATSolver:
                                  weekdays_by_week[week_str] = []
                              # Store (day_key, worked_var) to check for forced assignments later
                              weekdays_by_week[week_str].append((day_key, worked_var))
+                         elif d_num == 7:
+                             sunday_worked_vars.append(worked_var)
                      except:
                          pass
 
@@ -1144,7 +1147,7 @@ class SATSolver:
                      self.model.Add(sum(weekdays_worked_vars) > 0).OnlyEnforceIf(has_weekday)
                      self.model.Add(sum(weekdays_worked_vars) == 0).OnlyEnforceIf(has_weekday.Not())
                      
-                     sunday_vars = [v for v in days_worked_vars if v not in weekdays_worked_vars]
+                     sunday_vars = list(sunday_worked_vars)
                      has_sunday = self.model.NewBoolVar(f"has_sunday_{person}")
                      if sunday_vars:
                          self.model.Add(sum(sunday_vars) > 0).OnlyEnforceIf(has_sunday)
