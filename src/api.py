@@ -47,7 +47,7 @@ def load_config() -> Dict[str, Any]:
 
 def save_config(config: Dict[str, Any]):
     with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
-        json.dump(config, f, indent=4)
+        json.dump(config, f, indent=4, ensure_ascii=False)
 
 async def run_script(script_name: str, args: List[str] = []):
     """Runs a Python script from src/ as a subprocess."""

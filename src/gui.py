@@ -1206,7 +1206,7 @@ class TaskFamiliesOverlay(QDialog):
         # Save to disk
         try:
             with open(self.data_path, 'w', encoding='utf-8') as f:
-                json.dump(self.families_data, f, indent=4)
+                json.dump(self.families_data, f, indent=4, ensure_ascii=False)
         except Exception as e:
             print(f"Error saving task families: {e}")
             

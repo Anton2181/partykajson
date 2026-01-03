@@ -681,8 +681,32 @@ def finalize_candidate_lists(group, member_map, group_def = None):
         p_set = set(priority_assignees)
         p_list = list(intersected.intersection(p_set))
         group["priority_candidates_list"] = sorted(p_list)
+        
         fp_list = list(set(role_filtered).intersection(p_set))
-        group["filtered_priority_candidates_list"] = sorted(fp_list)
+        
+        # FIX for Single "Both" Candidate blocking 2 slots
+        # If we have exactly 1 priority candidate available for this role,
+        # and that candidate is a "Both" role (meaning they are likely blocking the other role's group too),
+        # we relax the constraint to allow ANY qualified candidate.
+        # This ensures we don't end up with 1 Person for 2 Slots.
+        relaxed_constraint = False
+        if len(fp_list) == 1:
+            cand_name = fp_list[0]
+            mem = member_map.get(cand_name)
+            if mem and mem.get('both'):
+                # RELAX
+                group["filtered_priority_candidates_list"] = sorted(role_filtered)
+                relaxed_constraint = True
+                
+                # Add note
+                note_text = "Priority constraint relaxed (Single 'Both' Candidate)."
+                if group["note"]:
+                    group["note"] += f"; {note_text}"
+                else:
+                    group["note"] = note_text
+        
+        if not relaxed_constraint:
+            group["filtered_priority_candidates_list"] = sorted(fp_list)
     else:
         group["priority_candidates_list"] = []
         group["filtered_priority_candidates_list"] = []
