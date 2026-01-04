@@ -73,15 +73,16 @@
                     "Conducting the lesson / Intermediate Bridge Course - Wednesday"
                 ],
                 "exclusive": [
-                    "Wednesday Milonga Installation",
-                    "Teaching Beginners Wednesday",
-                    "Assisting Beginners Wednesday",
-                    "Take Care of Newcomers - Wednesday",
                     "Third Registrator Wednesday",
-                    "Photographer Wednesday",
+                    "Deistalling the Venue + Cleaning - Wednesday",
+                    "Teaching Beginners Wednesday",
                     "Teaching Intermediate Technique Wednesday",
                     "Registration Intermediate Technique Wednesday",
-                    "Registration Intermediate Bridge Course Wednesday"
+                    "Photographer Wednesday",
+                    "Wednesday Milonga Installation",
+                    "Registration Intermediate Bridge Course Wednesday",
+                    "Take Care of Newcomers - Wednesday",
+                    "Assisting Beginners Wednesday"
                 ],
                 "PriorityAssignees": [
                     "Daniele Donzello",
@@ -240,10 +241,11 @@
                     "Registrations / Intermediate Bridge Course - Wednesday"
                 ],
                 "exclusive": [
+                    "Deistalling the Venue + Cleaning - Wednesday",
                     "Teaching Beginners Wednesday",
-                    "Photographer Wednesday",
                     "Teaching Intermediate Technique Wednesday",
-                    "Teaching Intermediate Bridge Course Wednesday"
+                    "Teaching Intermediate Bridge Course Wednesday",
+                    "Photographer Wednesday"
                 ],
                 "PriorityAssignees": [],
                 "leader-group-count": 0,
@@ -308,7 +310,8 @@
                     "Deistalling the Venue + Cleaning - Wednesday",
                     "Photographer Wednesday",
                     "Teaching Intermediate Bridge Course Wednesday",
-                    "Teaching Intermediate Technique Wednesday"
+                    "Teaching Intermediate Technique Wednesday",
+                    "Third Registrator Wednesday"
                 ],
                 "PriorityAssignees": [],
                 "leader-group-count": 0,
@@ -458,6 +461,8 @@
                     "Deistalling the Venue + Cleaning - Wednesday"
                 ],
                 "exclusive": [
+                    "Teaching Intermediate Bridge Course Wednesday",
+                    "Registration Intermediate Bridge Course Wednesday",
                     "DJ Wednesday",
                     "Wednesday Milonga Installation"
                 ],

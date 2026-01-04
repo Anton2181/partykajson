@@ -1117,6 +1117,27 @@ class TaskFamiliesOverlay(QDialog):
             if name in excl:
                 excl.remove(name)
         self.current_group_ref["exclusive"] = list(excl)
+        
+        # Propagate to the other group (Bidrectional)
+        target_group = None
+        current_name = self.current_group_ref.get("name")
+        
+        # Find target group by name
+        for fam in self.families_data:
+            for grp in fam.get("groups", []):
+                if grp.get("name") == name:
+                    target_group = grp
+                    break
+            if target_group: break
+            
+        if target_group and current_name:
+            t_excl = set(target_group.get("exclusive", []))
+            if checked:
+                t_excl.add(current_name)
+            else:
+                if current_name in t_excl:
+                    t_excl.remove(current_name)
+            target_group["exclusive"] = list(t_excl)
 
     def show_add_menu(self):
         menu = QMenu(self)

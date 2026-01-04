@@ -45,6 +45,29 @@ def process_groups(tasks_list, task_families, team_members):
     # Sort with safe key for None values
     sorted_contexts = sorted(list(contexts), key=lambda x: (x[0], x[1] if x[1] is not None else ""))
 
+    # Sort with safe key for None values
+    sorted_contexts = sorted(list(contexts), key=lambda x: (x[0], x[1] if x[1] is not None else ""))
+
+    # --- 0. Normalize Exclusions (Bidirectional) ---
+    # Ensure if A excludes B, B excludes A
+    group_map = {}
+    for fam in task_families:
+        for grp in fam['groups']:
+            group_map[grp['name']] = grp
+            
+    for fam in task_families:
+        for grp in fam['groups']:
+            name = grp['name']
+            excl = set(grp.get('exclusive', []))
+            
+            for target_name in excl:
+                if target_name in group_map:
+                    target_grp = group_map[target_name]
+                    t_excl = set(target_grp.get('exclusive', []))
+                    if name not in t_excl:
+                        t_excl.add(name)
+                        target_grp['exclusive'] = list(t_excl)
+
     for week, day in sorted_contexts:
         # --- 1. Family-based Groups ---
         for family in task_families:
@@ -341,7 +364,58 @@ def process_groups(tasks_list, task_families, team_members):
                                     "notes": ["Split residue from multiple assignees."]
                                 })
 
-                    # 3. Process Created Groups
+                    # 3. Determine Instance Role
+                    # We determine the role for the *entire instance* to ensure cohesion 
+                    # and correct slot consumption (1 Instance = 1 Slot, even if split).
+                    
+                    instance_assignees = set(filter(None, [g['assignee'] for g in final_groups_for_instance]))
+                    
+                    # Logic to pick role:
+                    # 1. If any assignee is Leader-only -> Leader
+                    # 2. If any assignee is Follower-only -> Follower
+                    # 3. Else, use available counts preference
+                    
+                    has_leader = False
+                    has_follower = False
+                    
+                    for uname in instance_assignees:
+                        mem = member_map.get(uname)
+                        if mem:
+                            if mem['role'] == 'leader' and not mem['both']:
+                                has_leader = True
+                            elif mem['role'] == 'follower' and not mem['both']:
+                                has_follower = True
+                    
+                    # 3. Use Assignee Preference ONLY if compatible with remaining counts
+                    pref = "any"
+                    if has_leader: pref = "leader"
+                    elif has_follower: pref = "follower"
+                    
+                    chosen_role = "any"
+                    
+                    if pref == "leader":
+                        if counts['leader'] > 0: chosen_role = "leader"
+                        elif counts['any'] > 0: chosen_role = "any"
+                        elif counts['follower'] > 0: chosen_role = "follower" # Fallback to what's left
+                    elif pref == "follower":
+                        if counts['follower'] > 0: chosen_role = "follower"
+                        elif counts['any'] > 0: chosen_role = "any"
+                        elif counts['leader'] > 0: chosen_role = "leader" # Fallback
+                    else:
+                        # No restricted preference (e.g. "Both" or "Any" assignee)
+                        if counts['leader'] > 0: chosen_role = "leader"
+                        elif counts['follower'] > 0: chosen_role = "follower"
+                        elif counts['any'] > 0: chosen_role = "any"
+                    
+                    # Consume Slot
+                    if chosen_role == 'leader':
+                        counts['leader'] -= 1
+                    elif chosen_role == 'follower':
+                        counts['follower'] -= 1
+                    elif chosen_role == 'any':
+                        counts['any'] -= 1
+
+                    # 4. Process Created Groups (Apply Role)
                     for idx, grp_data in enumerate(final_groups_for_instance):
                         if idx == 0:
                              gid_num = base_gid_num
@@ -349,7 +423,6 @@ def process_groups(tasks_list, task_families, team_members):
                              # Split groups get a new, unique ID
                              group_id_counters[(week, day)] += 1
                              gid_num = group_id_counters[(week, day)]
-                        
                         
                         DAY_NUM_MAP = {
                             "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4,
@@ -361,7 +434,7 @@ def process_groups(tasks_list, task_families, team_members):
                         
                         tasks_in_group = grp_data['tasks']
                         assignee = grp_data['assignee']
-                        role_mode = grp_data['role']
+                        # role_mode = grp_data['role'] # IGNORE fragment role mode, use Instance Role
                         current_notes = grp_data.get('notes', [])
                         
                         base_sets = [set(t['candidates']) for t in tasks_in_group]
@@ -370,32 +443,60 @@ def process_groups(tasks_list, task_families, team_members):
                         else:
                             intersected = set()
                         
-                        final_role = "any" # Default
+                        final_role = chosen_role
                         
-                        if role_mode == "FROM_ASSIGNEE":
+                        # --- VALIDATE & REASSIGN ---
+                        # If the assignee (manual) does not match the Instance Role (e.g. Follower assigned to Leader Group),
+                        # we must strip them and try to give it to the "Other" assignee who *is* valid.
+                        if assignee:
                             mem = member_map.get(assignee)
+                            valid_role = False
                             if mem:
-                                if mem['role'] == 'leader' or mem['both']:
-                                    final_role = 'leader'
-                                elif mem['role'] == 'follower':
-                                    final_role = 'follower'
+                                if final_role == 'leader':
+                                    if mem['role'] == 'leader' or mem['both']: valid_role = True
+                                elif final_role == 'follower':
+                                    if mem['role'] == 'follower' or mem['both']: valid_role = True
+                                else: # 'any'
+                                    valid_role = True
                             
-                            # Add note about role adaptation
-                            current_notes.append(f"Role adapted to assignee: {final_role}")
-                            
-                            if final_role == 'leader':
-                                counts['leader'] -= 1
-                            elif final_role == 'follower':
-                                counts['follower'] -= 1
-                            elif final_role == 'any':
-                                counts['any'] -= 1
+                            if not valid_role:
+                                # Assignee is INVALID for this Instance Role
+                                current_notes.append(f"Assignee {assignee} dropped (Role Mismatch for {final_role}).")
+                                
+                                # Try to find a valid replacement from the instance assignees
+                                replacement = None
+                                for candidate_name in instance_assignees:
+                                    if candidate_name == assignee: continue
+                                    
+                                    cmem = member_map.get(candidate_name)
+                                    c_valid = False
+                                    if cmem:
+                                        if final_role == 'leader':
+                                            if cmem['role'] == 'leader' or cmem['both']: c_valid = True
+                                        elif final_role == 'follower':
+                                            if cmem['role'] == 'follower' or cmem['both']: c_valid = True
+                                    
+                                    if c_valid:
+                                        replacement = candidate_name
+                                        break
+                                
+                                if replacement:
+                                    assignee = replacement
+                                    current_notes.append(f"Reassigned to {assignee} (Valid Instance Assignee).")
+                                else:
+                                    assignee = None
+                                    current_notes.append("Unassigned (No valid instance assignee found).")
+
+                        # Add note about role adaptation
+                        if assignee:
+                             current_notes.append(f"Role set to {final_role} (Instance-level).")
                         
                         total_effort = sum(t.get('effort', 0.0) for t in tasks_in_group)
                                 
                         new_group = {
                             "name": group_name,
                             "id": group_id,
-                            "role": final_role, # Temporary if TBD
+                            "role": final_role, 
                             "family": fam_name,
                             "week": week,
                             "day": day,
@@ -414,33 +515,12 @@ def process_groups(tasks_list, task_families, team_members):
                             "effort": round(total_effort, 2)
                         }
                         
-                        if role_mode == "TBD":
-                            tbd_groups.append(new_group)
-                        else:
-                            finalize_candidate_lists(new_group, member_map, group_def)
-                            groups_output.append(new_group)
-                            groups_by_day[(week, day)].append(new_group)
-                            groups_by_family_week[(fam_name, week)].append(new_group)
+                        # If TBD, we still finalize it with the Chosen Role
+                        finalize_candidate_lists(new_group, member_map, group_def)
+                        groups_output.append(new_group)
+                        groups_by_day[(week, day)].append(new_group)
+                        groups_by_family_week[(fam_name, week)].append(new_group)
                             
-                # 4. Resolve TBD Roles
-                tbd_roles = []
-                tbd_roles.extend(["leader"] * max(0, counts["leader"]))
-                tbd_roles.extend(["follower"] * max(0, counts["follower"]))
-                tbd_roles.extend(["any"] * max(0, counts["any"]))
-                
-                for grp in tbd_groups:
-                    if tbd_roles:
-                        assigned_role = tbd_roles.pop(0)
-                    else:
-                        assigned_role = "any" 
-                        
-                    grp['role'] = assigned_role
-                    finalize_candidate_lists(grp, member_map, group_def)
-                    
-                    groups_output.append(grp)
-                    groups_by_day[(week, day)].append(grp)
-                    groups_by_family_week[(fam_name, week)].append(grp)
-                
                 # STRICT CONSUMPTION:
                 # Mark any remaining instances of required_tasks as assigned so they don't become standalone.
                 # This ensures we only create the "Defined Groups" and ignore excess defined tasks.
@@ -494,6 +574,12 @@ def process_groups(tasks_list, task_families, team_members):
         groups_output.append(new_group)
         groups_by_day[(week, day)].append(new_group)
         groups_by_family_week[(t['name'], week)].append(new_group) 
+
+    groups_by_family_week[(t['name'], week)].append(new_group) 
+
+    # --- 1.5 Global Priority Deadlock Resolution ---
+    # Check for "Pigeonhole Deadlocks": N constrained groups for < N candidates
+    resolve_priority_deadlocks(groups_output)
 
     # --- Linking Logic ---
     for group in groups_output:
@@ -641,7 +727,69 @@ def aggregate_groups(source_prefix=None):
     output_path = PROCESSED_DIR / output_filename
     
     save_json(groups_output, output_path)
+    save_json(groups_output, output_path)
     print(f"Aggregated {len(groups_output)} groups to {output_path}")
+
+def resolve_priority_deadlocks(groups):
+    """
+    Checks for clusters of groups (same Name, Week, Day) where the number of 
+    manual/priority constrained slots exceeds the number of available unique candidates.
+    If detected, relaxes priority constraints for those groups.
+    """
+    # 1. Cluster groups by Logical Identity
+    clusters = defaultdict(list)
+    for g in groups:
+        # Key: Week, Day, Name
+        key = (g['week'], g['day'], g['name'])
+        clusters[key].append(g)
+        
+    for key, cluster_groups in clusters.items():
+        # 2. Identify Constrained Groups
+        constrained_groups = []
+        for g in cluster_groups:
+            # Manual Assignee = Highly Constrained
+            if g.get('assignee'):
+                constrained_groups.append(g)
+            # Priority List = Constrained
+            elif g.get('filtered_priority_candidates_list'):
+                constrained_groups.append(g)
+                
+        if not constrained_groups:
+            continue
+            
+        # 3. Collect Unique Candidates for these constraints
+        unique_candidates = set()
+        for g in constrained_groups:
+            if g.get('assignee'):
+                unique_candidates.add(g['assignee'])
+            else:
+                unique_candidates.update(g['filtered_priority_candidates_list'])
+                
+        # 4. Pigeonhole Check
+        num_slots = len(constrained_groups)
+        num_candidates = len(unique_candidates)
+        
+        if num_candidates < num_slots:
+            # Deadlock Detected!
+            print(f"Deadlock detected for {key}: {num_slots} slots vs {num_candidates} candidates. Relaxing...")
+            
+            for g in constrained_groups:
+                # Do not relax Manual Assignments (Intentional Overrides)
+                if g.get('assignee'):
+                    continue
+                    
+                # Revert to standard filtered candidates
+                if g.get('filtered_priority_candidates_list'):
+                    # Only relax if we actually have a broader list available
+                    standard = g.get('filtered_candidates_list', [])
+                    if len(standard) > len(g['filtered_priority_candidates_list']):
+                        g['filtered_priority_candidates_list'] = sorted(standard)
+                        
+                        note = f"Priority constraint relaxed (Deadlock: {num_candidates} cands < {num_slots} slots)"
+                        if g.get('note'):
+                            g['note'] += f"; {note}"
+                        else:
+                            g['note'] = note
 
 def finalize_candidate_lists(group, member_map, group_def = None):
     # Role Filtering
@@ -684,29 +832,9 @@ def finalize_candidate_lists(group, member_map, group_def = None):
         
         fp_list = list(set(role_filtered).intersection(p_set))
         
-        # FIX for Single "Both" Candidate blocking 2 slots
-        # If we have exactly 1 priority candidate available for this role,
-        # and that candidate is a "Both" role (meaning they are likely blocking the other role's group too),
-        # we relax the constraint to allow ANY qualified candidate.
-        # This ensures we don't end up with 1 Person for 2 Slots.
-        relaxed_constraint = False
-        if len(fp_list) == 1:
-            cand_name = fp_list[0]
-            mem = member_map.get(cand_name)
-            if mem and mem.get('both'):
-                # RELAX
-                group["filtered_priority_candidates_list"] = sorted(role_filtered)
-                relaxed_constraint = True
-                
-                # Add note
-                note_text = "Priority constraint relaxed (Single 'Both' Candidate)."
-                if group["note"]:
-                    group["note"] += f"; {note_text}"
-                else:
-                    group["note"] = note_text
+        # Removed inline relaxation.
         
-        if not relaxed_constraint:
-            group["filtered_priority_candidates_list"] = sorted(fp_list)
+        group["filtered_priority_candidates_list"] = sorted(fp_list)
     else:
         group["priority_candidates_list"] = []
         group["filtered_priority_candidates_list"] = []
