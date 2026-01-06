@@ -380,7 +380,7 @@ class SATSolver:
         self.effort_vars = {} # person_name -> IntVar (Scaled x10)
         self.underworked_vars = {} # person_name -> BoolVar
 
-    def solve(self, solution_callback=None):
+    def solve(self, solution_callback=None, log_search_progress=False):
         self.model = cp_model.CpModel()
         
         # ----------------------
@@ -432,7 +432,6 @@ class SATSolver:
             else:
                 self.model.Add(sum(possible_vars) + self.unassigned_vars[g_id] == 1)
             
-
 
         # Mutual Exclusion
         group_map = {g['id']: g for g in self.groups}
@@ -683,7 +682,7 @@ class SATSolver:
                                  else:
                                      multiplier = 3 ** (i - 2)
                                      val = P_TEACH_EQUALITY * multiplier
-                                     if val > 9000000000000000000: val = 9000000000000000000
+                                     if val > 10000000000000000: val = 10000000000000000
                                      costs.append(val)
                             
                              base_cost_var = self.model.NewIntVar(0, max(costs), f"equality_base_cost_{fam_name}_{person}")
@@ -773,7 +772,7 @@ class SATSolver:
                     costs = [0]
                     for i in range(1, len(missed_vars) + 1):
                          val = P_DIVERSITY * (3**(i-1))
-                         if val > 9000000000000000000: val = 9000000000000000000
+                         if val > 10000000000000000: val = 10000000000000000
                          costs.append(val)
                     
                     div_cost_var = self.model.NewIntVar(0, max(costs), f"div_cost_{person}")
@@ -1058,7 +1057,7 @@ class SATSolver:
                                  else:
                                      multiplier = 3 ** (i - 2)
                                      val = P_MULTI_WEEKDAY * multiplier
-                                     if val > 9000000000000000000: val = 9000000000000000000
+                                     if val > 10000000000000000: val = 10000000000000000
                                      costs.append(val)
                              
                              raw_cost_var = self.model.NewIntVar(0, max(costs), f"multi_weekday_raw_cost_{person}_{w_str}")
@@ -1290,6 +1289,8 @@ class SATSolver:
         solver = cp_model.CpSolver()
         if self.time_limit > 0:
             solver.parameters.max_time_in_seconds = self.time_limit
+        if log_search_progress:
+            solver.parameters.log_search_progress = True
             
         solution_printer = SolutionPrinter(all_cost_vars, callback=solution_callback)
         status = solver.Solve(self.model, solution_printer)

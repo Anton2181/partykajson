@@ -1691,6 +1691,10 @@ class PartykaSolverApp(QMainWindow):
         date_layout.addWidget(self.month_combo)
         date_layout.addWidget(self.year_combo)
         
+        # Connect signals
+        self.month_combo.currentTextChanged.connect(self.update_config_values)
+        self.year_combo.currentTextChanged.connect(self.update_config_values)
+        
         config_layout.addLayout(date_layout)
         
         # Time Limit
@@ -1714,6 +1718,9 @@ class PartykaSolverApp(QMainWindow):
         self.thresh_spin.valueChanged.connect(self.update_config_values)
         thresh_layout.addWidget(self.thresh_spin)
         config_layout.addLayout(thresh_layout)
+        
+        # Trigger initial save to ensure defaults (like auto-calculated date) are persisted
+        self.update_config_values()
         
         config_group.setLayout(config_layout)
         sidebar_layout.addWidget(config_group)
@@ -2053,6 +2060,13 @@ class PartykaSolverApp(QMainWindow):
     def update_config_values(self):
         self.config["time_limit_seconds"] = self.time_spin.value()
         self.config["effort_threshold"] = self.thresh_spin.value()
+        
+        # Save Scope
+        if "scope" not in self.config:
+            self.config["scope"] = {}
+        self.config["scope"]["month"] = self.month_combo.currentText()
+        self.config["scope"]["year"] = int(self.year_combo.currentText())
+        
         self.save_config()
 
     def update_button_states(self):

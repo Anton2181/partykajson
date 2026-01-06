@@ -15,7 +15,7 @@
     ],
     "time_limit_seconds": 120,
     "scope": {
-        "month": "January",
+        "month": "February",
         "year": 2026
     },
     "penalty_ratio": 10,

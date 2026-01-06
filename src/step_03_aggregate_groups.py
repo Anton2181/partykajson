@@ -266,11 +266,66 @@ def process_groups(tasks_list, task_families, team_members):
                 group_id_counters[(week, day)] += 1
                 base_gid_num = group_id_counters[(week, day)]
                 
+                # --- RESERVATION LOGIC START ---
+                # Lookahead to see if future instances have strict role requirements (Manual Assignments).
+                # This prevents "First-Come" unassigned instances from consuming scarce roles (e.g. Leader)
+                # needed by later manual instances.
+                
+                reserved_roles = [] # index -> "leader"|"follower"|None
+                
+                for i in range(total_instances):
+                    # Simulate gathering tasks for instance 'i'
+                    # We just peek at the lists
+                    inst_assignees = set()
+                    
+                    for task_name in required_tasks:
+                        key = (week, day, task_name)
+                        if key in tasks_by_context:
+                            t_list = tasks_by_context[key]
+                            if i < len(t_list): # Check if task exists for this index
+                                t = t_list[i]
+                                if t.get('assignee'):
+                                    inst_assignees.add(t['assignee'])
+                    
+                    # Determine Role Requirement for this future/current instance
+                    req_role = None
+                    has_leader_only = False
+                    has_follower_only = False
+                    
+                    for uname in inst_assignees:
+                        mem = member_map.get(uname)
+                        if mem:
+                            if mem['role'] == 'leader' and not mem['both']:
+                                has_leader_only = True
+                            elif mem['role'] == 'follower' and not mem['both']:
+                                has_follower_only = True
+                    
+                    if has_leader_only: req_role = "leader"
+                    elif has_follower_only: req_role = "follower"
+                    
+                    reserved_roles.append(req_role)
+
+                # Counts of reserved slots we must HOLD for specific instances
+                total_reserved_leader = reserved_roles.count("leader")
+                total_reserved_follower = reserved_roles.count("follower")
+                
+                # --- RESERVATION LOGIC END ---
+
                 # Storage for "TBD Role" groups to assign roles later
                 tbd_groups = [] # List of group dicts
                 
-                for _ in range(total_instances):
+                for i in range(total_instances):
                     group_repeat_counter += 1
+                    
+                    # Reservation Check for CURRENT instance
+                    current_reservation = reserved_roles[i] if i < len(reserved_roles) else None
+                    
+                    # Decrement global counters if this was one of the reserved ones
+                    # (We are now processing it, so we rely on normal consumption)
+                    if current_reservation == 'leader':
+                        total_reserved_leader -= 1
+                    elif current_reservation == 'follower':
+                        total_reserved_follower -= 1
                     
                     # 1. Gather Tasks for one instance
                     instance_tasks = [] #(task_obj, assignee) 
@@ -402,10 +457,33 @@ def process_groups(tasks_list, task_families, team_members):
                         elif counts['any'] > 0: chosen_role = "any"
                         elif counts['leader'] > 0: chosen_role = "leader" # Fallback
                     else:
-                        # No restricted preference (e.g. "Both" or "Any" assignee)
-                        if counts['leader'] > 0: chosen_role = "leader"
-                        elif counts['follower'] > 0: chosen_role = "follower"
+                        # No restricted preference (e.g. "Both" or "Any" assignee OR Unassigned)
+                        # MUST RESPECT RESERVATIONS for future instances
+                        
+                        can_take_leader = False
+                        if counts['leader'] > 0:
+                            # Only take if we have surplus OR if we are the one reserving it
+                            # But if we are here, 'pref' is NOT leader, so we are not the one reserving it strictly.
+                            # So we check if available > reserved_for_others
+                            if counts['leader'] > total_reserved_leader:
+                                can_take_leader = True
+                                
+                        can_take_follower = False
+                        if counts['follower'] > 0:
+                            if counts['follower'] > total_reserved_follower:
+                                can_take_follower = True
+                                
+                        if can_take_leader: chosen_role = "leader"
+                        elif can_take_follower: chosen_role = "follower"
                         elif counts['any'] > 0: chosen_role = "any"
+                        
+                        # Fallback: If locked out of preferred roles by reservations, 
+                        # but still have slots, we might have to take whatever is left 
+                        # (though that implies the reservation logic failed or numbers are tight).
+                        # Ideally, if constrained, we take what we can.
+                        if chosen_role == "any" and not (counts['any'] > 0):
+                             if counts['leader'] > 0: chosen_role = "leader"
+                             elif counts['follower'] > 0: chosen_role = "follower"
                     
                     # Consume Slot
                     if chosen_role == 'leader':
