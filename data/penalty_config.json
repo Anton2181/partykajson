@@ -13,7 +13,7 @@
         "Preferred Pair",
         "Effort Equalization"
     ],
-    "time_limit_seconds": 120,
+    "time_limit_seconds": 0,
     "scope": {
         "month": "February",
         "year": 2026

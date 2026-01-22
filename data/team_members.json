@@ -70,11 +70,6 @@
         "both": false
     },
     {
-        "name": "Ephraim Eshak",
-        "role": "leader",
-        "both": false
-    },
-    {
         "name": "Jan Mężyński",
         "role": "leader",
         "both": false
@@ -97,11 +92,6 @@
     {
         "name": "Patrycja Niemczuk",
         "role": "follower",
-        "both": false
-    },
-    {
-        "name": "Pawel Wypijewski",
-        "role": "leader",
         "both": false
     },
     {
