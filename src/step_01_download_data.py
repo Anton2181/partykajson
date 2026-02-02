@@ -1,11 +1,13 @@
 
 import pandas as pd
 import ssl
-import urllib.request
+import time
+import random
 
 # Define the Google Sheet URL
-SHEET_ID = "1s1hdDGjMQTjT1P5zO3xMX__hM1V-5Y9rEGt8uUg5_B0"
-url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=xlsx"
+SHEET_ID = "1s1hdDGjMQTjT1P5zO3xMX__hM1V-5Y9rEGt8uUg5_B0" 
+# Removed static URL definition to allow dynamic timestamp generation inside the function
+
 
 # Define the tabs to download
 import sys
@@ -29,13 +31,39 @@ def download_data(target_month_str=None):
     sheet_names = ["Task Availability", "Calendar Availability", target_month_str]
 
     try:
+        # Add cache busting to force fresh download
+        timestamp = int(time.time())
+        url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=xlsx&cache_bust={timestamp}"
         print(f"Downloading data from {url}...")
         
         # Bypass SSL verification
-        ssl._create_default_https_context = ssl._create_unverified_context
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
         
-        # Read the Excel file directly from the URL
-        data = pd.read_excel(url, sheet_name=sheet_names, engine='openpyxl')
+        # Explicit Download to temp file
+        import tempfile
+        import os
+        import urllib.request
+        
+        with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False) as tmp_file:
+            temp_path = tmp_file.name
+            
+        try:
+            # Open URL manually with context
+            with urllib.request.urlopen(url, context=ctx) as response, open(temp_path, 'wb') as out_file:
+                 out_file.write(response.read())
+            
+            print(f"Downloaded to temporary file: {temp_path}")
+            
+            # Read the Excel file from local path
+            data = pd.read_excel(temp_path, sheet_name=sheet_names, engine='openpyxl')
+            
+        finally:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+                pass # Clean up handled by os.remove
+
         
         for name, df in data.items():
             print(f"\n--- {name} ---")

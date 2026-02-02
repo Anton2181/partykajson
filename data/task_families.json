@@ -30,11 +30,12 @@
                     "Conducting the lesson / Teacher - Tuesday"
                 ],
                 "exclusive": [
-                    "Teaching Advanced Tuesday",
-                    "Assisting Beginners Tuesday",
                     "Take Care of Newcomers - Tuesday",
+                    "Assisting Beginners Tuesday",
+                    "Photographer Tuesday",
+                    "Teaching Advanced Tuesday",
                     "Tuesday Milonga Installation",
-                    "Photographer Tuesday"
+                    "Registration Advanced Tuesday"
                 ],
                 "PriorityAssignees": [],
                 "leader-group-count": 1,
@@ -198,7 +199,7 @@
         ]
     },
     {
-        "name": "Third Registrator Wednesday",
+        "name": "Registration",
         "groups": [
             {
                 "name": "Third Registrator Wednesday",
@@ -251,6 +252,17 @@
                 "leader-group-count": 0,
                 "follower-group-count": 0,
                 "any-group-count": 1
+            },
+            {
+                "name": "Registration Advanced Tuesday",
+                "tasks": [],
+                "exclusive": [
+                    "Teaching Beginners Tuesday"
+                ],
+                "PriorityAssignees": [],
+                "leader-group-count": 0,
+                "follower-group-count": 0,
+                "any-group-count": 0
             }
         ]
     },

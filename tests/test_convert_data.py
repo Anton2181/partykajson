@@ -120,3 +120,35 @@ def test_convert_data_dynamic_args(tmp_path, monkeypatch):
     output_path = tmp_path / "data" / "processed" / f"{target_prefix}_tasks.json"
     assert output_path.exists(), f"File not found at {output_path}"
 
+
+def test_process_schedule_manual_override_unavailability():
+    # Scenario: Alice is NOT available in calendar, but manually assigned to Task A.
+    
+    # Mock Schedule: Alice assigned
+    jan_df = pd.DataFrame([
+        {"Week": 1, "Day": "Monday", "Time": "20-21", "TODO": "Task A", "Assignee": "Alice", "EFFORT": 1.0}
+    ])
+    
+    # Task Def: Alice is capable
+    tasks_data = [{"name": "Task A", "candidates": ["Alice", "Bob"]}]
+    
+    # Calendar: Alice NOT available (only Bob is)
+    calendar_data = {
+        "Week 1": {
+            "Mon": { 
+                 "time_slots": {
+                     "20-21": ["Bob"] # Alice missing
+                 }
+            }
+        }
+    }
+    
+    result = process_schedule(jan_df, tasks_data, calendar_data)
+    
+    assert len(result) == 1
+    t = result[0]
+    
+    assert t['assignee'] == "Alice"
+    # CRITICAL CHECK: Alice must be in 'candidates' list for the solver to respect the assignment
+    # currently this likely fails (Alice filtered out because not in calendar)
+    assert "Alice" in t['candidates'], "Manual assignee Alice should be in candidates list even if unavailable"

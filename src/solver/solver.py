@@ -61,7 +61,7 @@ class SATSolver:
                     "assignee": None,
                     "rule": "Unassigned Group",
                     "cost": P_UNASSIGNED,
-                    "details": f"Group: {group['name']}"
+                    "details": f"Group: {group['name']} (ID: {g_id})"
                 })
             else:
                 candidates = self.get_group_candidates(group)

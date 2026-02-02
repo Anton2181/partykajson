@@ -919,6 +919,18 @@ class TaskFamiliesOverlay(QDialog):
                 for t in grp.get("tasks", []):
                     self.all_tasks.add(t)
         
+        # Load additional known tasks from processed/tasks.json
+        tasks_path = DATA_DIR / "processed" / "tasks.json"
+        if tasks_path.exists():
+            try:
+                with open(tasks_path, 'r', encoding='utf-8') as f:
+                    tasks_data = json.load(f)
+                    for t in tasks_data:
+                        if "name" in t:
+                            self.all_tasks.add(t["name"])
+            except Exception as e:
+                print(f"Error loading tasks.json in Families Overlay: {e}")
+        
         self.populate_tree()
         self.enable_editor(False)
 

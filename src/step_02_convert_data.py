@@ -228,11 +228,22 @@ def process_schedule(jan_df, tasks_data, calendar_data):
             # 3. Intersect
             if capable_candidates and available_candidates:
                 eligible_candidates = list(capable_candidates.intersection(available_candidates))
-                eligible_candidates.sort()
             elif not capable_candidates:
                  pass
             elif not available_candidates:
                  pass
+
+            # Force Assignee Override: If manually assigned, they MUST be a candidate
+            if assignee and assignee not in eligible_candidates:
+                # Add if they are at least technically capable (in task definition)? 
+                # Or force even if not capable? 
+                # User request: "Manual assignments... take precedent over time/task unavailability"
+                # This implies "time" (available) and "task" (capable?) or just "task unavailability" meaning "busy elsewhere"?
+                # Usually "task unavailability" implies capability.
+                # But safer to assume if user types a name, they want that person.
+                eligible_candidates.append(assignee)
+            
+            eligible_candidates.sort()
 
         task_entry = {
             "id": task_id,
